@@ -1,35 +1,41 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "{{ url }}", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const tweetId = '{{ url }}'.match(/\\/status\\/(\\d+)/)?.[1]; if (!tweetId) return { error: 'Invalid tweet URL' }; await new Promise(r => setTimeout(r, 2000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) await new Promise(r => setTimeout(r, 2000)); const article = Array.from(document.querySelectorAll('article')).find(a => a.querySelector('a[href*=\"/status/' + tweetId + '\"]')); if (!article) return { ok: false, message: 'Tweet article not found' }; const unretweetBtn = article.querySelector('[data-testid=\"unretweet\"]'); if (unretweetBtn) return { ok: true, message: 'Already retweeted' }; const retweetBtn = article.querySelector('[data-testid=\"retweet\"]'); if (!retweetBtn) return { ok: false, message: 'Retweet button not found' }; retweetBtn.click(); await new Promise(r => setTimeout(r, 1000)); const confirmBtn = document.querySelector('[data-testid=\"retweetConfirm\"]'); if (confirmBtn) { confirmBtn.click(); await new Promise(r => setTimeout(r, 1000)); } const verified = article.querySelector('[data-testid=\"unretweet\"]'); return { ok: !!verified, message: verified ? 'Retweeted' : 'Retweet confirmation not verified' }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error }]; return [intermediate]; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-retweet",
-  "category": "interact",
-  "description": "Retweet a tweet",
-  "is_public": true,
-  "method": "POST",
-  "name": "Retweet",
-  "output_schema": [
-    { "name": "ok", "type": "boolean", "description": "成功" },
-    { "name": "message", "type": "string", "description": "结果消息" }
-  ],
-  "variables": [
-    { "name": "url", "type": "string", "required": true, "help": "Tweet URL", "test": "https://x.com/elonmusk/status/2044315118583066738" }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "{{ url }}", "waitUntil": "load" }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const tweetId = '{{ url }}'.match(/\\/status\\/(\\d+)/)?.[1]; if (!tweetId) return { error: 'Invalid tweet URL' }; await new Promise(r => setTimeout(r, 2000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) await new Promise(r => setTimeout(r, 2000)); const article = Array.from(document.querySelectorAll('article')).find(a => a.querySelector('a[href*=\"/status/' + tweetId + '\"]')); if (!article) return { ok: false, message: 'Tweet article not found' }; const unretweetBtn = article.querySelector('[data-testid=\"unretweet\"]'); if (unretweetBtn) return { ok: true, message: 'Already retweeted' }; const retweetBtn = article.querySelector('[data-testid=\"retweet\"]'); if (!retweetBtn) return { ok: false, message: 'Retweet button not found' }; retweetBtn.click(); await new Promise(r => setTimeout(r, 1000)); const confirmBtn = document.querySelector('[data-testid=\"retweetConfirm\"]'); if (confirmBtn) { confirmBtn.click(); await new Promise(r => setTimeout(r, 1000)); } const verified = article.querySelector('[data-testid=\"unretweet\"]'); return { ok: !!verified, message: verified ? 'Retweeted' : 'Retweet confirmation not verified' }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error }]; return [intermediate]; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-retweet",
+	"category": "interact",
+	"description": "Retweet a tweet",
+	"is_public": true,
+	"method": "POST",
+	"name": "Retweet",
+	"output_schema": [
+		{ "name": "ok", "type": "boolean", "description": "成功" },
+		{ "name": "message", "type": "string", "description": "结果消息" }
+	],
+	"variables": [
+		{
+			"name": "url",
+			"type": "string",
+			"required": true,
+			"help": "Tweet URL",
+			"test": "https://x.com/elonmusk/status/2044315118583066738"
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

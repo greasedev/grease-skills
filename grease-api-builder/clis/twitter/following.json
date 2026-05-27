@@ -1,44 +1,55 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/home", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const ops = ['Following', 'UserByScreenName']; const fallbacks = { Following: 'zx6e-TLzRkeDO_a7p4b3JQ', UserByScreenName: 'IGgvgiOx4QZndDHuD3x9TQ' }; let scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length < 5) { for (let i = 0; i < 10; i++) { await new Promise(r => setTimeout(r, 500)); scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length >= 5) break; } } const queryIds = {}; for (const op of ops) { queryIds[op] = fallbacks[op]; for (const scriptUrl of scripts.slice(0, 30)) { try { const text = await (await fetch(scriptUrl)).text(); const re = new RegExp('queryId:\"([A-Za-z0-9_-]+)\"[^}]{0,200}operationName:\"' + op + '\"'); const match = text.match(re); if (match) { queryIds[op] = match[1]; break; } } catch {} } } return { queryIds }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const qids = intermediate.queryIds || {}; const username = ('{{ user }}' || '').replace(/^@/, ''); const limit = {{ limit }} || 50; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; const bearer = 'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'; const headers = { 'Authorization': 'Bearer ' + decodeURIComponent(bearer), 'X-Csrf-Token': ct0, 'X-Twitter-Auth-Type': 'OAuth2Session', 'X-Twitter-Active-User': 'yes' }; const features = JSON.stringify({ hidden_profile_subscriptions_enabled: true, rweb_tipjar_consumption_enabled: true, responsive_web_graphql_exclude_directive_enabled: true, verified_phone_label_enabled: false, subscriptions_verification_info_is_identity_verified_enabled: true, subscriptions_verification_info_verified_since_enabled: true, highlights_tweets_tab_ui_enabled: true, responsive_web_twitter_article_notes_tab_enabled: true, subscriptions_feature_can_gift_premium: true, creator_subscriptions_tweet_preview_api_enabled: true, responsive_web_graphql_skip_user_profile_image_extensions_enabled: false, responsive_web_graphql_timeline_navigation_enabled: true }); let targetUser = username; if (!targetUser) { const userResp = await fetch('/i/api/graphql/' + qids.UserByScreenName + '/UserByScreenName?variables=' + encodeURIComponent(JSON.stringify({ screen_name: '' })), { headers, credentials: 'include' }); if (userResp.ok) { const ud = await userResp.json(); targetUser = ud?.data?.user?.result?.core?.screen_name || ud?.data?.user?.result?.legacy?.screen_name || ''; } if (!targetUser) return { error: 'Could not determine logged-in user' }; } const userResp = await fetch('/i/api/graphql/' + qids.UserByScreenName + '/UserByScreenName?variables=' + encodeURIComponent(JSON.stringify({ screen_name: targetUser, withSafetyModeUserFields: true })) + '&features=' + encodeURIComponent(features), { headers, credentials: 'include' }); if (!userResp.ok) return { error: 'HTTP ' + userResp.status + ' resolving user' }; const userData = await userResp.json(); const userId = userData?.data?.user?.result?.rest_id; if (!userId) return { error: 'User not found: @' + targetUser }; const users = []; const seen = new Set(); let cursor = null; for (let i = 0; i < 5 && users.length < limit; i++) { const vars = { userId, count: Math.min(50, limit - users.length + 10), includePromotedContent: false }; if (cursor) vars.cursor = cursor; const resp = await fetch('/i/api/graphql/' + qids.Following + '/Following?variables=' + encodeURIComponent(JSON.stringify(vars)) + '&features=' + encodeURIComponent(features), { headers, credentials: 'include' }); if (!resp.ok) break; const d = await resp.json(); const instructions = d?.data?.user?.result?.timeline?.timeline?.instructions || d?.data?.user?.result?.timeline_v2?.timeline?.instructions || []; let nextCursor = null; for (const inst of instructions) { for (const entry of inst.entries || []) { if (entry.entryId?.startsWith('cursor-bottom-')) { nextCursor = entry.content?.value; continue; } if (!entry.entryId?.startsWith('user-')) continue; const userResult = entry.content?.itemContent?.user_results?.result; if (!userResult) continue; const l = userResult.legacy || {}; const c = userResult.core || {}; const sn = c.screen_name || l.screen_name; if (!sn || seen.has(sn)) continue; seen.add(sn); users.push({ screen_name: sn, name: c.name || l.name || '', bio: l.description || '', followers: l.followers_count || 0 }); } } if (!nextCursor || nextCursor === cursor) break; cursor = nextCursor; } return { users: users.slice(0, limit) }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ screen_name: '', name: '', bio: '', followers: 0, error: intermediate.error }]; return intermediate.users || []; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-following",
-  "category": "auth",
-  "description": "Fetch accounts a user follows",
-  "is_public": true,
-  "method": "GET",
-  "name": "Following",
-  "output_schema": [
-    { "name": "screen_name", "type": "string", "description": "用户名" },
-    { "name": "name", "type": "string", "description": "昵称" },
-    { "name": "bio", "type": "string", "description": "简介" },
-    { "name": "followers", "type": "number", "description": "粉丝数" }
-  ],
-  "variables": [
-    { "name": "user", "type": "string", "positional": true, "help": "Twitter screen name (defaults to logged-in user)", "test": "elonmusk" },
-    { "name": "limit", "type": "int", "default": 50, "help": "Number of accounts", "test": 5 }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://x.com/home", "waitUntil": "load" }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const ops = ['Following', 'UserByScreenName']; const fallbacks = { Following: 'zx6e-TLzRkeDO_a7p4b3JQ', UserByScreenName: 'IGgvgiOx4QZndDHuD3x9TQ' }; let scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length < 5) { for (let i = 0; i < 10; i++) { await new Promise(r => setTimeout(r, 500)); scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length >= 5) break; } } const queryIds = {}; for (const op of ops) { queryIds[op] = fallbacks[op]; for (const scriptUrl of scripts.slice(0, 30)) { try { const text = await (await fetch(scriptUrl)).text(); const re = new RegExp('queryId:\"([A-Za-z0-9_-]+)\"[^}]{0,200}operationName:\"' + op + '\"'); const match = text.match(re); if (match) { queryIds[op] = match[1]; break; } } catch {} } } return { queryIds }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const qids = intermediate.queryIds || {}; const username = ('{{ user }}' || '').replace(/^@/, ''); const limit = {{ limit }} || 50; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; const bearer = 'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'; const headers = { 'Authorization': 'Bearer ' + decodeURIComponent(bearer), 'X-Csrf-Token': ct0, 'X-Twitter-Auth-Type': 'OAuth2Session', 'X-Twitter-Active-User': 'yes' }; const features = JSON.stringify({ hidden_profile_subscriptions_enabled: true, rweb_tipjar_consumption_enabled: true, responsive_web_graphql_exclude_directive_enabled: true, verified_phone_label_enabled: false, subscriptions_verification_info_is_identity_verified_enabled: true, subscriptions_verification_info_verified_since_enabled: true, highlights_tweets_tab_ui_enabled: true, responsive_web_twitter_article_notes_tab_enabled: true, subscriptions_feature_can_gift_premium: true, creator_subscriptions_tweet_preview_api_enabled: true, responsive_web_graphql_skip_user_profile_image_extensions_enabled: false, responsive_web_graphql_timeline_navigation_enabled: true }); let targetUser = username; if (!targetUser) { const userResp = await fetch('/i/api/graphql/' + qids.UserByScreenName + '/UserByScreenName?variables=' + encodeURIComponent(JSON.stringify({ screen_name: '' })), { headers, credentials: 'include' }); if (userResp.ok) { const ud = await userResp.json(); targetUser = ud?.data?.user?.result?.core?.screen_name || ud?.data?.user?.result?.legacy?.screen_name || ''; } if (!targetUser) return { error: 'Could not determine logged-in user' }; } const userResp = await fetch('/i/api/graphql/' + qids.UserByScreenName + '/UserByScreenName?variables=' + encodeURIComponent(JSON.stringify({ screen_name: targetUser, withSafetyModeUserFields: true })) + '&features=' + encodeURIComponent(features), { headers, credentials: 'include' }); if (!userResp.ok) return { error: 'HTTP ' + userResp.status + ' resolving user' }; const userData = await userResp.json(); const userId = userData?.data?.user?.result?.rest_id; if (!userId) return { error: 'User not found: @' + targetUser }; const users = []; const seen = new Set(); let cursor = null; for (let i = 0; i < 5 && users.length < limit; i++) { const vars = { userId, count: Math.min(50, limit - users.length + 10), includePromotedContent: false }; if (cursor) vars.cursor = cursor; const resp = await fetch('/i/api/graphql/' + qids.Following + '/Following?variables=' + encodeURIComponent(JSON.stringify(vars)) + '&features=' + encodeURIComponent(features), { headers, credentials: 'include' }); if (!resp.ok) break; const d = await resp.json(); const instructions = d?.data?.user?.result?.timeline?.timeline?.instructions || d?.data?.user?.result?.timeline_v2?.timeline?.instructions || []; let nextCursor = null; for (const inst of instructions) { for (const entry of inst.entries || []) { if (entry.entryId?.startsWith('cursor-bottom-')) { nextCursor = entry.content?.value; continue; } if (!entry.entryId?.startsWith('user-')) continue; const userResult = entry.content?.itemContent?.user_results?.result; if (!userResult) continue; const l = userResult.legacy || {}; const c = userResult.core || {}; const sn = c.screen_name || l.screen_name; if (!sn || seen.has(sn)) continue; seen.add(sn); users.push({ screen_name: sn, name: c.name || l.name || '', bio: l.description || '', followers: l.followers_count || 0 }); } } if (!nextCursor || nextCursor === cursor) break; cursor = nextCursor; } return { users: users.slice(0, limit) }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ screen_name: '', name: '', bio: '', followers: 0, error: intermediate.error }]; return intermediate.users || []; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-following",
+	"category": "auth",
+	"description": "Fetch accounts a user follows",
+	"is_public": true,
+	"method": "GET",
+	"name": "Following",
+	"output_schema": [
+		{ "name": "screen_name", "type": "string", "description": "用户名" },
+		{ "name": "name", "type": "string", "description": "昵称" },
+		{ "name": "bio", "type": "string", "description": "简介" },
+		{ "name": "followers", "type": "number", "description": "粉丝数" }
+	],
+	"variables": [
+		{
+			"name": "user",
+			"type": "string",
+			"help": "Twitter screen name (defaults to logged-in user)",
+			"test": "elonmusk"
+		},
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 50,
+			"help": "Number of accounts",
+			"test": 5
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

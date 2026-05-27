@@ -1,29 +1,29 @@
 {
-  "name": "opencli-to-grease",
-  "version": "1.0.0",
-  "description": "Convert OpenCLI commands to GreaseAI-compatible JSON format",
-  "type": "module",
-  "main": "dist/test.js",
-  "types": "dist/test.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "test": "tsx scripts/test.ts",
-    "clean": "rm -rf dist clis"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "grease-driver-layer": "github:greasedev/automator#97792b8"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "tsx": "^4.0.0",
-    "typescript": "^5.0.0"
-  },
-  "keywords": [
-    "opencli",
-    "grease",
-    "converter",
-    "browser-automation"
-  ],
-  "license": "Apache-2.0"
+	"name": "opencli-to-grease",
+	"version": "1.0.0",
+	"description": "Convert OpenCLI commands to GreaseAI-compatible JSON format",
+	"type": "module",
+	"main": "dist/test.js",
+	"types": "dist/test.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"test": "tsx scripts/test.ts",
+		"clean": "rm -rf dist clis"
+	},
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"grease-driver-layer": "github:greasedev/automator#97792b8"
+	},
+	"devDependencies": {
+		"@types/node": "^20.0.0",
+		"tsx": "^4.0.0",
+		"typescript": "^5.0.0"
+	},
+	"keywords": [
+		"opencli",
+		"grease",
+		"converter",
+		"browser-automation"
+	],
+	"license": "Apache-2.0"
 }

@@ -1,37 +1,52 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://weibo.com/mygroups?gid={{ group_id }}", "waitUntil": "load" }
-    },
-    {
-      "action": "wait",
-      "argument": { "timeMs": 2000 }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const group_id = '{{ group_id }}'; const count = {{ count }} || 25; const xsrfToken = document.cookie.split(';').find(c => c.trim().startsWith('XSRF-TOKEN='))?.split('=')[1] || ''; const url = '/ajax/feed/groupstimeline?list_id=' + group_id + '&refresh=4&fast_refresh=1&count=' + count; const resp = await fetch(url, { method: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-XSRF-TOKEN': xsrfToken } }); const text = await resp.text(); let data; try { data = JSON.parse(text); } catch (e) { return [{ status: 'error', message: 'JSON parse error', group_id }]; } if (!data.ok || !data.statuses) { return [{ status: 'error', message: data.msg || 'Failed to fetch posts', group_id }]; } const posts = []; for (const item of data.statuses || []) { posts.push({ id: item.idstr || '', text: item.text?.substring(0, 200) || '', user_id: item.user?.idstr || '', user_name: item.user?.screen_name || '', created_at: item.created_at || '' }); } return posts; }"
-      }
-    }
-  ],
-  "api_endpoint": "weibo-group-posts",
-  "category": "scrape",
-  "description": "Get posts from a follow group",
-  "is_public": true,
-  "method": "GET",
-  "name": "GroupPosts",
-  "output_schema": [
-    { "name": "id", "type": "string", "description": "帖子ID" },
-    { "name": "text", "type": "string", "description": "帖子内容" },
-    { "name": "user_id", "type": "string", "description": "用户ID" },
-    { "name": "user_name", "type": "string", "description": "用户名" },
-    { "name": "created_at", "type": "string", "description": "发布时间" }
-  ],
-  "variables": [
-    { "name": "group_id", "type": "string", "required": true, "help": "Group ID (from group-list)", "test": "201207160998946111" },
-    { "name": "count", "type": "integer", "default": 25, "help": "Number of posts to fetch", "test": 25 }
-  ],
-  "website_domain": "weibo.com",
-  "website_id": "website-weibo.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://weibo.com/mygroups?gid={{ group_id }}",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": { "timeMs": 2000 }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const group_id = '{{ group_id }}'; const count = {{ count }} || 25; const xsrfToken = document.cookie.split(';').find(c => c.trim().startsWith('XSRF-TOKEN='))?.split('=')[1] || ''; const url = '/ajax/feed/groupstimeline?list_id=' + group_id + '&refresh=4&fast_refresh=1&count=' + count; const resp = await fetch(url, { method: 'GET', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-XSRF-TOKEN': xsrfToken } }); const text = await resp.text(); let data; try { data = JSON.parse(text); } catch (e) { return [{ status: 'error', message: 'JSON parse error', group_id }]; } if (!data.ok || !data.statuses) { return [{ status: 'error', message: data.msg || 'Failed to fetch posts', group_id }]; } const posts = []; for (const item of data.statuses || []) { posts.push({ id: item.idstr || '', text: item.text?.substring(0, 200) || '', user_id: item.user?.idstr || '', user_name: item.user?.screen_name || '', created_at: item.created_at || '' }); } return posts; }"
+			}
+		}
+	],
+	"api_endpoint": "weibo-group-posts",
+	"category": "scrape",
+	"description": "Get posts from a follow group",
+	"is_public": true,
+	"method": "GET",
+	"name": "GroupPosts",
+	"output_schema": [
+		{ "name": "id", "type": "string", "description": "帖子ID" },
+		{ "name": "text", "type": "string", "description": "帖子内容" },
+		{ "name": "user_id", "type": "string", "description": "用户ID" },
+		{ "name": "user_name", "type": "string", "description": "用户名" },
+		{ "name": "created_at", "type": "string", "description": "发布时间" }
+	],
+	"variables": [
+		{
+			"name": "group_id",
+			"type": "string",
+			"required": true,
+			"help": "Group ID (from group-list)",
+			"test": "201207160998946111"
+		},
+		{
+			"name": "count",
+			"type": "integer",
+			"default": 25,
+			"help": "Number of posts to fetch",
+			"test": 25
+		}
+	],
+	"website_domain": "weibo.com",
+	"website_id": "website-weibo.com"
 }

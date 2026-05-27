@@ -1,42 +1,51 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/i/connect_people", "waitUntil": "load" }
-    },
-    {
-      "action": "wait",
-      "argument": { "timeMs": 3000 }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const limit = {{ limit }} || 20; await new Promise(r => setTimeout(r, 1500)); const items = document.querySelectorAll('[data-testid=\"UserCell\"]') || []; const results = []; for (const item of items) { if (results.length >= limit) break; const avatarContainer = item.querySelector('[data-testid^=\"UserAvatar-Container-\"]'); const username = avatarContainer?.getAttribute('data-testid')?.replace('UserAvatar-Container-', '') || ''; if (!username) continue; const nameDiv = item.querySelector('div[dir=\"ltr\"][class*=\"r-3s2u2q\"]'); const name = nameDiv?.textContent || ''; const bioDiv = item.querySelector('div[dir=\"auto\"][class*=\"r-1h8ys4a\"]'); const bio = bioDiv?.innerText || ''; results.push({ username, name: name.trim(), bio: bio.trim(), url: 'https://x.com/' + username }); } return { results }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { return intermediate.results || []; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-suggested",
-  "category": "auth",
-  "description": "Get suggested users to follow from Twitter/X",
-  "is_public": true,
-  "method": "GET",
-  "name": "Suggested",
-  "output_schema": [
-    { "name": "username", "type": "string", "description": "用户名" },
-    { "name": "name", "type": "string", "description": "昵称" },
-    { "name": "bio", "type": "string", "description": "简介" },
-    { "name": "url", "type": "string", "description": "链接" },
-    { "name": "error", "type": "string", "description": "错误信息(可选)" }
-  ],
-  "variables": [
-    { "name": "limit", "type": "int", "default": 20, "help": "Number of results", "test": 5 }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://x.com/i/connect_people",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": { "timeMs": 3000 }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const limit = {{ limit }} || 20; await new Promise(r => setTimeout(r, 1500)); const items = document.querySelectorAll('[data-testid=\"UserCell\"]') || []; const results = []; for (const item of items) { if (results.length >= limit) break; const avatarContainer = item.querySelector('[data-testid^=\"UserAvatar-Container-\"]'); const username = avatarContainer?.getAttribute('data-testid')?.replace('UserAvatar-Container-', '') || ''; if (!username) continue; const nameDiv = item.querySelector('div[dir=\"ltr\"][class*=\"r-3s2u2q\"]'); const name = nameDiv?.textContent || ''; const bioDiv = item.querySelector('div[dir=\"auto\"][class*=\"r-1h8ys4a\"]'); const bio = bioDiv?.innerText || ''; results.push({ username, name: name.trim(), bio: bio.trim(), url: 'https://x.com/' + username }); } return { results }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { return intermediate.results || []; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-suggested",
+	"category": "auth",
+	"description": "Get suggested users to follow from Twitter/X",
+	"is_public": true,
+	"method": "GET",
+	"name": "Suggested",
+	"output_schema": [
+		{ "name": "username", "type": "string", "description": "用户名" },
+		{ "name": "name", "type": "string", "description": "昵称" },
+		{ "name": "bio", "type": "string", "description": "简介" },
+		{ "name": "url", "type": "string", "description": "链接" },
+		{ "name": "error", "type": "string", "description": "错误信息(可选)" }
+	],
+	"variables": [
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 20,
+			"help": "Number of results",
+			"test": 5
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

@@ -1,32 +1,32 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://weibo.com", "waitUntil": "load" }
-    },
-    {
-      "action": "wait",
-      "argument": { "timeMs": 2000 }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const resp = await fetch('https://weibo.com/ajax/feed/allGroups'); const data = await resp.json(); const groups = []; if (data.groups) { for (const category of data.groups) { if (category.group) { for (const g of category.group) { if (g.title && g.gid) { groups.push({ name: g.title, id: g.gid, type: g.type || '' }); } } } } } return groups; }"
-      }
-    }
-  ],
-  "api_endpoint": "weibo-group-list",
-  "category": "scrape",
-  "description": "List Weibo follow groups with group IDs",
-  "is_public": true,
-  "method": "GET",
-  "name": "GroupList",
-  "output_schema": [
-    { "name": "name", "type": "string", "description": "分组名称" },
-    { "name": "id", "type": "string", "description": "分组ID" },
-    { "name": "type", "type": "string", "description": "分组类型" }
-  ],
-  "variables": [],
-  "website_domain": "weibo.com",
-  "website_id": "website-weibo.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://weibo.com", "waitUntil": "load" }
+		},
+		{
+			"action": "wait",
+			"argument": { "timeMs": 2000 }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const resp = await fetch('https://weibo.com/ajax/feed/allGroups'); const data = await resp.json(); const groups = []; if (data.groups) { for (const category of data.groups) { if (category.group) { for (const g of category.group) { if (g.title && g.gid) { groups.push({ name: g.title, id: g.gid, type: g.type || '' }); } } } } } return groups; }"
+			}
+		}
+	],
+	"api_endpoint": "weibo-group-list",
+	"category": "scrape",
+	"description": "List Weibo follow groups with group IDs",
+	"is_public": true,
+	"method": "GET",
+	"name": "GroupList",
+	"output_schema": [
+		{ "name": "name", "type": "string", "description": "分组名称" },
+		{ "name": "id", "type": "string", "description": "分组ID" },
+		{ "name": "type", "type": "string", "description": "分组类型" }
+	],
+	"variables": [],
+	"website_domain": "weibo.com",
+	"website_id": "website-weibo.com"
 }

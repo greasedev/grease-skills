@@ -1,33 +1,39 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://weibo.com", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const count = Math.min({{ limit }} || 30, 50); const resp = await fetch('/ajax/statuses/hot_band', {credentials: 'include'}); if (!resp.ok) return {error: 'HTTP ' + resp.status}; const data = await resp.json(); if (!data.ok) return {error: 'API error'}; const bandList = data.data?.band_list || []; return bandList.slice(0, count).map((item, i) => ({ rank: item.realpos || (i + 1), word: item.word, hot_value: item.num || 0, category: item.category || '', label: item.label_name || '', url: 'https://s.weibo.com/weibo?q=' + encodeURIComponent('#' + item.word + '#') })); }"
-      }
-    }
-  ],
-  "api_endpoint": "weibo-hot",
-  "category": "scrape",
-  "description": "微博热搜",
-  "is_public": true,
-  "method": "GET",
-  "name": "Hot",
-  "output_schema": [
-    { "name": "rank", "type": "number", "description": "排名" },
-    { "name": "word", "type": "string", "description": "热搜词" },
-    { "name": "hot_value", "type": "number", "description": "热度值" },
-    { "name": "category", "type": "string", "description": "分类" },
-    { "name": "label", "type": "string", "description": "标签" },
-    { "name": "url", "type": "string", "description": "链接" }
-  ],
-  "variables": [
-    { "name": "limit", "type": "int", "default": 30, "help": "Number of items (max 50)", "test": 10 }
-  ],
-  "website_domain": "weibo.com",
-  "website_id": "website-weibo.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://weibo.com", "waitUntil": "load" }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const count = Math.min({{ limit }} || 30, 50); const resp = await fetch('/ajax/statuses/hot_band', {credentials: 'include'}); if (!resp.ok) return {error: 'HTTP ' + resp.status}; const data = await resp.json(); if (!data.ok) return {error: 'API error'}; const bandList = data.data?.band_list || []; return bandList.slice(0, count).map((item, i) => ({ rank: item.realpos || (i + 1), word: item.word, hot_value: item.num || 0, category: item.category || '', label: item.label_name || '', url: 'https://s.weibo.com/weibo?q=' + encodeURIComponent('#' + item.word + '#') })); }"
+			}
+		}
+	],
+	"api_endpoint": "weibo-hot",
+	"category": "scrape",
+	"description": "微博热搜",
+	"is_public": true,
+	"method": "GET",
+	"name": "Hot",
+	"output_schema": [
+		{ "name": "rank", "type": "number", "description": "排名" },
+		{ "name": "word", "type": "string", "description": "热搜词" },
+		{ "name": "hot_value", "type": "number", "description": "热度值" },
+		{ "name": "category", "type": "string", "description": "分类" },
+		{ "name": "label", "type": "string", "description": "标签" },
+		{ "name": "url", "type": "string", "description": "链接" }
+	],
+	"variables": [
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 30,
+			"help": "Number of items (max 50)",
+			"test": 10
+		}
+	],
+	"website_domain": "weibo.com",
+	"website_id": "website-weibo.com"
 }

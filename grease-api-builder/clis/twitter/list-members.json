@@ -1,50 +1,65 @@
 {
-  "actions": [
-    {
-      "action": "track",
-      "argument": {
-        "urlPattern": "ListMembers",
-        "script": "async (globalVars) => { const response = globalVars.response; const prev = globalVars.extractData || []; const seenIds = prev.filter(u => !u._isTerminated).map(u => u.id); const seen = new Set(seenIds); const members = []; let isTerminated = false; try { const d = JSON.parse(response.body); const insts = d?.data?.list?.members_timeline?.timeline?.instructions || []; for (const inst of insts) { if (inst.type === 'TimelineTerminateTimeline' && inst.direction === 'Bottom') { isTerminated = true; continue; } for (const e of inst.entries || []) { const content = e?.content; const entryId = e?.entryId || ''; if (entryId.startsWith('cursor-')) continue; const user = content?.itemContent?.user_results?.result; if (!user) continue; const id = user?.rest_id || user?.id; if (!id || seen.has(id)) continue; seen.add(id); const legacy = user?.legacy || {}; const core = user?.core || {}; members.push({ id: String(id), username: core?.screen_name || legacy?.screen_name || '', name: core?.name || legacy?.name || '', bio: legacy?.description || '', followers: legacy?.followers_count || 0, following: legacy?.friends_count || 0, verified: user?.is_blue_verified || legacy?.verified || false, url: 'https://x.com/' + (core?.screen_name || legacy?.screen_name || '') }); } } if (isTerminated) members.push({ _isTerminated: true }); return members; } catch (e) { return []; } }"
-      }
-    },
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/i/lists/{{ list_id }}/members", "waitUntil": "load" }
-    },
-    {
-      "action": "loop",
-      "argument": {
-        "script": "async (globalVars) => { const limit = {{ limit }} || 20; const maxScrolls = 20; const data = globalVars.extractData || []; if (data.some(d => d._isTerminated)) return false; const members = data.filter(d => !d._isTerminated); if (members.length >= limit) return false; globalVars.loopCount = (globalVars.loopCount || 0) + 1; if (globalVars.loopCount > maxScrolls) return false; const modal = document.querySelector('[aria-modal=\"true\"]'); if (modal) { const scrollable = modal.querySelector('[data-viewportview=\"true\"]') || modal.querySelector('section[aria-label]') || modal; scrollable.scrollBy(0, 10000); } else { window.scrollBy(0, 10000); } return {loopCount: globalVars.loopCount}; }",
-        "intervalMs": 2000
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "(globalVars) => { const limit = {{ limit }} || 20; globalVars.extractData = (globalVars.extractData || []).filter(d => !d._isTerminated).slice(0, limit); return globalVars; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-list-members",
-  "category": "auth",
-  "description": "Get members of a Twitter/X list using network interception with auto-scroll",
-  "is_public": true,
-  "method": "GET",
-  "name": "ListMembers",
-  "output_schema": [
-    { "name": "id", "type": "string", "description": "用户ID" },
-    { "name": "username", "type": "string", "description": "用户名" },
-    { "name": "name", "type": "string", "description": "昵称" },
-    { "name": "bio", "type": "string", "description": "简介" },
-    { "name": "followers", "type": "number", "description": "粉丝数" },
-    { "name": "following", "type": "number", "description": "关注数" },
-    { "name": "verified", "type": "boolean", "description": "认证状态" },
-    { "name": "url", "type": "string", "description": "用户链接" }
-  ],
-  "variables": [
-    { "name": "list_id", "type": "string", "required": true, "help": "List ID to fetch members from", "test": "2055292560806142450" },
-    { "name": "limit", "type": "int", "default": 20, "help": "Number of members to fetch", "test": 100 }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "track",
+			"argument": {
+				"urlPattern": "ListMembers",
+				"script": "async (globalVars) => { const response = globalVars.response; const prev = globalVars.extractData || []; const seenIds = prev.filter(u => !u._isTerminated).map(u => u.id); const seen = new Set(seenIds); const members = []; let isTerminated = false; try { const d = JSON.parse(response.body); const insts = d?.data?.list?.members_timeline?.timeline?.instructions || []; for (const inst of insts) { if (inst.type === 'TimelineTerminateTimeline' && inst.direction === 'Bottom') { isTerminated = true; continue; } for (const e of inst.entries || []) { const content = e?.content; const entryId = e?.entryId || ''; if (entryId.startsWith('cursor-')) continue; const user = content?.itemContent?.user_results?.result; if (!user) continue; const id = user?.rest_id || user?.id; if (!id || seen.has(id)) continue; seen.add(id); const legacy = user?.legacy || {}; const core = user?.core || {}; members.push({ id: String(id), username: core?.screen_name || legacy?.screen_name || '', name: core?.name || legacy?.name || '', bio: legacy?.description || '', followers: legacy?.followers_count || 0, following: legacy?.friends_count || 0, verified: user?.is_blue_verified || legacy?.verified || false, url: 'https://x.com/' + (core?.screen_name || legacy?.screen_name || '') }); } } if (isTerminated) members.push({ _isTerminated: true }); return members; } catch (e) { return []; } }"
+			}
+		},
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://x.com/i/lists/{{ list_id }}/members",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "loop",
+			"argument": {
+				"script": "async (globalVars) => { const limit = {{ limit }} || 20; const maxScrolls = 20; const data = globalVars.extractData || []; if (data.some(d => d._isTerminated)) return false; const members = data.filter(d => !d._isTerminated); if (members.length >= limit) return false; globalVars.loopCount = (globalVars.loopCount || 0) + 1; if (globalVars.loopCount > maxScrolls) return false; const modal = document.querySelector('[aria-modal=\"true\"]'); if (modal) { const scrollable = modal.querySelector('[data-viewportview=\"true\"]') || modal.querySelector('section[aria-label]') || modal; scrollable.scrollBy(0, 10000); } else { window.scrollBy(0, 10000); } return {loopCount: globalVars.loopCount}; }",
+				"intervalMs": 2000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "(globalVars) => { const limit = {{ limit }} || 20; globalVars.extractData = (globalVars.extractData || []).filter(d => !d._isTerminated).slice(0, limit); return globalVars; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-list-members",
+	"category": "auth",
+	"description": "Get members of a Twitter/X list using network interception with auto-scroll",
+	"is_public": true,
+	"method": "GET",
+	"name": "ListMembers",
+	"output_schema": [
+		{ "name": "id", "type": "string", "description": "用户ID" },
+		{ "name": "username", "type": "string", "description": "用户名" },
+		{ "name": "name", "type": "string", "description": "昵称" },
+		{ "name": "bio", "type": "string", "description": "简介" },
+		{ "name": "followers", "type": "number", "description": "粉丝数" },
+		{ "name": "following", "type": "number", "description": "关注数" },
+		{ "name": "verified", "type": "boolean", "description": "认证状态" },
+		{ "name": "url", "type": "string", "description": "用户链接" }
+	],
+	"variables": [
+		{
+			"name": "list_id",
+			"type": "string",
+			"required": true,
+			"help": "List ID to fetch members from",
+			"test": "2055292560806142450"
+		},
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 20,
+			"help": "Number of members to fetch",
+			"test": 100
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

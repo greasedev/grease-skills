@@ -1,35 +1,41 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "{{ url }}", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const tweetId = '{{ url }}'.match(/\\/status\\/(\\d+)/)?.[1]; if (!tweetId) return { error: 'Invalid tweet URL' }; await new Promise(r => setTimeout(r, 2000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) await new Promise(r => setTimeout(r, 2000)); const article = Array.from(document.querySelectorAll('article')).find(a => a.querySelector('a[href*=\"/status/' + tweetId + '\"]')); if (!article) return { ok: false, message: 'Tweet article not found' }; const moreBtn = article.querySelector('[aria-label=\"More\"]'); if (!moreBtn) return { ok: false, message: 'More button not found' }; moreBtn.click(); await new Promise(r => setTimeout(r, 500)); const deleteItem = Array.from(document.querySelectorAll('[role=\"menuitem\"]')).find(m => /delete/i.test(m.textContent || '')); if (!deleteItem) return { ok: false, message: 'Delete menu item not found' }; deleteItem.click(); await new Promise(r => setTimeout(r, 500)); const confirmBtn = document.querySelector('[data-testid=\"confirmationSheetConfirm\"]'); if (confirmBtn) { confirmBtn.click(); await new Promise(r => setTimeout(r, 1000)); } return { ok: true, message: 'Delete initiated' }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error }]; return [intermediate]; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-delete",
-  "category": "interact",
-  "description": "Delete a tweet (must be your own)",
-  "is_public": true,
-  "method": "POST",
-  "name": "Delete",
-  "output_schema": [
-    { "name": "ok", "type": "boolean", "description": "成功" },
-    { "name": "message", "type": "string", "description": "结果消息" }
-  ],
-  "variables": [
-    { "name": "url", "type": "string", "required": true, "help": "Tweet URL to delete", "test": "https://x.com/elonmusk/status/2044315118583066738" }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "{{ url }}", "waitUntil": "load" }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const tweetId = '{{ url }}'.match(/\\/status\\/(\\d+)/)?.[1]; if (!tweetId) return { error: 'Invalid tweet URL' }; await new Promise(r => setTimeout(r, 2000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) await new Promise(r => setTimeout(r, 2000)); const article = Array.from(document.querySelectorAll('article')).find(a => a.querySelector('a[href*=\"/status/' + tweetId + '\"]')); if (!article) return { ok: false, message: 'Tweet article not found' }; const moreBtn = article.querySelector('[aria-label=\"More\"]'); if (!moreBtn) return { ok: false, message: 'More button not found' }; moreBtn.click(); await new Promise(r => setTimeout(r, 500)); const deleteItem = Array.from(document.querySelectorAll('[role=\"menuitem\"]')).find(m => /delete/i.test(m.textContent || '')); if (!deleteItem) return { ok: false, message: 'Delete menu item not found' }; deleteItem.click(); await new Promise(r => setTimeout(r, 500)); const confirmBtn = document.querySelector('[data-testid=\"confirmationSheetConfirm\"]'); if (confirmBtn) { confirmBtn.click(); await new Promise(r => setTimeout(r, 1000)); } return { ok: true, message: 'Delete initiated' }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error }]; return [intermediate]; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-delete",
+	"category": "interact",
+	"description": "Delete a tweet (must be your own)",
+	"is_public": true,
+	"method": "POST",
+	"name": "Delete",
+	"output_schema": [
+		{ "name": "ok", "type": "boolean", "description": "成功" },
+		{ "name": "message", "type": "string", "description": "结果消息" }
+	],
+	"variables": [
+		{
+			"name": "url",
+			"type": "string",
+			"required": true,
+			"help": "Tweet URL to delete",
+			"test": "https://x.com/elonmusk/status/2044315118583066738"
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

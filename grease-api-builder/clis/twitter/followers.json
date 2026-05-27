@@ -1,37 +1,51 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/{{ user }}/followers", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const limit = {{ limit }} || 50; await new Promise(r => { const start = Date.now(); const poll = () => { const cells = document.querySelectorAll('[data-testid=\"UserCell\"]'); if (cells.length > 0) return r(); if (Date.now() - start > 10000) return r(); setTimeout(poll, 500); }; poll(); }); const scrolls = Math.ceil(limit / 20); for (let i = 0; i < scrolls; i++) { window.scrollBy(0, window.innerHeight); await new Promise(r => setTimeout(r, 1500)); } await new Promise(r => setTimeout(r, 500)); const items = []; const seen = new Set(); const cells = document.querySelectorAll('[data-testid=\"UserCell\"]'); for (const cell of cells) { if (items.length >= limit) break; const stripTexts = new Set(); const buttons = cell.querySelectorAll('[data-testid$=\"-follow\"],[data-testid$=\"-unfollow\"],[data-testid=\"userFollowIndicator\"]'); for (const el of buttons) { const t = (el.innerText || '').trim(); if (t) stripTexts.add(t); } const lines = (cell.innerText || '').split('\\n').map(s => s.trim()).filter(Boolean).filter(l => !stripTexts.has(l)); let screen_name = ''; const remaining = []; for (const l of lines) { if (!screen_name && l.startsWith('@')) { screen_name = l.slice(1).split(/\\s/)[0]; } else { remaining.push(l); } } if (!screen_name) { const av = cell.querySelector('[data-testid^=\"UserAvatar-Container-\"]'); const tid = av ? av.getAttribute('data-testid') || '' : ''; if (tid.startsWith('UserAvatar-Container-')) { screen_name = tid.slice('UserAvatar-Container-'.length); } } const name = remaining[0] || screen_name; const bio = remaining.slice(1).join(' ').replace(/\\s+/g, ' ').trim(); if (screen_name && !seen.has(screen_name)) { seen.add(screen_name); items.push({ screen_name, name, bio }); } } return { results: items }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ screen_name: '', name: '', bio: '', error: intermediate.error }]; return intermediate.results || []; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-followers",
-  "category": "auth",
-  "description": "Fetch a user's followers via DOM extraction",
-  "is_public": true,
-  "method": "GET",
-  "name": "Followers",
-  "output_schema": [
-    { "name": "screen_name", "type": "string", "description": "用户名" },
-    { "name": "name", "type": "string", "description": "昵称" },
-    { "name": "bio", "type": "string", "description": "简介" }
-  ],
-  "variables": [
-    { "name": "user", "type": "string", "positional": true, "help": "Twitter screen name", "test": "elonmusk" },
-    { "name": "limit", "type": "int", "default": 50, "help": "Number of followers", "test": 5 }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://x.com/{{ user }}/followers",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const limit = {{ limit }} || 50; await new Promise(r => { const start = Date.now(); const poll = () => { const cells = document.querySelectorAll('[data-testid=\"UserCell\"]'); if (cells.length > 0) return r(); if (Date.now() - start > 10000) return r(); setTimeout(poll, 500); }; poll(); }); const scrolls = Math.ceil(limit / 20); for (let i = 0; i < scrolls; i++) { window.scrollBy(0, window.innerHeight); await new Promise(r => setTimeout(r, 1500)); } await new Promise(r => setTimeout(r, 500)); const items = []; const seen = new Set(); const cells = document.querySelectorAll('[data-testid=\"UserCell\"]'); for (const cell of cells) { if (items.length >= limit) break; const stripTexts = new Set(); const buttons = cell.querySelectorAll('[data-testid$=\"-follow\"],[data-testid$=\"-unfollow\"],[data-testid=\"userFollowIndicator\"]'); for (const el of buttons) { const t = (el.innerText || '').trim(); if (t) stripTexts.add(t); } const lines = (cell.innerText || '').split('\\n').map(s => s.trim()).filter(Boolean).filter(l => !stripTexts.has(l)); let screen_name = ''; const remaining = []; for (const l of lines) { if (!screen_name && l.startsWith('@')) { screen_name = l.slice(1).split(/\\s/)[0]; } else { remaining.push(l); } } if (!screen_name) { const av = cell.querySelector('[data-testid^=\"UserAvatar-Container-\"]'); const tid = av ? av.getAttribute('data-testid') || '' : ''; if (tid.startsWith('UserAvatar-Container-')) { screen_name = tid.slice('UserAvatar-Container-'.length); } } const name = remaining[0] || screen_name; const bio = remaining.slice(1).join(' ').replace(/\\s+/g, ' ').trim(); if (screen_name && !seen.has(screen_name)) { seen.add(screen_name); items.push({ screen_name, name, bio }); } } return { results: items }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ screen_name: '', name: '', bio: '', error: intermediate.error }]; return intermediate.results || []; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-followers",
+	"category": "auth",
+	"description": "Fetch a user's followers via DOM extraction",
+	"is_public": true,
+	"method": "GET",
+	"name": "Followers",
+	"output_schema": [
+		{ "name": "screen_name", "type": "string", "description": "用户名" },
+		{ "name": "name", "type": "string", "description": "昵称" },
+		{ "name": "bio", "type": "string", "description": "简介" }
+	],
+	"variables": [
+		{
+			"name": "user",
+			"type": "string",
+			"help": "Twitter screen name",
+			"test": "elonmusk"
+		},
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 50,
+			"help": "Number of followers",
+			"test": 5
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

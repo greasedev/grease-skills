@@ -1,38 +1,44 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/home", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const limit = {{ limit }} || 20; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; await new Promise(r => { const start = Date.now(); const poll = () => { const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (primary) return r(); if (Date.now() - start > 10000) return r(); setTimeout(poll, 500); }; poll(); }); const captured = []; const origFetch = window.fetch; window.fetch = async function(...args) { const resp = await origFetch.apply(this, args); try { const u = typeof args[0] === 'string' ? args[0] : args[0]?.url || args[0]?.href || ''; if (u.includes('NotificationsTimeline')) { const clone = resp.clone(); const body = await clone.json(); captured.push(body); } } catch {} return resp; }; const origXHROpen = XMLHttpRequest.prototype.open; XMLHttpRequest.prototype.open = function(method, url, ...rest) { this._url = url; return origXHROpen.apply(this, [method, url, ...rest]); }; const origXHRSend = XMLHttpRequest.prototype.send; XMLHttpRequest.prototype.send = function(...args) { if (this._url && this._url.includes('NotificationsTimeline')) { this.addEventListener('load', function() { try { const body = JSON.parse(this.responseText); captured.push(body); } catch {} }); } return origXHRSend.apply(this, args); }; window.history.pushState({}, '', '/notifications'); window.dispatchEvent(new PopStateEvent('popstate', { state: {} })); await new Promise(r => setTimeout(r, 5000)); for (let i = 0; i < 3; i++) { window.scrollBy(0, window.innerHeight); await new Promise(r => setTimeout(r, 2000)); } await new Promise(r => setTimeout(r, 1000)); window.fetch = origFetch; XMLHttpRequest.prototype.open = origXHROpen; XMLHttpRequest.prototype.send = origXHRSend; const results = []; const seen = new Set(); for (const d of captured) { try { let instructions = d?.data?.viewer?.timeline_response?.timeline?.instructions || d?.data?.viewer_v2?.user_results?.result?.notification_timeline?.timeline?.instructions || d?.data?.timeline?.instructions || []; let addEntries = instructions.find(i => i.type === 'TimelineAddEntries') || instructions.find(i => i.entries && Array.isArray(i.entries)); if (!addEntries) continue; for (const entry of addEntries.entries) { const processItem = (itemContent, entryId) => { if (!itemContent) return; let item = itemContent?.notification_results?.result || itemContent?.tweet_results?.result || itemContent; let actionText = 'Notification'; let author = 'unknown'; let text = ''; let urlStr = ''; if (item.__typename === 'TimelineNotification') { text = item.rich_message?.text || item.message?.text || ''; const fromUser = item.template?.from_users?.[0]?.user_results?.result; author = fromUser?.core?.screen_name || fromUser?.legacy?.screen_name || 'unknown'; urlStr = item.notification_url?.url || ''; actionText = item.notification_icon || 'Activity'; const targetTweet = item.template?.target_objects?.[0]?.tweet_results?.result; if (targetTweet) { const targetText = targetTweet.note_tweet?.note_tweet_results?.result?.text || targetTweet.legacy?.full_text || ''; text += text && targetText ? ' | ' + targetText : targetText; if (!urlStr) urlStr = 'https://x.com/i/status/' + targetTweet.rest_id; } } else if (item.__typename === 'TweetNotification') { const tweet = item.tweet_result?.result; const tweetUser = tweet?.core?.user_results?.result; author = tweetUser?.core?.screen_name || tweetUser?.legacy?.screen_name || 'unknown'; text = tweet?.note_tweet?.note_tweet_results?.result?.text || tweet?.legacy?.full_text || item.message?.text || ''; actionText = 'Mention/Reply'; urlStr = 'https://x.com/i/status/' + tweet?.rest_id; } else if (item.__typename === 'Tweet') { const tweetUser = item.core?.user_results?.result; author = tweetUser?.core?.screen_name || tweetUser?.legacy?.screen_name || 'unknown'; text = item.note_tweet?.note_tweet_results?.result?.text || item.legacy?.full_text || ''; actionText = 'Mention'; urlStr = 'https://x.com/i/status/' + item.rest_id; } const id = item.id || item.rest_id || (entryId || '').replace('notification-', ''); if (!id || seen.has(id)) return; seen.add(id); results.push({ id, action: actionText, author, text: text.slice(0, 200), url: urlStr || 'https://x.com/notifications' }); }; if (!entry.entryId?.startsWith('notification-')) { if (entry.content?.items) { for (const subItem of entry.content.items) { processItem(subItem.item?.itemContent, subItem.entryId); } } continue; } processItem(entry.content?.itemContent, entry.entryId); } } catch {} } return { results: results.slice(0, limit) }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ id: '', action: '', author: '', text: '', url: '', error: intermediate.error }]; return intermediate.results || []; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-notifications",
-  "category": "auth",
-  "description": "Fetch Twitter/X notifications via network intercept",
-  "is_public": true,
-  "method": "GET",
-  "name": "Notifications",
-  "output_schema": [
-    { "name": "id", "type": "string", "description": "通知ID" },
-    { "name": "action", "type": "string", "description": "动作类型" },
-    { "name": "author", "type": "string", "description": "用户" },
-    { "name": "text", "type": "string", "description": "内容" },
-    { "name": "url", "type": "string", "description": "链接" }
-  ],
-  "variables": [
-    { "name": "limit", "type": "int", "default": 20, "help": "Number of notifications", "test": 5 }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://x.com/home", "waitUntil": "load" }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const limit = {{ limit }} || 20; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; await new Promise(r => { const start = Date.now(); const poll = () => { const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (primary) return r(); if (Date.now() - start > 10000) return r(); setTimeout(poll, 500); }; poll(); }); const captured = []; const origFetch = window.fetch; window.fetch = async function(...args) { const resp = await origFetch.apply(this, args); try { const u = typeof args[0] === 'string' ? args[0] : args[0]?.url || args[0]?.href || ''; if (u.includes('NotificationsTimeline')) { const clone = resp.clone(); const body = await clone.json(); captured.push(body); } } catch {} return resp; }; const origXHROpen = XMLHttpRequest.prototype.open; XMLHttpRequest.prototype.open = function(method, url, ...rest) { this._url = url; return origXHROpen.apply(this, [method, url, ...rest]); }; const origXHRSend = XMLHttpRequest.prototype.send; XMLHttpRequest.prototype.send = function(...args) { if (this._url && this._url.includes('NotificationsTimeline')) { this.addEventListener('load', function() { try { const body = JSON.parse(this.responseText); captured.push(body); } catch {} }); } return origXHRSend.apply(this, args); }; window.history.pushState({}, '', '/notifications'); window.dispatchEvent(new PopStateEvent('popstate', { state: {} })); await new Promise(r => setTimeout(r, 5000)); for (let i = 0; i < 3; i++) { window.scrollBy(0, window.innerHeight); await new Promise(r => setTimeout(r, 2000)); } await new Promise(r => setTimeout(r, 1000)); window.fetch = origFetch; XMLHttpRequest.prototype.open = origXHROpen; XMLHttpRequest.prototype.send = origXHRSend; const results = []; const seen = new Set(); for (const d of captured) { try { let instructions = d?.data?.viewer?.timeline_response?.timeline?.instructions || d?.data?.viewer_v2?.user_results?.result?.notification_timeline?.timeline?.instructions || d?.data?.timeline?.instructions || []; let addEntries = instructions.find(i => i.type === 'TimelineAddEntries') || instructions.find(i => i.entries && Array.isArray(i.entries)); if (!addEntries) continue; for (const entry of addEntries.entries) { const processItem = (itemContent, entryId) => { if (!itemContent) return; let item = itemContent?.notification_results?.result || itemContent?.tweet_results?.result || itemContent; let actionText = 'Notification'; let author = 'unknown'; let text = ''; let urlStr = ''; if (item.__typename === 'TimelineNotification') { text = item.rich_message?.text || item.message?.text || ''; const fromUser = item.template?.from_users?.[0]?.user_results?.result; author = fromUser?.core?.screen_name || fromUser?.legacy?.screen_name || 'unknown'; urlStr = item.notification_url?.url || ''; actionText = item.notification_icon || 'Activity'; const targetTweet = item.template?.target_objects?.[0]?.tweet_results?.result; if (targetTweet) { const targetText = targetTweet.note_tweet?.note_tweet_results?.result?.text || targetTweet.legacy?.full_text || ''; text += text && targetText ? ' | ' + targetText : targetText; if (!urlStr) urlStr = 'https://x.com/i/status/' + targetTweet.rest_id; } } else if (item.__typename === 'TweetNotification') { const tweet = item.tweet_result?.result; const tweetUser = tweet?.core?.user_results?.result; author = tweetUser?.core?.screen_name || tweetUser?.legacy?.screen_name || 'unknown'; text = tweet?.note_tweet?.note_tweet_results?.result?.text || tweet?.legacy?.full_text || item.message?.text || ''; actionText = 'Mention/Reply'; urlStr = 'https://x.com/i/status/' + tweet?.rest_id; } else if (item.__typename === 'Tweet') { const tweetUser = item.core?.user_results?.result; author = tweetUser?.core?.screen_name || tweetUser?.legacy?.screen_name || 'unknown'; text = item.note_tweet?.note_tweet_results?.result?.text || item.legacy?.full_text || ''; actionText = 'Mention'; urlStr = 'https://x.com/i/status/' + item.rest_id; } const id = item.id || item.rest_id || (entryId || '').replace('notification-', ''); if (!id || seen.has(id)) return; seen.add(id); results.push({ id, action: actionText, author, text: text.slice(0, 200), url: urlStr || 'https://x.com/notifications' }); }; if (!entry.entryId?.startsWith('notification-')) { if (entry.content?.items) { for (const subItem of entry.content.items) { processItem(subItem.item?.itemContent, subItem.entryId); } } continue; } processItem(entry.content?.itemContent, entry.entryId); } } catch {} } return { results: results.slice(0, limit) }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ id: '', action: '', author: '', text: '', url: '', error: intermediate.error }]; return intermediate.results || []; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-notifications",
+	"category": "auth",
+	"description": "Fetch Twitter/X notifications via network intercept",
+	"is_public": true,
+	"method": "GET",
+	"name": "Notifications",
+	"output_schema": [
+		{ "name": "id", "type": "string", "description": "通知ID" },
+		{ "name": "action", "type": "string", "description": "动作类型" },
+		{ "name": "author", "type": "string", "description": "用户" },
+		{ "name": "text", "type": "string", "description": "内容" },
+		{ "name": "url", "type": "string", "description": "链接" }
+	],
+	"variables": [
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 20,
+			"help": "Number of notifications",
+			"test": 5
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

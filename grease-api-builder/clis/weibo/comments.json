@@ -1,39 +1,51 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://weibo.com", "waitUntil": "load" }
-    },
-    {
-      "action": "wait",
-      "argument": { "timeMs": 2000 }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const id = '{{ id }}'; const count = Math.min({{ limit }} || 20, 50); const strip = (html) => (html || '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').trim(); const url = '/ajax/statuses/buildComments?flow=0&is_reload=1&id=' + id + '&is_show_bulletin=2&is_mix=0&count=' + count; const resp = await fetch(url, {credentials: 'include'}); if (!resp.ok) return {error: 'HTTP ' + resp.status}; const data = await resp.json(); if (!data.ok) return {error: 'API error: ' + (data.msg || 'unknown')}; return (data.data || []).map((c, i) => { const item = { rank: i + 1, author: c.user?.screen_name || '', text: strip(c.text || ''), likes: c.like_count || 0, replies: c.total_number || 0, time: c.created_at || '' }; if (c.reply_comment) { item.reply_to = (c.reply_comment.user?.screen_name || '') + ': ' + strip(c.reply_comment.text || '').substring(0, 80); } return item; }); }"
-      }
-    }
-  ],
-  "api_endpoint": "weibo-comments",
-  "category": "scrape",
-  "description": "Get comments on a Weibo post",
-  "is_public": true,
-  "method": "GET",
-  "name": "Comments",
-  "output_schema": [
-    { "name": "rank", "type": "number", "description": "排名" },
-    { "name": "author", "type": "string", "description": "评论者" },
-    { "name": "text", "type": "string", "description": "评论内容" },
-    { "name": "likes", "type": "number", "description": "点赞数" },
-    { "name": "replies", "type": "number", "description": "回复数" },
-    { "name": "time", "type": "string", "description": "时间" },
-    { "name": "reply_to", "type": "string", "description": "回复对象" }
-  ],
-  "variables": [
-    { "name": "id", "type": "string", "required": true, "help": "Post ID (numeric idstr)", "test": "QEQmJnN2K" },
-    { "name": "limit", "type": "int", "default": 20, "help": "Number of comments (max 50)", "test": 5 }
-  ],
-  "website_domain": "weibo.com",
-  "website_id": "website-weibo.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://weibo.com", "waitUntil": "load" }
+		},
+		{
+			"action": "wait",
+			"argument": { "timeMs": 2000 }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const id = '{{ id }}'; const count = Math.min({{ limit }} || 20, 50); const strip = (html) => (html || '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').trim(); const url = '/ajax/statuses/buildComments?flow=0&is_reload=1&id=' + id + '&is_show_bulletin=2&is_mix=0&count=' + count; const resp = await fetch(url, {credentials: 'include'}); if (!resp.ok) return {error: 'HTTP ' + resp.status}; const data = await resp.json(); if (!data.ok) return {error: 'API error: ' + (data.msg || 'unknown')}; return (data.data || []).map((c, i) => { const item = { rank: i + 1, author: c.user?.screen_name || '', text: strip(c.text || ''), likes: c.like_count || 0, replies: c.total_number || 0, time: c.created_at || '' }; if (c.reply_comment) { item.reply_to = (c.reply_comment.user?.screen_name || '') + ': ' + strip(c.reply_comment.text || '').substring(0, 80); } return item; }); }"
+			}
+		}
+	],
+	"api_endpoint": "weibo-comments",
+	"category": "scrape",
+	"description": "Get comments on a Weibo post",
+	"is_public": true,
+	"method": "GET",
+	"name": "Comments",
+	"output_schema": [
+		{ "name": "rank", "type": "number", "description": "排名" },
+		{ "name": "author", "type": "string", "description": "评论者" },
+		{ "name": "text", "type": "string", "description": "评论内容" },
+		{ "name": "likes", "type": "number", "description": "点赞数" },
+		{ "name": "replies", "type": "number", "description": "回复数" },
+		{ "name": "time", "type": "string", "description": "时间" },
+		{ "name": "reply_to", "type": "string", "description": "回复对象" }
+	],
+	"variables": [
+		{
+			"name": "id",
+			"type": "string",
+			"required": true,
+			"help": "Post ID (numeric idstr)",
+			"test": "QEQmJnN2K"
+		},
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 20,
+			"help": "Number of comments (max 50)",
+			"test": 5
+		}
+	],
+	"website_domain": "weibo.com",
+	"website_id": "website-weibo.com"
 }

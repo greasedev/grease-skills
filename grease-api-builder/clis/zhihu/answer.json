@@ -1,97 +1,97 @@
 {
-  "actions": [
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const target = '{{ target }}'; let questionId = null; let targetUrl = target; if (target.startsWith('question:')) { const match = target.match(/question:(\\d+)/); questionId = match ? match[1] : null; targetUrl = 'https://www.zhihu.com/question/' + questionId; } else if (target.includes('/question/')) { const match = target.match(/\\/question\\/(\\d+)/); questionId = match ? match[1] : null; targetUrl = 'https://www.zhihu.com/question/' + questionId; } return { targetUrl, questionId }; }"
-      }
-    },
-    {
-      "action": "open",
-      "argument": {
-        "url": "${targetUrl}",
-        "waitUntil": "load"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { await new Promise(r => setTimeout(r, 500)); const writeBtns = Array.from(document.querySelectorAll('button')).filter(n => (n.textContent || '').includes('写回答') || (n.textContent || '').includes('编辑回答')); if (writeBtns.length === 0) return { status: 'error', outcome: 'no_write_button', message: 'Write/Edit answer button not found', target_type: 'question', target: '{{ target }}' }; const mainWriteBtn = writeBtns.find(n => !n.closest('.QuestionAnswers-answerForm')) || writeBtns[0]; mainWriteBtn.click(); await new Promise(r => setTimeout(r, 2000)); return { clicked: true }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const target = '{{ target }}'; const text = '{{ text }}'; const execute = {{ execute }}; const questionId = intermediate.questionId; await new Promise(r => setTimeout(r, 500)); const editor = document.querySelector('[contenteditable=\"true\"]'); if (!editor) return { status: 'error', outcome: 'no_composer', message: 'Answer editor not found after clicking write button', target_type: 'question', target }; const container = editor.closest('.AnswerForm, .AnswerFormEditorContainer, .DraftEditor-root'); const submitButton = Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').includes('发布回答') && b.className.includes('FEfUrdfMIKpQDJDqkjte')); if (!submitButton) return { status: 'error', outcome: 'no_submit', message: 'Submit button not found', target_type: 'question', target }; editor.focus(); await new Promise(r => setTimeout(r, 100)); document.execCommand('insertText', false, text); editor.dispatchEvent(new InputEvent('input', { bubbles: true, data: text, inputType: 'insertText' })); await new Promise((resolve) => setTimeout(resolve, 200)); if (!execute) { return { status: 'success', outcome: 'preview', message: 'Answer prepared (not submitted - execute=false)', target_type: 'question', target, prepared_text: text }; } submitButton.click(); await new Promise((resolve) => setTimeout(resolve, 1500)); const href = location.href; const match = href.match(/question\\/(\\d+)\\/answer\\/(\\d+)/); if (match && match[1] === questionId) { return { status: 'success', outcome: 'created', message: 'Answer created for question ' + questionId, target_type: 'question', target, created_target: 'answer:' + match[1] + ':' + match[2], created_url: href }; } return { status: 'error', outcome: 'unknown', message: 'Answer submission dispatched but result not verified', target_type: 'question', target }; }"
-      }
-    }
-  ],
-  "api_endpoint": "zhihu-answer",
-  "category": "interact",
-  "description": "Answer a Zhihu question",
-  "is_public": true,
-  "method": "POST",
-  "name": "Answer",
-  "output_schema": [
-    {
-      "name": "status",
-      "type": "string",
-      "description": "操作状态"
-    },
-    {
-      "name": "outcome",
-      "type": "string",
-      "description": "操作结果"
-    },
-    {
-      "name": "message",
-      "type": "string",
-      "description": "消息"
-    },
-    {
-      "name": "target_type",
-      "type": "string",
-      "description": "目标类型"
-    },
-    {
-      "name": "target",
-      "type": "string",
-      "description": "目标"
-    },
-    {
-      "name": "created_target",
-      "type": "string",
-      "description": "创建的目标"
-    },
-    {
-      "name": "created_url",
-      "type": "string",
-      "description": "创建的回答链接"
-    }
-  ],
-  "variables": [
-    {
-      "name": "target",
-      "type": "string",
-      "required": true,
-      "help": "Zhihu question URL or typed target (question:123)",
-      "test": "https://www.zhihu.com/question/2019722609273631935"
-    },
-    {
-      "name": "text",
-      "type": "string",
-      "required": true,
-      "help": "Answer text",
-      "test": "关键是有没有提升生产力"
-    },
-    {
-      "name": "execute",
-      "type": "boolean",
-      "default": false,
-      "help": "Actually perform the write action",
-      "test": false
-    }
-  ],
-  "website_domain": "www.zhihu.com",
-  "website_id": "website-www.zhihu.com"
+	"actions": [
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const target = '{{ target }}'; let questionId = null; let targetUrl = target; if (target.startsWith('question:')) { const match = target.match(/question:(\\d+)/); questionId = match ? match[1] : null; targetUrl = 'https://www.zhihu.com/question/' + questionId; } else if (target.includes('/question/')) { const match = target.match(/\\/question\\/(\\d+)/); questionId = match ? match[1] : null; targetUrl = 'https://www.zhihu.com/question/' + questionId; } return { targetUrl, questionId }; }"
+			}
+		},
+		{
+			"action": "open",
+			"argument": {
+				"url": "${targetUrl}",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { await new Promise(r => setTimeout(r, 500)); const writeBtns = Array.from(document.querySelectorAll('button')).filter(n => (n.textContent || '').includes('写回答') || (n.textContent || '').includes('编辑回答')); if (writeBtns.length === 0) return { status: 'error', outcome: 'no_write_button', message: 'Write/Edit answer button not found', target_type: 'question', target: '{{ target }}' }; const mainWriteBtn = writeBtns.find(n => !n.closest('.QuestionAnswers-answerForm')) || writeBtns[0]; mainWriteBtn.click(); await new Promise(r => setTimeout(r, 2000)); return { clicked: true }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const target = '{{ target }}'; const text = '{{ text }}'; const execute = {{ execute }}; const questionId = intermediate.questionId; await new Promise(r => setTimeout(r, 500)); const editor = document.querySelector('[contenteditable=\"true\"]'); if (!editor) return { status: 'error', outcome: 'no_composer', message: 'Answer editor not found after clicking write button', target_type: 'question', target }; const container = editor.closest('.AnswerForm, .AnswerFormEditorContainer, .DraftEditor-root'); const submitButton = Array.from(document.querySelectorAll('button')).find(b => (b.textContent || '').includes('发布回答') && b.className.includes('FEfUrdfMIKpQDJDqkjte')); if (!submitButton) return { status: 'error', outcome: 'no_submit', message: 'Submit button not found', target_type: 'question', target }; editor.focus(); await new Promise(r => setTimeout(r, 100)); document.execCommand('insertText', false, text); editor.dispatchEvent(new InputEvent('input', { bubbles: true, data: text, inputType: 'insertText' })); await new Promise((resolve) => setTimeout(resolve, 200)); if (!execute) { return { status: 'success', outcome: 'preview', message: 'Answer prepared (not submitted - execute=false)', target_type: 'question', target, prepared_text: text }; } submitButton.click(); await new Promise((resolve) => setTimeout(resolve, 1500)); const href = location.href; const match = href.match(/question\\/(\\d+)\\/answer\\/(\\d+)/); if (match && match[1] === questionId) { return { status: 'success', outcome: 'created', message: 'Answer created for question ' + questionId, target_type: 'question', target, created_target: 'answer:' + match[1] + ':' + match[2], created_url: href }; } return { status: 'error', outcome: 'unknown', message: 'Answer submission dispatched but result not verified', target_type: 'question', target }; }"
+			}
+		}
+	],
+	"api_endpoint": "zhihu-answer",
+	"category": "interact",
+	"description": "Answer a Zhihu question",
+	"is_public": true,
+	"method": "POST",
+	"name": "Answer",
+	"output_schema": [
+		{
+			"name": "status",
+			"type": "string",
+			"description": "操作状态"
+		},
+		{
+			"name": "outcome",
+			"type": "string",
+			"description": "操作结果"
+		},
+		{
+			"name": "message",
+			"type": "string",
+			"description": "消息"
+		},
+		{
+			"name": "target_type",
+			"type": "string",
+			"description": "目标类型"
+		},
+		{
+			"name": "target",
+			"type": "string",
+			"description": "目标"
+		},
+		{
+			"name": "created_target",
+			"type": "string",
+			"description": "创建的目标"
+		},
+		{
+			"name": "created_url",
+			"type": "string",
+			"description": "创建的回答链接"
+		}
+	],
+	"variables": [
+		{
+			"name": "target",
+			"type": "string",
+			"required": true,
+			"help": "Zhihu question URL or typed target (question:123)",
+			"test": "https://www.zhihu.com/question/2019722609273631935"
+		},
+		{
+			"name": "text",
+			"type": "string",
+			"required": true,
+			"help": "Answer text",
+			"test": "关键是有没有提升生产力"
+		},
+		{
+			"name": "execute",
+			"type": "boolean",
+			"default": false,
+			"help": "Actually perform the write action",
+			"test": false
+		}
+	],
+	"website_domain": "www.zhihu.com",
+	"website_id": "website-www.zhihu.com"
 }

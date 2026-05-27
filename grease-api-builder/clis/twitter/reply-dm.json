@@ -1,39 +1,61 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/messages", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const text = '{{ text }}'; const max = {{ max }} || 20; const skipReplied = {{ skip_replied }} !== false; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com' }; await new Promise(r => setTimeout(r, 3000)); let attempts = 0; while (attempts < 10) { const items = document.querySelectorAll('[data-testid^=\"dm-conversation-item-\"], [data-testid=\"conversation\"]'); if (items.length > 0) break; await new Promise(r => setTimeout(r, 1000)); attempts++; } const needed = max + 5; for (let scroll = 0; scroll < 10; scroll++) { const items = document.querySelectorAll('[data-testid^=\"dm-conversation-item-\"], [data-testid=\"conversation\"]'); if (items.length >= needed) break; if (items.length > 0) { items[items.length - 1].scrollIntoView({ behavior: 'instant', block: 'end' }); } await new Promise(r => setTimeout(r, 1500)); } const results = []; const conversationItems = document.querySelectorAll('[data-testid^=\"dm-conversation-item-\"], [data-testid=\"conversation\"]'); for (let i = 0; i < Math.min(conversationItems.length, max); i++) { const item = conversationItems[i]; const testId = item.getAttribute('data-testid') || ''; const lines = (item.innerText || '').split('\\n').filter(l => l.trim()); const username = lines[0] || 'Unknown'; const match = testId.match(/dm-conversation-item-(.+)/); const convId = match ? match[1].replace(':', '-') : ''; const link = item.querySelector('a[href*=\"/messages/\"]'); const href = link ? link.href : ''; if (!convId && !href) { results.push({ index: i + 1, status: 'skipped', user: username, message: 'No conversation link' }); continue; } const convUrl = convId ? 'https://x.com/messages/' + convId : href; item.click(); await new Promise(r => setTimeout(r, 3000)); const dmHeader = document.querySelector('[data-testid=\"DmActivityContainer\"] [dir=\"ltr\"] span, [data-testid=\"conversation-header\"], [data-testid=\"DmActivityContainer\"] h2'); const chatUser = dmHeader ? dmHeader.innerText.trim().split('\\n')[0] : username; if (skipReplied) { const chatArea = document.querySelector('[data-testid=\"DmScrollerContainer\"], main'); const chatText = chatArea ? chatArea.innerText : ''; if (chatText.includes(text)) { results.push({ index: i + 1, status: 'skipped', user: chatUser, message: 'Already sent this message' }); continue; } } const input = document.querySelector('[data-testid=\"dmComposerTextInput\"]'); if (!input) { results.push({ index: i + 1, status: 'skipped', user: chatUser, message: 'No input found' }); continue; } input.focus(); await new Promise(r => setTimeout(r, 300)); document.execCommand('insertText', false, text); await new Promise(r => setTimeout(r, 500)); const sendBtn = document.querySelector('[data-testid=\"dmComposerSendButton\"]'); if (sendBtn) { sendBtn.click(); await new Promise(r => setTimeout(r, 1500)); results.push({ index: i + 1, status: 'sent', user: chatUser, message: 'Message sent: ' + text.slice(0, 50) }); } else { results.push({ index: i + 1, status: 'error', user: chatUser, message: 'No send button found' }); } } return { results }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ index: 0, status: 'error', user: '', message: intermediate.error }]; return intermediate.results || []; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-reply-dm",
-  "category": "interact",
-  "description": "Send DM replies to recent conversations",
-  "is_public": true,
-  "method": "POST",
-  "name": "ReplyDM",
-  "output_schema": [
-    { "name": "index", "type": "number", "description": "索引" },
-    { "name": "status", "type": "string", "description": "状态(sent/skipped/error)" },
-    { "name": "user", "type": "string", "description": "用户" },
-    { "name": "message", "type": "string", "description": "消息/错误" }
-  ],
-  "variables": [
-    { "name": "text", "type": "string", "required": true, "help": "Message text to send", "test": "Hello!" },
-    { "name": "max", "type": "int", "default": 20, "help": "Max conversations", "test": 2 },
-    { "name": "skip_replied", "type": "bool", "default": true, "help": "Skip already replied", "test": true }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://x.com/messages", "waitUntil": "load" }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const text = '{{ text }}'; const max = {{ max }} || 20; const skipReplied = {{ skip_replied }} !== false; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com' }; await new Promise(r => setTimeout(r, 3000)); let attempts = 0; while (attempts < 10) { const items = document.querySelectorAll('[data-testid^=\"dm-conversation-item-\"], [data-testid=\"conversation\"]'); if (items.length > 0) break; await new Promise(r => setTimeout(r, 1000)); attempts++; } const needed = max + 5; for (let scroll = 0; scroll < 10; scroll++) { const items = document.querySelectorAll('[data-testid^=\"dm-conversation-item-\"], [data-testid=\"conversation\"]'); if (items.length >= needed) break; if (items.length > 0) { items[items.length - 1].scrollIntoView({ behavior: 'instant', block: 'end' }); } await new Promise(r => setTimeout(r, 1500)); } const results = []; const conversationItems = document.querySelectorAll('[data-testid^=\"dm-conversation-item-\"], [data-testid=\"conversation\"]'); for (let i = 0; i < Math.min(conversationItems.length, max); i++) { const item = conversationItems[i]; const testId = item.getAttribute('data-testid') || ''; const lines = (item.innerText || '').split('\\n').filter(l => l.trim()); const username = lines[0] || 'Unknown'; const match = testId.match(/dm-conversation-item-(.+)/); const convId = match ? match[1].replace(':', '-') : ''; const link = item.querySelector('a[href*=\"/messages/\"]'); const href = link ? link.href : ''; if (!convId && !href) { results.push({ index: i + 1, status: 'skipped', user: username, message: 'No conversation link' }); continue; } const convUrl = convId ? 'https://x.com/messages/' + convId : href; item.click(); await new Promise(r => setTimeout(r, 3000)); const dmHeader = document.querySelector('[data-testid=\"DmActivityContainer\"] [dir=\"ltr\"] span, [data-testid=\"conversation-header\"], [data-testid=\"DmActivityContainer\"] h2'); const chatUser = dmHeader ? dmHeader.innerText.trim().split('\\n')[0] : username; if (skipReplied) { const chatArea = document.querySelector('[data-testid=\"DmScrollerContainer\"], main'); const chatText = chatArea ? chatArea.innerText : ''; if (chatText.includes(text)) { results.push({ index: i + 1, status: 'skipped', user: chatUser, message: 'Already sent this message' }); continue; } } const input = document.querySelector('[data-testid=\"dmComposerTextInput\"]'); if (!input) { results.push({ index: i + 1, status: 'skipped', user: chatUser, message: 'No input found' }); continue; } input.focus(); await new Promise(r => setTimeout(r, 300)); document.execCommand('insertText', false, text); await new Promise(r => setTimeout(r, 500)); const sendBtn = document.querySelector('[data-testid=\"dmComposerSendButton\"]'); if (sendBtn) { sendBtn.click(); await new Promise(r => setTimeout(r, 1500)); results.push({ index: i + 1, status: 'sent', user: chatUser, message: 'Message sent: ' + text.slice(0, 50) }); } else { results.push({ index: i + 1, status: 'error', user: chatUser, message: 'No send button found' }); } } return { results }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ index: 0, status: 'error', user: '', message: intermediate.error }]; return intermediate.results || []; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-reply-dm",
+	"category": "interact",
+	"description": "Send DM replies to recent conversations",
+	"is_public": true,
+	"method": "POST",
+	"name": "ReplyDM",
+	"output_schema": [
+		{ "name": "index", "type": "number", "description": "索引" },
+		{
+			"name": "status",
+			"type": "string",
+			"description": "状态(sent/skipped/error)"
+		},
+		{ "name": "user", "type": "string", "description": "用户" },
+		{ "name": "message", "type": "string", "description": "消息/错误" }
+	],
+	"variables": [
+		{
+			"name": "text",
+			"type": "string",
+			"required": true,
+			"help": "Message text to send",
+			"test": "Hello!"
+		},
+		{
+			"name": "max",
+			"type": "int",
+			"default": 20,
+			"help": "Max conversations",
+			"test": 2
+		},
+		{
+			"name": "skip_replied",
+			"type": "bool",
+			"default": true,
+			"help": "Skip already replied",
+			"test": true
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

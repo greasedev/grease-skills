@@ -1,37 +1,52 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://x.com/compose/post?url={{ url }}", "waitUntil": "load" }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const text = '{{ text }}'; await new Promise(r => setTimeout(r, 3000)); const textarea = document.querySelector('[data-testid=\"tweetTextarea_0\"]'); if (!textarea) return { ok: false, message: 'Composer textarea not found' }; textarea.focus(); try { document.execCommand('insertText', false, text); } catch { const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set; if (nativeSetter) nativeSetter.call(textarea, text); else textarea.value = text; textarea.dispatchEvent(new Event('input', { bubbles: true })); } await new Promise(r => setTimeout(r, 1000)); const tweetBtn = document.querySelector('[data-testid=\"tweetButton\"]') || document.querySelector('[data-testid=\"tweetButtonInline\"]'); if (!tweetBtn) return { ok: false, message: 'Tweet button not found' }; tweetBtn.click(); await new Promise(r => setTimeout(r, 2000)); const toast = document.querySelector('[data-testid=\"toast\"]'); const success = !toast || !toast.textContent?.includes('error'); return { ok: success, message: success ? 'Quote posted' : 'Post may have failed', text }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error, text: '' }]; return [intermediate]; }"
-      }
-    }
-  ],
-  "api_endpoint": "twitter-quote",
-  "category": "interact",
-  "description": "Quote tweet with comment",
-  "is_public": true,
-  "method": "POST",
-  "name": "Quote",
-  "output_schema": [
-    { "name": "ok", "type": "boolean", "description": "成功" },
-    { "name": "message", "type": "string", "description": "结果消息" },
-    { "name": "text", "type": "string", "description": "引用文本" }
-  ],
-  "variables": [
-    { "name": "url", "type": "string", "required": true, "help": "Tweet URL to quote", "test": "https://x.com/elonmusk/status/2044315118583066738" },
-    { "name": "text", "type": "string", "required": true, "help": "Quote text", "test": "Interesting!" }
-  ],
-  "website_domain": "x.com",
-  "website_id": "website-x.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://x.com/compose/post?url={{ url }}",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const text = '{{ text }}'; await new Promise(r => setTimeout(r, 3000)); const textarea = document.querySelector('[data-testid=\"tweetTextarea_0\"]'); if (!textarea) return { ok: false, message: 'Composer textarea not found' }; textarea.focus(); try { document.execCommand('insertText', false, text); } catch { const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set; if (nativeSetter) nativeSetter.call(textarea, text); else textarea.value = text; textarea.dispatchEvent(new Event('input', { bubbles: true })); } await new Promise(r => setTimeout(r, 1000)); const tweetBtn = document.querySelector('[data-testid=\"tweetButton\"]') || document.querySelector('[data-testid=\"tweetButtonInline\"]'); if (!tweetBtn) return { ok: false, message: 'Tweet button not found' }; tweetBtn.click(); await new Promise(r => setTimeout(r, 2000)); const toast = document.querySelector('[data-testid=\"toast\"]'); const success = !toast || !toast.textContent?.includes('error'); return { ok: success, message: success ? 'Quote posted' : 'Post may have failed', text }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error, text: '' }]; return [intermediate]; }"
+			}
+		}
+	],
+	"api_endpoint": "twitter-quote",
+	"category": "interact",
+	"description": "Quote tweet with comment",
+	"is_public": true,
+	"method": "POST",
+	"name": "Quote",
+	"output_schema": [
+		{ "name": "ok", "type": "boolean", "description": "成功" },
+		{ "name": "message", "type": "string", "description": "结果消息" },
+		{ "name": "text", "type": "string", "description": "引用文本" }
+	],
+	"variables": [
+		{
+			"name": "url",
+			"type": "string",
+			"required": true,
+			"help": "Tweet URL to quote",
+			"test": "https://x.com/elonmusk/status/2044315118583066738"
+		},
+		{
+			"name": "text",
+			"type": "string",
+			"required": true,
+			"help": "Quote text",
+			"test": "Interesting!"
+		}
+	],
+	"website_domain": "x.com",
+	"website_id": "website-x.com"
 }

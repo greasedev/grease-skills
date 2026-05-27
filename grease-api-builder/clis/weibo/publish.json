@@ -1,47 +1,63 @@
 {
-  "actions": [
-    {
-      "action": "open",
-      "argument": { "url": "https://weibo.com", "waitUntil": "load" }
-    },
-    {
-      "action": "wait",
-      "argument": { "timeMs": 2000 }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { const dryrun = {{ dryrun }} || false; const text = '{{ text }}'; const app = document.querySelector('#app')?.__vue_app__; const store = app?.config?.globalProperties?.$store; const uid = store?.state?.config?.config?.uid; if (!uid) { const resp = await fetch('/ajax/config/get_config', {credentials: 'include'}); if (resp.ok) { const data = await resp.json(); if (data.ok && data.data?.uid) return { uid: String(data.data.uid), dryrun, text }; } return { error: 'Not logged into weibo.com' }; } return { uid: String(uid), dryrun, text }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ status: 'error', message: intermediate.error, text: '' }]; const text = intermediate.text; const dryrun = intermediate.dryrun; const visible = el => !!el && el.offsetParent !== null && !el.disabled; const buttons = document.querySelectorAll('button[title=\"发微博\"], button[title=\"写微博\"]'); let clicked = false; for (const btn of buttons) { if (visible(btn)) { btn.click(); clicked = true; break; } } if (!clicked) return { error: 'Could not find 发微博 button' }; await new Promise(r => setTimeout(r, 1000)); for (let i = 0; i < 30; i++) { const ta = document.querySelector('textarea._input_13iqr_8'); if (ta && ta.offsetParent !== null) { ta.focus(); const nativeSetter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set; if (nativeSetter) nativeSetter.call(ta, text); else ta.value = text; ta.dispatchEvent(new Event('input', { bubbles: true })); ta.dispatchEvent(new Event('change', { bubbles: true })); await new Promise(r => setTimeout(r, 500)); if (dryrun) { return [{ status: 'dryrun', message: 'Dryrun mode - text filled but not published', text }]; } const allBtns = document.querySelectorAll('button, [role=\"button\"]'); for (const btn of allBtns) { const t = (btn.innerText || btn.textContent || '').trim(); if ((t === '发送' || t === '发布') && visible(btn)) { btn.click(); await new Promise(r => setTimeout(r, 3000)); for (let j = 0; j < 40; j++) { for (const el of document.querySelectorAll('*')) { if (el.children.length > 3) continue; const txt = (el.innerText || '').trim(); if (!txt || txt.length > 100) continue; if (txt.includes('发布成功') || txt.includes('已发布') || txt.includes('发送成功')) { return { ok: true, message: txt, text }; } if (txt.includes('发布失败') || txt.includes('发送失败') || txt.includes('内容违规') || txt.includes('频繁')) { return { error: txt, text }; } } await new Promise(r => setTimeout(r, 500)); } return { error: 'Publish result unclear', text }; } } return { error: 'Could not find send button', text }; } await new Promise(r => setTimeout(r, 300)); } return { error: 'Compose editor did not appear', text }; }"
-      }
-    },
-    {
-      "action": "evaluate",
-      "argument": {
-        "script": "async (intermediate) => { if (intermediate.error) return [{ status: 'error', message: intermediate.error, text: intermediate.text || '' }]; if (intermediate.ok) return [{ status: 'success', message: intermediate.message, text: intermediate.text }]; return intermediate; }"
-      }
-    }
-  ],
-  "api_endpoint": "weibo-publish",
-  "category": "interact",
-  "description": "Publish a new Weibo post",
-  "is_public": true,
-  "method": "POST",
-  "name": "Publish",
-  "output_schema": [
-    { "name": "status", "type": "string", "description": "状态(success/dryrun/error)" },
-    { "name": "message", "type": "string", "description": "结果消息" },
-    { "name": "text", "type": "string", "description": "微博内容" }
-  ],
-  "variables": [
-    { "name": "text", "type": "string", "required": true, "help": "Weibo text content (max 2000 chars)", "test": "测试微博 #opencli" },
-    { "name": "dryrun", "type": "boolean", "default": false, "help": "Test mode without actually publishing", "test": true }
-  ],
-  "website_domain": "weibo.com",
-  "website_id": "website-weibo.com"
+	"actions": [
+		{
+			"action": "open",
+			"argument": { "url": "https://weibo.com", "waitUntil": "load" }
+		},
+		{
+			"action": "wait",
+			"argument": { "timeMs": 2000 }
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const dryrun = {{ dryrun }} || false; const text = '{{ text }}'; const app = document.querySelector('#app')?.__vue_app__; const store = app?.config?.globalProperties?.$store; const uid = store?.state?.config?.config?.uid; if (!uid) { const resp = await fetch('/ajax/config/get_config', {credentials: 'include'}); if (resp.ok) { const data = await resp.json(); if (data.ok && data.data?.uid) return { uid: String(data.data.uid), dryrun, text }; } return { error: 'Not logged into weibo.com' }; } return { uid: String(uid), dryrun, text }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ status: 'error', message: intermediate.error, text: '' }]; const text = intermediate.text; const dryrun = intermediate.dryrun; const visible = el => !!el && el.offsetParent !== null && !el.disabled; const buttons = document.querySelectorAll('button[title=\"发微博\"], button[title=\"写微博\"]'); let clicked = false; for (const btn of buttons) { if (visible(btn)) { btn.click(); clicked = true; break; } } if (!clicked) return { error: 'Could not find 发微博 button' }; await new Promise(r => setTimeout(r, 1000)); for (let i = 0; i < 30; i++) { const ta = document.querySelector('textarea._input_13iqr_8'); if (ta && ta.offsetParent !== null) { ta.focus(); const nativeSetter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set; if (nativeSetter) nativeSetter.call(ta, text); else ta.value = text; ta.dispatchEvent(new Event('input', { bubbles: true })); ta.dispatchEvent(new Event('change', { bubbles: true })); await new Promise(r => setTimeout(r, 500)); if (dryrun) { return [{ status: 'dryrun', message: 'Dryrun mode - text filled but not published', text }]; } const allBtns = document.querySelectorAll('button, [role=\"button\"]'); for (const btn of allBtns) { const t = (btn.innerText || btn.textContent || '').trim(); if ((t === '发送' || t === '发布') && visible(btn)) { btn.click(); await new Promise(r => setTimeout(r, 3000)); for (let j = 0; j < 40; j++) { for (const el of document.querySelectorAll('*')) { if (el.children.length > 3) continue; const txt = (el.innerText || '').trim(); if (!txt || txt.length > 100) continue; if (txt.includes('发布成功') || txt.includes('已发布') || txt.includes('发送成功')) { return { ok: true, message: txt, text }; } if (txt.includes('发布失败') || txt.includes('发送失败') || txt.includes('内容违规') || txt.includes('频繁')) { return { error: txt, text }; } } await new Promise(r => setTimeout(r, 500)); } return { error: 'Publish result unclear', text }; } } return { error: 'Could not find send button', text }; } await new Promise(r => setTimeout(r, 300)); } return { error: 'Compose editor did not appear', text }; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { if (intermediate.error) return [{ status: 'error', message: intermediate.error, text: intermediate.text || '' }]; if (intermediate.ok) return [{ status: 'success', message: intermediate.message, text: intermediate.text }]; return intermediate; }"
+			}
+		}
+	],
+	"api_endpoint": "weibo-publish",
+	"category": "interact",
+	"description": "Publish a new Weibo post",
+	"is_public": true,
+	"method": "POST",
+	"name": "Publish",
+	"output_schema": [
+		{
+			"name": "status",
+			"type": "string",
+			"description": "状态(success/dryrun/error)"
+		},
+		{ "name": "message", "type": "string", "description": "结果消息" },
+		{ "name": "text", "type": "string", "description": "微博内容" }
+	],
+	"variables": [
+		{
+			"name": "text",
+			"type": "string",
+			"required": true,
+			"help": "Weibo text content (max 2000 chars)",
+			"test": "测试微博 #opencli"
+		},
+		{
+			"name": "dryrun",
+			"type": "boolean",
+			"default": false,
+			"help": "Test mode without actually publishing",
+			"test": true
+		}
+	],
+	"website_domain": "weibo.com",
+	"website_id": "website-weibo.com"
 }
