@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-05-12T08:42:00.734Z",
+  "json_file": "./clis/weibo/me.json",
+  "command": "Me",
+  "website": "weibo.com",
+  "params": {},
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "screen_name": "龙哥龙哥_3",
+      "uid": 2791653847,
+      "followers": 0,
+      "following": 53,
+      "statuses": 0,
+      "verified": false,
+      "location": "湖北",
+      "description": "暂无简介",
+      "avatar": "https://tva1.sinaimg.cn/crop.0.0.960.960.1024/a66541d7jw8fam6br1n4uj20qo0qpgn3.jpg?KID=imgbed,tva&Expires=1778586118&ssig=nc9DczBNQs",
+      "profile_url": "https://weibo.com/u/2791653847"
+    }
+  ]
+}

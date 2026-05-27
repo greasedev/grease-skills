@@ -1,0 +1,58 @@
+{
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://www.bilibili.com",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const navRes = await fetch('https://api.bilibili.com/x/web-interface/nav', { credentials: 'include' }); const nav = await navRes.json(); const data = nav?.data ?? {}; if (!data.isLogin) return { error: 'Not logged in' }; const levelInfo = data.level_info ?? {}; return { name: data.uname ?? '', uid: data.mid ?? 0, level: levelInfo.current_level ?? 0, coins: data.money ?? 0, followers: 0, following: 0 }; }"
+      }
+    }
+  ],
+  "api_endpoint": "bilibili-me",
+  "category": "auth",
+  "description": "My Bilibili profile info",
+  "is_public": true,
+  "method": "GET",
+  "name": "Me",
+  "output_schema": [
+    {
+      "name": "name",
+      "type": "string",
+      "description": "用户名"
+    },
+    {
+      "name": "uid",
+      "type": "number",
+      "description": "用户ID"
+    },
+    {
+      "name": "level",
+      "type": "number",
+      "description": "等级"
+    },
+    {
+      "name": "coins",
+      "type": "number",
+      "description": "硬币数"
+    },
+    {
+      "name": "followers",
+      "type": "number",
+      "description": "粉丝数"
+    },
+    {
+      "name": "following",
+      "type": "number",
+      "description": "关注数"
+    }
+  ],
+  "variables": [],
+  "website_domain": "www.bilibili.com",
+  "website_id": "website-bilibili"
+}

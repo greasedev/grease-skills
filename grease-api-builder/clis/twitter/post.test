@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-11T10:38:56.502Z",
+  "json_file": "clis/twitter/post.json",
+  "command": "Post",
+  "website": "x.com",
+  "params": {
+    "text": "Hello world from GreaseAI!",
+    "submit": false
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "ok": true,
+      "message": "Text entered (not submitted).",
+      "text": "Hello world from GreaseAI!",
+      "submitted": false
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter post \"Hello world from GreaseAI!\" --submit \"false\" -f json\nerror: unknown option '--submit'\n"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-05-12T08:45:59.563Z",
+  "json_file": "./clis/weibo/post.json",
+  "command": "Post",
+  "website": "weibo.com",
+  "params": {
+    "id": "QEQmJnN2K"
+  },
+  "success": true,
+  "data_count": 11,
+  "sample_data": [
+    {
+      "field": "author",
+      "value": "老妖女士"
+    },
+    {
+      "field": "comments",
+      "value": "28"
+    },
+    {
+      "field": "created_at",
+      "value": "Mon May 11 11:05:34 +0800 2026"
+    },
+    {
+      "field": "id",
+      "value": "5297344175670070"
+    },
+    {
+      "field": "likes",
+      "value": "3923"
+    }
+  ],
+  "comparison": {
+    "grease_count": 11,
+    "opencli_count": 11,
+    "match": true,
+    "differences": []
+  }
+}

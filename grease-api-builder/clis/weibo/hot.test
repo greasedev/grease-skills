@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-05-12T08:35:16.573Z",
+  "json_file": "./clis/weibo/hot.json",
+  "command": "Hot",
+  "website": "weibo.com",
+  "params": {
+    "limit": 10
+  },
+  "success": true,
+  "data_count": 10,
+  "sample_data": [
+    {
+      "rank": 1,
+      "word": "宇树机甲390万起",
+      "hot_value": 1431494,
+      "category": "互联网",
+      "label": "",
+      "url": "https://s.weibo.com/weibo?q=%23%E5%AE%87%E6%A0%91%E6%9C%BA%E7%94%B2390%E4%B8%87%E8%B5%B7%23"
+    },
+    {
+      "rank": 2,
+      "word": "降噪耳机受害者出现",
+      "hot_value": 869859,
+      "category": "数码",
+      "label": "",
+      "url": "https://s.weibo.com/weibo?q=%23%E9%99%8D%E5%99%AA%E8%80%B3%E6%9C%BA%E5%8F%97%E5%AE%B3%E8%80%85%E5%87%BA%E7%8E%B0%23"
+    },
+    {
+      "rank": 3,
+      "word": "科学避险自救指南",
+      "hot_value": 749161,
+      "category": "国内时政",
+      "label": "新",
+      "url": "https://s.weibo.com/weibo?q=%23%E7%A7%91%E5%AD%A6%E9%81%BF%E9%99%A9%E8%87%AA%E6%95%91%E6%8C%87%E5%8D%97%23"
+    },
+    {
+      "rank": 4,
+      "word": "原来健康的人身体是静音的",
+      "hot_value": 740939,
+      "category": "幽默",
+      "label": "",
+      "url": "https://s.weibo.com/weibo?q=%23%E5%8E%9F%E6%9D%A5%E5%81%A5%E5%BA%B7%E7%9A%84%E4%BA%BA%E8%BA%AB%E4%BD%93%E6%98%AF%E9%9D%99%E9%9F%B3%E7%9A%84%23"
+    },
+    {
+      "rank": 5,
+      "word": "深圳夫妻囤存储芯片5个月狂涨320亿",
+      "hot_value": 731026,
+      "category": "财经",
+      "label": "",
+      "url": "https://s.weibo.com/weibo?q=%23%E6%B7%B1%E5%9C%B3%E5%A4%AB%E5%A6%BB%E5%9B%A4%E5%AD%98%E5%82%A8%E8%8A%AF%E7%89%875%E4%B8%AA%E6%9C%88%E7%8B%82%E6%B6%A8320%E4%BA%BF%23"
+    }
+  ],
+  "comparison": {
+    "grease_count": 10,
+    "opencli_count": 10,
+    "match": true,
+    "differences": []
+  }
+}

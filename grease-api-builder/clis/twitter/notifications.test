@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-05-12T04:11:33.668Z",
+  "json_file": "./clis/twitter/notifications.json",
+  "command": "Notifications",
+  "website": "x.com",
+  "params": {
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "Ff0UvQiXwAAAAAABm5udsRdbqkJNqQj0INc",
+      "action": "recommendation_icon",
+      "author": "X",
+      "text": "X | tell your mom i said happy mother's day",
+      "url": "https://twitter.com/X/status/2053491018897445128"
+    },
+    {
+      "id": "Ff0UvQiXwAAAAAABm5udsRdbqkLhz227INc",
+      "action": "recommendation_icon",
+      "author": "hiarun02",
+      "text": "Arun | ChatGPT usage now impacting my Codex rates 🤧 https://t.co/anmq8LTLkp",
+      "url": "https://twitter.com/hiarun02/status/2053497791079690477"
+    },
+    {
+      "id": "Ff0UvQiXwAAAAAABm5udsRdbqkLjveVODgc",
+      "action": "recommendation_icon",
+      "author": "sheriyuo",
+      "text": "Xiuyu Li | AI research is already falling into a death cycle.\n\nIf you do not get an internship at a top lab/company, you cannot access the core techniques or gain real frontier engineering experience.",
+      "url": "https://twitter.com/sheriyuo/status/2053477912536301793"
+    },
+    {
+      "id": "Ff0UvQiXwAAAAAABm5udsRdbqkKaPipjDgc",
+      "action": "recommendation_icon",
+      "author": "dotey",
+      "text": "宝玉 | https://t.co/ppWKvUk98n",
+      "url": "https://twitter.com/dotey/status/2053351712149135385"
+    },
+    {
+      "id": "Ff0UvQiXwAAAAAABm5udsRdbqkIVXIjNDgc",
+      "action": "recommendation_icon",
+      "author": "IntCyberDigest",
+      "text": "International Cyber Digest | ‼️🚨 ALARMING: Google now treats privacy as suspicious behavior by default. Users of GrapheneOS, CalyxOS, /e/OS, and other deGoogled Android phones are being locked out of",
+      "url": "https://twitter.com/IntCyberDigest/status/2053259432054726872"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

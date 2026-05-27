@@ -1,0 +1,39 @@
+{
+  "actions": [
+    {
+      "action": "open",
+      "argument": { "url": "https://weibo.com", "waitUntil": "load" }
+    },
+    {
+      "action": "wait",
+      "argument": { "timeMs": 2000 }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const app = document.querySelector('#app')?.__vue_app__; const store = app?.config?.globalProperties?.$store; const cfg = store?.state?.config?.config; const u = cfg?.user; let uid = cfg?.uid; if (!uid) { const resp = await fetch('/ajax/config/get_config', {credentials: 'include'}); if (resp.ok) { const data = await resp.json(); if (data.ok && data.data?.uid) uid = String(data.data.uid); } } if (!uid) return {error: 'Not logged into weibo.com'}; const detailResp = await fetch('/ajax/profile/detail?uid=' + uid, {credentials: 'include'}); const detail = detailResp.ok ? await detailResp.json() : null; const d = detail?.data || {}; if (u && u.id) { return { screen_name: u.screen_name, uid: u.id, followers: u.followers_count, following: u.friends_count, statuses: u.statuses_count, verified: u.verified || false, location: u.location || '', description: u.description || d.description || '', avatar: u.avatar_hd || u.avatar_large || '', profile_url: 'https://weibo.com' + (u.profile_url || '/u/' + u.id) }; } const infoResp = await fetch('/ajax/profile/info?uid=' + uid, {credentials: 'include'}); if (!infoResp.ok) return {error: 'HTTP ' + infoResp.status}; const info = await infoResp.json(); if (!info.ok) return {error: 'API error'}; const p = info.data?.user; if (!p) return {error: 'User data not found'}; return { screen_name: p.screen_name, uid: p.id, followers: p.followers_count, following: p.friends_count, statuses: p.statuses_count, verified: p.verified || false, location: p.location || '', description: p.description || d.description || '', avatar: p.avatar_hd || p.avatar_large || '', profile_url: 'https://weibo.com' + (p.profile_url || '/u/' + p.id) }; }"
+      }
+    }
+  ],
+  "api_endpoint": "weibo-me",
+  "category": "scrape",
+  "description": "My Weibo profile info",
+  "is_public": true,
+  "method": "GET",
+  "name": "Me",
+  "output_schema": [
+    { "name": "screen_name", "type": "string", "description": "用户名" },
+    { "name": "uid", "type": "string", "description": "用户ID" },
+    { "name": "followers", "type": "number", "description": "粉丝数" },
+    { "name": "following", "type": "number", "description": "关注数" },
+    { "name": "statuses", "type": "number", "description": "微博数" },
+    { "name": "verified", "type": "boolean", "description": "是否认证" },
+    { "name": "location", "type": "string", "description": "位置" },
+    { "name": "description", "type": "string", "description": "简介" },
+    { "name": "avatar", "type": "string", "description": "头像" },
+    { "name": "profile_url", "type": "string", "description": "主页链接" }
+  ],
+  "variables": [],
+  "website_domain": "weibo.com",
+  "website_id": "website-weibo.com"
+}

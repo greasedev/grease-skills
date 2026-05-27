@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-04-11T08:22:15.778Z",
+  "json_file": "./clis/xiaohongshu/notifications.json",
+  "command": "Notifications",
+  "website": "www.xiaohongshu.com",
+  "params": {
+    "limit": 3,
+    "type": "mentions"
+  },
+  "success": false,
+  "data_count": 3,
+  "sample_data": [
+    {
+      "rank": 1,
+      "user": "小红薯694276E6",
+      "action": "评论了你的笔记",
+      "content": "我也喜欢吃",
+      "note": "没人觉得九寨英迪格的甜糌粑巨好吃吗？",
+      "time": 1764636173
+    },
+    {
+      "rank": 2,
+      "user": "甄四月",
+      "action": "回复了你的评论",
+      "content": "呵呵！必须的[偷笑R]",
+      "note": "布艺兔兔合集",
+      "time": 1761719928
+    },
+    {
+      "rank": 3,
+      "user": "不在小院",
+      "action": "回复了你的评论",
+      "content": "欢迎常来",
+      "note": "国庆日程表｜在乡村玩一场桌游",
+      "time": 1761150218
+    }
+  ],
+  "comparison": {
+    "grease_count": 3,
+    "opencli_count": 1,
+    "match": false,
+    "differences": [
+      "Count mismatch: GreaseAI=3, OpenCLI=1"
+    ]
+  }
+}

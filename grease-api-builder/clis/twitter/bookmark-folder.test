@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-05-11T14:51:17.916Z",
+  "json_file": "clis/twitter/bookmark-folder.json",
+  "command": "BookmarkFolder",
+  "website": "x.com",
+  "params": {
+    "folder_id": "779082698558406656",
+    "limit": 5
+  },
+  "success": false,
+  "data_count": 0,
+  "sample_data": [],
+  "comparison": {
+    "grease_count": 0,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter bookmark-folder \"779082698558406656\" --limit 5 -f json 2>/dev/null\n"
+    ]
+  }
+}

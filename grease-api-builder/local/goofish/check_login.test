@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-04-14T15:48:12.557Z",
+  "json_file": "./clis/local/goofish/check_login.json",
+  "command": "Check Login",
+  "website": "www.goofish.com",
+  "params": {},
+  "success": false,
+  "data_count": 0
+}

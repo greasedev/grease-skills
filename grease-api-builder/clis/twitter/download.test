@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-05-12T04:17:51.776Z",
+  "json_file": "./clis/twitter/download.json",
+  "command": "Download",
+  "website": "x.com",
+  "params": {
+    "username": "elonmusk",
+    "limit": 3
+  },
+  "success": false,
+  "data_count": 0,
+  "sample_data": [],
+  "comparison": {
+    "grease_count": 0,
+    "opencli_count": 1,
+    "match": false,
+    "differences": [
+      "Count mismatch: GreaseAI=0, OpenCLI=1"
+    ]
+  }
+}

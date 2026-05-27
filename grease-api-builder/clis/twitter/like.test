@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-05-11T10:38:49.047Z",
+  "json_file": "clis/twitter/like.json",
+  "command": "Like",
+  "website": "x.com",
+  "params": {
+    "url": "https://x.com/elonmusk/status/2044315118583066738"
+  },
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "ok": true,
+      "message": "Tweet is already liked."
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 1,
+    "match": true,
+    "differences": []
+  }
+}

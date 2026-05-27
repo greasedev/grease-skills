@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-05-14T07:16:18.317Z",
+  "json_file": "./clis/twitter/suggested.json",
+  "command": "Suggested",
+  "website": "x.com",
+  "params": {
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "username": "liuzhuang1234",
+      "name": "Zhuang Liu",
+      "bio": "Assistant Professor \n@PrincetonCS\n. deep learning, vision, models. previously \n@MetaAI\n, \n@UCBerkeley\n, \n@Tsinghua_Uni",
+      "url": "https://x.com/liuzhuang1234"
+    },
+    {
+      "username": "apolloaievals",
+      "name": "Apollo Research",
+      "bio": "Our goal is to secure frontier AI systems from development, to deployment and governance.",
+      "url": "https://x.com/apolloaievals"
+    },
+    {
+      "username": "woj_zaremba",
+      "name": "Wojciech Zaremba",
+      "bio": "AI resilience at OpenAI Foundation Co-Founder of OpenAI \nhttps://\nwoj.world",
+      "url": "https://x.com/woj_zaremba"
+    },
+    {
+      "username": "chelseabfinn",
+      "name": "Chelsea Finn",
+      "bio": "Asst Prof of CS & EE \n@Stanford\n Co-founder of Physical Intelligence \n@physical_int\n PhD from \n@Berkeley_EECS\n, EECS BS from \n@MIT",
+      "url": "https://x.com/chelseabfinn"
+    },
+    {
+      "username": "DbrxMosaicAI",
+      "name": "Databricks AI Research",
+      "bio": "We remove the barriers to state-of-the-art generative AI model development and make data + AI available to all.",
+      "url": "https://x.com/DbrxMosaicAI"
+    }
+  ]
+}

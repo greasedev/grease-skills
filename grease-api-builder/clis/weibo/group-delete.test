@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-05-12T08:52:33.856Z",
+  "json_file": "./clis/weibo/group-delete.json",
+  "command": "GroupDelete",
+  "website": "weibo.com",
+  "params": {
+    "name": "测试",
+    "dryrun": true
+  },
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "error": "Group not found: 测试",
+      "name": "测试"
+    }
+  ]
+}

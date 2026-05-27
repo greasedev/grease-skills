@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-05-12T08:41:56.715Z",
+  "json_file": "./clis/weibo/comments.json",
+  "command": "Comments",
+  "website": "weibo.com",
+  "params": {
+    "id": "QEQmJnN2K",
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 20,
+  "sample_data": [
+    {
+      "rank": 1,
+      "author": "缪小咪大王",
+      "text": "中国没有成年的男人，没有未成年的女人",
+      "likes": 0,
+      "replies": 0,
+      "time": "Mon May 11 22:00:24 +0800 2026"
+    },
+    {
+      "rank": 2,
+      "author": "微博智搜",
+      "text": "该事件发生于内蒙古呼伦贝尔市海拉尔区一游乐场，一名男子向蹦床扔烟头导致弹跳网破损，一名10岁女孩坠落受伤，涉事项目已停运，警方介入。园方称设备被烟头烫破属意外损耗，非质量问题。“海底捞17岁男童”表述源于另一起独立事件，指媒体对成年人使用低...查看全部戳->微博智搜",
+      "likes": 0,
+      "replies": 0,
+      "time": "Mon May 11 22:15:21 +0800 2026"
+    },
+    {
+      "rank": 3,
+      "author": "土狗不存在",
+      "text": "请给我一个准确的解释，什么年龄是童，什么年龄是子",
+      "likes": 0,
+      "replies": 2,
+      "time": "Mon May 11 22:19:33 +0800 2026"
+    },
+    {
+      "rank": 4,
+      "author": "爱读书小娃",
+      "text": "祈祷张雪峰老师把这帮学新闻的孙子都带走",
+      "likes": 0,
+      "replies": 1,
+      "time": "Mon May 11 22:10:30 +0800 2026"
+    },
+    {
+      "rank": 5,
+      "author": "水果乐园宝宝",
+      "text": "六十岁男子找女朋友！这是媒体的问题！",
+      "likes": 0,
+      "replies": 0,
+      "time": "Mon May 11 15:40:14 +0800 2026"
+    }
+  ],
+  "comparison": {
+    "grease_count": 20,
+    "opencli_count": 20,
+    "match": true,
+    "differences": []
+  }
+}

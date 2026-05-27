@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-05-12T03:45:52.995Z",
+  "json_file": "./clis/twitter/thread.json",
+  "command": "Thread",
+  "website": "x.com",
+  "params": {
+    "tweet_id": "2044315118583066738",
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "2044315118583066738",
+      "author": "elonmusk",
+      "text": "Congrats to the @Tesla_AI chip design team on taping out AI5!\n\nAI6, Dojo3 &amp; other exciting chips in work. https://t.co/hm54TdIzBx",
+      "likes": 120756,
+      "retweets": 13068,
+      "created_at": "Wed Apr 15 07:21:20 +0000 2026",
+      "url": "https://x.com/elonmusk/status/2044315118583066738"
+    },
+    {
+      "id": "2053523128400363565",
+      "author": "acoba_may8543",
+      "text": "@elonmusk @Tesla_AI 👍👍♥️",
+      "likes": 0,
+      "retweets": 0,
+      "in_reply_to": "2044315118583066738",
+      "created_at": "Sun May 10 17:10:41 +0000 2026",
+      "url": "https://x.com/acoba_may8543/status/2053523128400363565"
+    },
+    {
+      "id": "2053328719473717431",
+      "author": "ISchrick70921",
+      "text": "@elonmusk @Tesla_AI Gratulation",
+      "likes": 1,
+      "retweets": 0,
+      "in_reply_to": "2044315118583066738",
+      "created_at": "Sun May 10 04:18:10 +0000 2026",
+      "url": "https://x.com/ISchrick70921/status/2053328719473717431"
+    },
+    {
+      "id": "2053185920384336217",
+      "author": "TXSLA99",
+      "text": "@elonmusk @Tesla_AI @aelluswamy @Tesla_AI Release of 14.3.2 puts a stain on all of the progress that’s been accomplished, with the amount of regression I’m seeing. Fix it. This is horrible.",
+      "likes": 0,
+      "retweets": 0,
+      "in_reply_to": "2044315118583066738",
+      "created_at": "Sat May 09 18:50:44 +0000 2026",
+      "url": "https://x.com/TXSLA99/status/2053185920384336217"
+    },
+    {
+      "id": "2052840004733346027",
+      "author": "medusawalter",
+      "text": "@elonmusk @elonumuskX @Tesla_AI Herzlichen Glückwunsch.",
+      "likes": 1,
+      "retweets": 1,
+      "in_reply_to": "2044315118583066738",
+      "created_at": "Fri May 08 19:56:11 +0000 2026",
+      "url": "https://x.com/medusawalter/status/2052840004733346027"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

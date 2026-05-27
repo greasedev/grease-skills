@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-05-12T08:43:47.852Z",
+  "json_file": "./clis/weibo/publish.json",
+  "command": "Publish",
+  "website": "weibo.com",
+  "params": {
+    "text": "测试微博 #opencli",
+    "dryrun": true
+  },
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "uid": "2791653847",
+      "dryrun": true,
+      "text": "测试微博 #opencli"
+    }
+  ]
+}

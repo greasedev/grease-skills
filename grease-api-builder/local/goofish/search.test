@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-04-17T03:55:27.094Z",
+  "json_file": "local/goofish/search.json",
+  "command": "Search",
+  "website": "www.goofish.com",
+  "params": {
+    "querystring": "iphone"
+  },
+  "success": false,
+  "data_count": 20,
+  "sample_data": [
+    {
+      "links": [
+        "https://www.goofish.com/item?id=986363121800&categoryId=126862807"
+      ]
+    },
+    {
+      "links": [
+        "https://www.goofish.com/item?id=985210978688&categoryId=126860292"
+      ]
+    },
+    {
+      "links": [
+        "https://www.goofish.com/item?id=1037709384476&categoryId=126918005"
+      ]
+    },
+    {
+      "links": [
+        "https://www.goofish.com/item?id=922694646346&categoryId=126860475"
+      ]
+    },
+    {
+      "links": [
+        "https://www.goofish.com/item?id=625437244144&categoryId=126862902"
+      ]
+    }
+  ],
+  "comparison": {
+    "grease_count": 20,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli goofish search \"iphone\"  -f json\nerror: unknown command 'goofish'\n"
+    ]
+  }
+}

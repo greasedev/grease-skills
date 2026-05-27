@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-05-12T14:18:47.938Z",
+  "json_file": "clis/weibo/group-posts.json",
+  "command": "GroupPosts",
+  "website": "weibo.com",
+  "params": {
+    "group_id": "201207160998946111",
+    "count": 25
+  },
+  "success": false,
+  "data_count": 23,
+  "sample_data": [
+    {
+      "id": "5297841084039491",
+      "text": "特朗普的凯迪拉克野兽车队 <a target=\"_blank\" href=\"https://video.weibo.com/show?fid=1034:5297839908257821\"><img class=\"icon-link\" title=\"http://t.cn/AXi5vegY\" src=\"https://h5.sinaimg.cn/upload/2015/09/25/3/timelin",
+      "user_id": "5903980664",
+      "user_name": "周树似",
+      "created_at": "Tue May 12 20:00:06 +0800 2026"
+    },
+    {
+      "id": "5297758136960386",
+      "text": "越南的三军仪仗队在东南亚也算一流的。 <a target=\"_blank\" href=\"https://video.weibo.com/show?fid=1034:5297758018666579\"><img class=\"icon-link\" title=\"http://t.cn/AXiGHlrE\" src=\"https://h5.sinaimg.cn/upload/2015/09/25/3/t",
+      "user_id": "5903980664",
+      "user_name": "周树似",
+      "created_at": "Tue May 12 14:30:30 +0800 2026"
+    },
+    {
+      "id": "5297159940607273",
+      "text": "柬埔寨电诈园区玻璃上触目惊心的求救信号！ <a target=\"_blank\" href=\"https://video.weibo.com/show?fid=1034:5297159785087101\"><img class=\"icon-link\" title=\"http://t.cn/AXiZDEq8\" src=\"https://h5.sinaimg.cn/upload/2015/09/25/3",
+      "user_id": "5903980664",
+      "user_name": "周树似",
+      "created_at": "Sun May 10 22:53:29 +0800 2026"
+    },
+    {
+      "id": "5297014986509889",
+      "text": "现场实拍俄胜利日阅兵俄军士兵高喊乌拉，响彻红场！ <a target=\"_blank\" href=\"https://video.weibo.com/show?fid=1034:5297014897049669\"><img class=\"icon-link\" title=\"http://t.cn/AXi7brfB\" src=\"https://h5.sinaimg.cn/upload/2015/09/",
+      "user_id": "5903980664",
+      "user_name": "周树似",
+      "created_at": "Sun May 10 13:17:29 +0800 2026"
+    },
+    {
+      "id": "5296950549415032",
+      "text": "来自我们四川广元民众对美国的警告⚠️ <a target=\"_blank\" href=\"https://video.weibo.com/show?fid=1034:5296950275145758\"><img class=\"icon-link\" title=\"http://t.cn/AXihi4Qb\" src=\"https://h5.sinaimg.cn/upload/2015/09/25/3/t",
+      "user_id": "5903980664",
+      "user_name": "周树似",
+      "created_at": "Sun May 10 09:01:26 +0800 2026"
+    }
+  ],
+  "comparison": {
+    "grease_count": 23,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli weibo group-posts \"201207160998946111\" --count \"25\" -f json 2>/dev/null\n"
+    ]
+  }
+}

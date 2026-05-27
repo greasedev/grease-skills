@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-05-12T08:38:11.265Z",
+  "json_file": "./clis/weibo/feed.json",
+  "command": "Feed",
+  "website": "weibo.com",
+  "params": {
+    "type": "for-you",
+    "limit": 5
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "QETMrlqO3",
+      "author": "斯图卡98",
+      "text": "一个学校如果总是出现价值观、意识形态的问题\n还不如停业整改两年 ​​​",
+      "reposts": 18,
+      "comments": 43,
+      "likes": 351,
+      "time": "Mon May 11 19:47:09 +0800 2026",
+      "url": "https://weibo.com/3279710155/QETMrlqO3"
+    },
+    {
+      "id": "QF1BVD9QQ",
+      "author": "鲁中晨报",
+      "text": "#日一零食企业薯片包装变黑白#据日本媒体5月11日报道，日本零食企业卡乐比计划将旗下部分薯片商品改为黑白两色包装，原因是中东局势紧张，导致印刷用的石油制品石脑油紧缺。日本内阁官房副长官佐藤启今天（5月12日）回应此事称，已经了解相关报道，相关部门正在与企业沟通了解情况。http://t.cn/AXiGElsY",
+      "reposts": 0,
+      "comments": 0,
+      "likes": 0,
+      "time": "Tue May 12 15:43:14 +0800 2026",
+      "url": "https://weibo.com/1625232640/QF1BVD9QQ"
+    },
+    {
+      "id": "QEVLZdUXA",
+      "author": "姜雅Vajra",
+      "text": "#瑜伽##瑜伽[超话]##运动打卡[超话]# 泡沫轴放松 http://t.cn/AXi4vafZ ​",
+      "reposts": 13,
+      "comments": 15,
+      "likes": 103,
+      "time": "Tue May 12 00:51:31 +0800 2026",
+      "url": "https://weibo.com/3194837130/QEVLZdUXA"
+    },
+    {
+      "id": "QEGLstEDC",
+      "author": "阿尔法小分队",
+      "text": "笑死，这也Cosplay的吗？\n#海外新鲜事# #热点现场# http://t.cn/AXihlHwQ ​​​",
+      "reposts": 1,
+      "comments": 0,
+      "likes": 1,
+      "time": "Sun May 10 10:39:01 +0800 2026",
+      "url": "https://weibo.com/5354408684/QEGLstEDC"
+    },
+    {
+      "id": "QEoEntuZq",
+      "author": "爱国青年刘战神",
+      "text": "中国男人的最大的问题，被外国妞也都看透了。\n\n#海外新鲜事##热点现场# http://t.cn/AXJrbS0d ​​​",
+      "reposts": 93,
+      "comments": 105,
+      "likes": 793,
+      "time": "Fri May 08 12:32:08 +0800 2026",
+      "url": "https://weibo.com/6317134281/QEoEntuZq"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": false,
+    "differences": [
+      "Item 1 \"id\": Grease=\"QETMrlqO3\" vs OpenCLI=\"QEQmJnN2K\"",
+      "Item 1 \"author\": Grease=\"斯图卡98\" vs OpenCLI=\"老妖女士\"",
+      "Item 1 \"text\": Grease=\"一个学校如果总是出现价值观、意识形态的问题\n还不如停业整改两年 ​​​\" vs OpenCLI=\"男的朝蹦床扔烟头，导致一个10岁女童掉下来受伤，\n\n媒体：有人扔烟头，一女子受伤，设备损坏是正常。\n\"",
+      "Item 1 \"reposts\": Grease=\"18\" vs OpenCLI=\"114\"",
+      "Item 1 \"comments\": Grease=\"43\" vs OpenCLI=\"28\"",
+      "Item 1 \"likes\": Grease=\"351\" vs OpenCLI=\"3918\"",
+      "Item 1 \"time\": Grease=\"Mon May 11 19:47:09 +0800 2026\" vs OpenCLI=\"Mon May 11 11:05:34 +0800 2026\"",
+      "Item 1 \"url\": Grease=\"https://weibo.com/3279710155/QETMrlqO3\" vs OpenCLI=\"https://weibo.com/1559590327/QEQmJnN2K\"",
+      "Item 2 \"id\": Grease=\"QF1BVD9QQ\" vs OpenCLI=\"QF01uEdjv\"",
+      "Item 2 \"author\": Grease=\"鲁中晨报\" vs OpenCLI=\"斯图卡98\"",
+      "Item 2 \"text\": Grease=\"#日一零食企业薯片包装变黑白#据日本媒体5月11日报道，日本零食企业卡乐比计划将旗下部分薯片商品改为\" vs OpenCLI=\"呼吁也没用，因为法律，包括司法实践为高彩礼背书站台。给索要高额彩礼提供底气与参照，助长婚恋市场功利化\"",
+      "Item 2 \"reposts\": Grease=\"0\" vs OpenCLI=\"21\"",
+      "Item 2 \"comments\": Grease=\"0\" vs OpenCLI=\"35\"",
+      "Item 2 \"likes\": Grease=\"0\" vs OpenCLI=\"151\"",
+      "Item 2 \"time\": Grease=\"Tue May 12 15:43:14 +0800 2026\" vs OpenCLI=\"Tue May 12 11:40:42 +0800 2026\"",
+      "Item 2 \"url\": Grease=\"https://weibo.com/1625232640/QF1BVD9QQ\" vs OpenCLI=\"https://weibo.com/3279710155/QF01uEdjv\"",
+      "Item 3 \"id\": Grease=\"QEVLZdUXA\" vs OpenCLI=\"QF14B3yOc\"",
+      "Item 3 \"author\": Grease=\"姜雅Vajra\" vs OpenCLI=\"鲁中晨报\"",
+      "Item 3 \"text\": Grease=\"#瑜伽##瑜伽[超话]##运动打卡[超话]# 泡沫轴放松 http://t.cn/AXi4vafZ \" vs OpenCLI=\"【#18年前人群举国旗高喊加油汶川#】再看18年前的新闻直播画面依旧热泪盈眶。现在看到的画面是200\"",
+      "Item 3 \"reposts\": Grease=\"13\" vs OpenCLI=\"0\"",
+      "Item 3 \"comments\": Grease=\"15\" vs OpenCLI=\"0\"",
+      "Item 3 \"likes\": Grease=\"103\" vs OpenCLI=\"0\"",
+      "Item 3 \"time\": Grease=\"Tue May 12 00:51:31 +0800 2026\" vs OpenCLI=\"Tue May 12 14:21:06 +0800 2026\"",
+      "Item 3 \"url\": Grease=\"https://weibo.com/3194837130/QEVLZdUXA\" vs OpenCLI=\"https://weibo.com/1625232640/QF14B3yOc\""
+    ]
+  }
+}

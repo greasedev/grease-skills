@@ -1,0 +1,64 @@
+{
+  "actions": [
+    {
+      "action": "track",
+      "argument": {
+        "urlPattern": "ListLatestTweetsTimeline",
+        "script": "async (globalVars) => { const response = globalVars.response; const prev = globalVars.extractData || []; const seenIds = prev.filter(t => !t._isTerminated).map(t => t.id); const seen = new Set(seenIds); const tweets = []; let isTerminated = false; const extractUser = (u) => { if (!u?.result) return null; const r = u.result; return { id: r.rest_id || '', name: r.core?.name || r.legacy?.name || '', screen_name: r.core?.screen_name || r.legacy?.screen_name || '', avatar_url: r.avatar?.image_url || r.legacy?.profile_image_url_https || '', is_verified: r.is_blue_verified || false, description: r.legacy?.description || '', followers_count: r.legacy?.followers_count || 0, location: r.location?.location || '' }; }; const extractMedia = (l) => { return (l?.extended_entities?.media || []).map(m => { const i = { type: m.type || 'photo', url: m.media_url_https || '', width: m.original_info?.width || 0, height: m.original_info?.height || 0 }; if (m.type === 'video' && m.video_info) { i.duration_ms = m.video_info.duration_millis || 0; const best = m.video_info.variants?.filter(v => v.content_type === 'video/mp4').reduce((a,b) => (a.bitrate||0)>(b.bitrate||0)?a:b, {}); i.video_url = best.url; i.bitrate = best.bitrate; } return i; }); }; const extractTweet = (tr) => { if (!tr) return null; const t = tr.tweet || tr; if (!t?.rest_id) return null; const l = t.legacy || {}; const u = extractUser(t.core?.user_results); const m = extractMedia(l); const tw = { id: t.rest_id, user: u, text: t.note_tweet?.note_tweet_results?.result?.text || l.full_text || '', likes: l.favorite_count || 0, retweets: l.retweet_count || 0, replies: l.reply_count || 0, quotes: l.quote_count || 0, bookmarks: l.bookmark_count || 0, created_at: l.created_at || '', lang: l.lang || '', conversation_id: l.conversation_id_str || '', url: 'https://x.com/i/status/' + t.rest_id, media: m, hashtags: l.entities?.hashtags?.map(h=>h.text) || [], mentions: l.entities?.user_mentions?.map(m=>({id:m.id_str,name:m.name,screen_name:m.screen_name})) || [], urls: l.entities?.urls?.map(u=>({display_url:u.display_url,expanded_url:u.expanded_url})) || [] }; if (l.retweeted_status_result?.result) { tw.is_retweet = true; tw.retweeted_tweet = extractTweet(l.retweeted_status_result.result); } if (l.quoted_status_result?.result) { tw.is_quote = true; tw.quoted_tweet_id = l.quoted_status_id_str || ''; tw.quoted_tweet_url = l.quoted_status_permalink?.expanded || ('https://x.com/i/status/' + l.quoted_status_id_str); tw.quoted_tweet = extractTweet(l.quoted_status_result.result); } return tw; }; try { const d = JSON.parse(response.body); const insts = d?.data?.list?.tweets_timeline?.timeline?.instructions || []; for (const inst of insts) { if (inst.type === 'TimelineTerminateTimeline' && inst.direction === 'Bottom') { isTerminated = true; continue; } for (const e of inst.entries || []) { if (!e.entryId?.startsWith('cursor-')) { const tw = extractTweet(e.content?.itemContent?.tweet_results?.result); if (tw && !seen.has(tw.id)) { seen.add(tw.id); tweets.push(tw); } } } } if (isTerminated) tweets.push({ _isTerminated: true }); return tweets; } catch (e) { return []; } }"
+      }
+    },
+    {
+      "action": "open",
+      "argument": { "url": "https://x.com/i/lists/{{ list_id }}", "waitUntil": "load" }
+    },
+    {
+      "action": "loop",
+      "argument": {
+        "script": "async (globalVars) => { const limit = {{ limit }} || 20; const maxScrolls = 20; const data = globalVars.extractData || []; if (data.some(d => d._isTerminated)) return false; const tweets = data.filter(d => !d._isTerminated); if (tweets.length >= limit) return false; globalVars.loopCount = (globalVars.loopCount || 0) + 1; if (globalVars.loopCount > maxScrolls) return false; window.scrollBy(0, 10000); return {loopCount: globalVars.loopCount}; }",
+        "intervalMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "(globalVars) => { const limit = {{ limit }} || 50; globalVars.extractData = (globalVars.extractData || []).filter(d => !d._isTerminated).slice(0, limit); return globalVars; }"
+      }
+    }
+  ],
+  "api_endpoint": "twitter-list-tweets",
+  "category": "auth",
+  "description": "Fetch tweets from a Twitter/X list using network interception with auto-scroll",
+  "is_public": true,
+  "method": "GET",
+  "name": "ListTweets",
+  "output_schema": [
+    { "name": "id", "type": "string", "description": "推文ID" },
+    { "name": "user", "type": "object", "description": "作者信息 {id, name, screen_name, avatar_url, is_verified, description, followers_count, location}" },
+    { "name": "text", "type": "string", "description": "推文内容" },
+    { "name": "likes", "type": "number", "description": "点赞数" },
+    { "name": "retweets", "type": "number", "description": "转推数" },
+    { "name": "replies", "type": "number", "description": "回复数" },
+    { "name": "quotes", "type": "number", "description": "引用数" },
+    { "name": "bookmarks", "type": "number", "description": "书签数" },
+    { "name": "created_at", "type": "string", "description": "创建时间" },
+    { "name": "lang", "type": "string", "description": "语言" },
+    { "name": "conversation_id", "type": "string", "description": "会话ID" },
+    { "name": "url", "type": "string", "description": "推文链接" },
+    { "name": "media", "type": "array", "description": "媒体附件 [{type, url, video_url, width, height, duration_ms, bitrate}]" },
+    { "name": "hashtags", "type": "array", "description": "标签列表" },
+    { "name": "mentions", "type": "array", "description": "提及用户 [{id, name, screen_name}]" },
+    { "name": "urls", "type": "array", "description": "链接 [{display_url, expanded_url}]" },
+    { "name": "is_retweet", "type": "boolean", "description": "是否为转推" },
+    { "name": "retweeted_tweet", "type": "object", "description": "原推文信息(转推时)" },
+    { "name": "is_quote", "type": "boolean", "description": "是否为引用推文" },
+    { "name": "quoted_tweet_id", "type": "string", "description": "引用推文ID" },
+    { "name": "quoted_tweet_url", "type": "string", "description": "引用推文链接" },
+    { "name": "quoted_tweet", "type": "object", "description": "引用推文详情" }
+  ],
+  "variables": [
+    { "name": "list_id", "type": "string", "required": true, "help": "Numeric list ID", "test": "2055292495400210857" },
+    { "name": "limit", "type": "int", "default": 20, "help": "Number of tweets", "test": 100 }
+  ],
+  "website_domain": "x.com",
+  "website_id": "website-x.com"
+}

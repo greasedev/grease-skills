@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-04-10T18:33:51.225Z",
+  "json_file": "./clis/bilibili/dynamic.json",
+  "command": "Dynamic",
+  "website": "www.bilibili.com",
+  "params": {
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "1189701650342739976",
+      "author": "哔哩哔哩会员购",
+      "text": "",
+      "likes": 350,
+      "url": "https://t.bilibili.com/1189701650342739976"
+    },
+    {
+      "id": "1189691342405500950",
+      "author": "哔哩哔哩会员购",
+      "text": "",
+      "likes": 423,
+      "url": "https://t.bilibili.com/1189691342405500950"
+    },
+    {
+      "id": "1189681034532225059",
+      "author": "哔哩哔哩会员购",
+      "text": "",
+      "likes": 474,
+      "url": "https://t.bilibili.com/1189681034532225059"
+    },
+    {
+      "id": "1189674385869373479",
+      "author": "未来英语面试指导",
+      "text": "超级推荐！原来小学英语课堂这么有趣！",
+      "likes": 0,
+      "url": "https://t.bilibili.com/1189674385869373479"
+    },
+    {
+      "id": "1189674222665859091",
+      "author": "电视儿童飞飞",
+      "text": "先婚后爱【梧桐雨】全28集  徐露/邱心志/潘虹/李宗翰/傅淼 reaction",
+      "likes": 13,
+      "url": "https://t.bilibili.com/1189674222665859091"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

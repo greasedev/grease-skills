@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-04-11T10:55:48.428Z",
+  "json_file": "./clis/zhihu/question.json",
+  "command": "Question",
+  "website": "www.zhihu.com",
+  "params": {
+    "id": "2025706051010307038",
+    "limit": 3
+  },
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "rank": 1,
+      "author": "暴哥",
+      "votes": 0,
+      "content": "有很多， 知乎是第一个"
+    }
+  ]
+}

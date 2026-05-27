@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-05-14T00:31:53.793Z",
+  "json_file": "./clis/twitter/search.json",
+  "command": "Search",
+  "website": "x.com",
+  "params": {
+    "query": "AI",
+    "limit": 5,
+    "filter": "top"
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "2054236506756370865",
+      "author": "AndrewYNg",
+      "text": "There will be no AI jobpocalypse.\n\nThe story that AI will lead to massive unemployment is stoking unnecessary fear. AI — like any other technology — does affect jobs, but telling overblown stories of large-scale unemployment is irresponsible and damaging. Let’s put a stop to it.",
+      "created_at": "2026-05-12T16:25:23.000Z",
+      "likes": "4.3K",
+      "views": "",
+      "url": "https://x.com/i/status/2054236506756370865"
+    },
+    {
+      "id": "2052050956272230577",
+      "author": "gs_ai_",
+      "text": "We are back. After one year of quiet building.\n\nIntroducing GENE-26.5, our first robotic brain that takes a major step toward human-level capability.\n\nFor years, robotics has struggled to learn from the world’s largest and valuable data source: Humans.\n\nSolving it means",
+      "created_at": "2026-05-06T15:40:47.000Z",
+      "likes": "5.7K",
+      "views": "",
+      "url": "https://x.com/i/status/2052050956272230577"
+    },
+    {
+      "id": "2054626219858293128",
+      "author": "sama",
+      "text": "codex is the best AI coding product and we want to make it easy to try.\n\nfor the next 30 days, we are giving companies that want to try switching over two months of free codex usage.",
+      "created_at": "2026-05-13T18:13:58.000Z",
+      "likes": "13K",
+      "views": "",
+      "url": "https://x.com/i/status/2054626219858293128"
+    },
+    {
+      "id": "2051709028250915275",
+      "author": "OpenAI",
+      "text": "GPT-5.5 Instant is starting to roll out in ChatGPT.\n\nIt’s a big upgrade, giving you smarter, clearer, and more personalized answers in a warmer, more natural tone.\n\nAnd it's also more concise, which we heard you wanted. We think you'll love chatting with it.",
+      "created_at": "2026-05-05T17:02:05.000Z",
+      "likes": "10K",
+      "views": "",
+      "url": "https://x.com/i/status/2051709028250915275"
+    },
+    {
+      "id": "2054246119635300451",
+      "author": "GoogleDeepMind",
+      "text": "We’re reimagining a 50-year-old interface - the mouse pointer - with AI. \n\nThese experimental demos show how people can intuitively direct Gemini on their screens using motion, speech, and natural shorthand to get things done ",
+      "created_at": "2026-05-12T17:03:35.000Z",
+      "likes": "8K",
+      "views": "",
+      "url": "https://x.com/i/status/2054246119635300451"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter search \"AI\" --limit 5 --filter \"top\" -f json 2>/dev/null\n"
+    ]
+  }
+}

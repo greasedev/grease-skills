@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-04-16T04:22:03.889Z",
+  "json_file": "./clis/reddit/popular.json",
+  "command": "Popular",
+  "website": "reddit.com",
+  "params": {
+    "limit": 5
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "rank": 1,
+      "title": "Pete Hegseth quotes fake Pulp Fiction Bible verse during Pentagon sermon",
+      "subreddit": "r/politics",
+      "score": 17436,
+      "comments": 1031,
+      "url": "https://www.reddit.com/r/politics/comments/1smn6rk/pete_hegseth_quotes_fake_pulp_fiction_bible_verse/"
+    },
+    {
+      "rank": 2,
+      "title": "What game has a learning curve that puts you off?",
+      "subreddit": "r/pcmasterrace",
+      "score": 12040,
+      "comments": 4086,
+      "url": "https://www.reddit.com/r/pcmasterrace/comments/1smfoda/what_game_has_a_learning_curve_that_puts_you_off/"
+    },
+    {
+      "rank": 3,
+      "title": "Billboard in my very red area",
+      "subreddit": "r/pics",
+      "score": 11228,
+      "comments": 320,
+      "url": "https://www.reddit.com/r/pics/comments/1sms99u/billboard_in_my_very_red_area/"
+    },
+    {
+      "rank": 4,
+      "title": "Israeli settler harasses a woman outside of Hebron",
+      "subreddit": "r/pics",
+      "score": 76772,
+      "comments": 6261,
+      "url": "https://www.reddit.com/r/pics/comments/1smanff/israeli_settler_harasses_a_woman_outside_of_hebron/"
+    },
+    {
+      "rank": 5,
+      "title": "Zelenskyy: return of draft-age Ukrainian men from abroad is a matter of fairness",
+      "subreddit": "r/worldnews",
+      "score": 18815,
+      "comments": 5725,
+      "url": "https://www.reddit.com/r/worldnews/comments/1sm1l4n/zelenskyy_return_of_draftage_ukrainian_men_from/"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": false,
+    "differences": [
+      "Item 1 \"score\": Grease=\"17436\" vs OpenCLI=\"17438\"",
+      "Item 2 \"score\": Grease=\"12040\" vs OpenCLI=\"12035\"",
+      "Item 3 \"score\": Grease=\"11228\" vs OpenCLI=\"11201\"",
+      "Item 3 \"comments\": Grease=\"320\" vs OpenCLI=\"318\""
+    ]
+  }
+}

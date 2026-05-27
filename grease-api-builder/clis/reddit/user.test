@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-04-16T04:22:29.787Z",
+  "json_file": "./clis/reddit/user.json",
+  "command": "User",
+  "website": "reddit.com",
+  "params": {
+    "username": "spez"
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "field": "Username",
+      "value": "u/spez"
+    },
+    {
+      "field": "Post Karma",
+      "value": "182287"
+    },
+    {
+      "field": "Comment Karma",
+      "value": "755099"
+    },
+    {
+      "field": "Total Karma",
+      "value": "937386"
+    },
+    {
+      "field": "Account Created",
+      "value": "2005-06-06"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 7,
+    "match": false,
+    "differences": [
+      "Count mismatch: GreaseAI=5, OpenCLI=7"
+    ]
+  }
+}

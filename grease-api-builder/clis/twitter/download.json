@@ -1,0 +1,38 @@
+{
+  "actions": [
+    {
+      "action": "open",
+      "argument": { "url": "https://x.com/{{ username }}/media", "waitUntil": "load" }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const username = ('{{ username }}' || '').replace(/^@/, ''); const limit = {{ limit }} || 10; await new Promise(r => { const start = Date.now(); const poll = () => { const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (primary) return r(); if (Date.now() - start > 10000) return r(); setTimeout(poll, 500); }; poll(); }); await new Promise(r => setTimeout(r, 3000)); const scrolls = Math.ceil(limit / 5); for (let i = 0; i < scrolls; i++) { window.scrollBy(0, window.innerHeight); await new Promise(r => setTimeout(r, 2000)); } const results = []; const seen = new Set(); const allImages = document.querySelectorAll('img'); for (const img of allImages) { if (results.length >= limit) break; const src = img.src || img.getAttribute('src') || ''; if (src.includes('pbs.twimg.com/media') || src.includes('pbs.twimg.com/ext_tw_video_image') || src.includes('pbs.twimg.com/amplify_video_thumb')) { let url = src.replace(/&name=\\w+/, '&name=large'); if (!url.includes('&name=')) url += '&name=large'; if (!seen.has(url)) { seen.add(url); results.push({ index: results.length + 1, type: 'image', url, size: '' }); } } } const videos = document.querySelectorAll('video[src], video source[src]'); for (const vid of videos) { if (results.length >= limit) break; const src = vid.src || vid.getAttribute('src') || ''; if (!src || seen.has(src)) continue; seen.add(src); results.push({ index: results.length + 1, type: 'video', url: src, size: '' }); } const players = document.querySelectorAll('[data-testid=\"videoPlayer\"]'); for (const player of players) { if (results.length >= limit) break; const tweetLink = player.closest('article')?.querySelector('a[href*=\"/status/\"]'); const href = tweetLink?.getAttribute('href') || ''; if (!href || seen.has(href)) continue; seen.add(href); results.push({ index: results.length + 1, type: 'video-tweet', url: 'https://x.com' + href, size: '' }); } return { results }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ index: 0, type: '', url: '', size: '', error: intermediate.error }]; return intermediate.results || []; }"
+      }
+    }
+  ],
+  "api_endpoint": "twitter-download",
+  "category": "auth",
+  "description": "Download media from a Twitter/X user",
+  "is_public": true,
+  "method": "GET",
+  "name": "Download",
+  "output_schema": [
+    { "name": "index", "type": "number", "description": "索引" },
+    { "name": "type", "type": "string", "description": "类型(image/video)" },
+    { "name": "url", "type": "string", "description": "媒体URL" },
+    { "name": "size", "type": "string", "description": "大小" }
+  ],
+  "variables": [
+    { "name": "username", "type": "string", "required": true, "help": "Twitter screen name", "test": "elonmusk" },
+    { "name": "limit", "type": "int", "default": 10, "help": "Max media items", "test": 3 }
+  ],
+  "website_domain": "x.com",
+  "website_id": "website-x.com"
+}

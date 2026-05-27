@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-12T03:46:30.309Z",
+  "json_file": "./clis/twitter/article.json",
+  "command": "Article",
+  "website": "x.com",
+  "params": {
+    "tweet_id": "2044315118583066738"
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "title": "",
+      "author": "",
+      "content": "",
+      "url": "",
+      "error": "Tweet has no article content"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter article \"2044315118583066738\"  -f json 2>/dev/null\n"
+    ]
+  }
+}

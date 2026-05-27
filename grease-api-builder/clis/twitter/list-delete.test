@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-05-12T08:02:23.189Z",
+  "json_file": "./clis/twitter/list-delete.json",
+  "command": "ListDelete",
+  "website": "x.com",
+  "params": {
+    "list_id": "2054109886146105506"
+  },
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "listId": "2054109886146105506",
+      "status": "success",
+      "message": "Deleted list 2054109886146105506"
+    }
+  ]
+}

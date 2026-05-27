@@ -1,0 +1,48 @@
+{
+  "actions": [
+    {
+      "action": "open",
+      "argument": { "url": "https://x.com/i/lists/create", "waitUntil": "load" }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const op = 'CreateList'; const fallback = 'UQRa0jJ9doxGEIQRea1Y0w'; let scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length < 5) { for (let i = 0; i < 10; i++) { await new Promise(r => setTimeout(r, 500)); scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length >= 5) break; } } let queryId = fallback; for (const scriptUrl of scripts.slice(0, 30)) { try { const text = await (await fetch(scriptUrl)).text(); const re = new RegExp('queryId:\"([A-Za-z0-9_-]+)\"[^}]{0,200}operationName:\"' + op + '\"'); const match = text.match(re); if (match) { queryId = match[1]; break; } } catch {} } return { queryId }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const queryId = intermediate.queryId; const name = '{{ name }}'; const description = '{{ description }}' || ''; const isPrivate = {{ is_private }} || false; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; const bearer = 'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'; const headers = { 'Authorization': 'Bearer ' + decodeURIComponent(bearer), 'X-Csrf-Token': ct0, 'X-Twitter-Auth-Type': 'OAuth2Session', 'X-Twitter-Active-User': 'yes', 'Content-Type': 'application/json' }; const body = JSON.stringify({ variables: { isPrivate, name, description }, features: { profile_label_improvements_pcf_label_in_post_enabled: true, responsive_web_profile_redirect_enabled: false, rweb_tipjar_consumption_enabled: false, verified_phone_label_enabled: false, responsive_web_graphql_skip_user_profile_image_extensions_enabled: false, responsive_web_graphql_timeline_navigation_enabled: true } }); const resp = await fetch('/i/api/graphql/' + queryId + '/CreateList', { method: 'POST', headers, body, credentials: 'include' }); const data = await resp.json(); const listResult = data?.data?.list?.result || data?.data?.list; const listId = listResult?.id_str || listResult?.rest_id || listResult?.id; if (!listId) return { error: 'CreateList response missing list id', status: resp.status, data }; return { listId: String(listId), name: listResult?.name || name, isPrivate: listResult?.mode === 'Private' || isPrivate, members: listResult?.member_count || 0, subscribers: listResult?.subscriber_count || 0 }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ listId: '', name: '', status: 'error', message: intermediate.error }]; return [{ listId: intermediate.listId, name: intermediate.name, isPrivate: intermediate.isPrivate, members: intermediate.members, subscribers: intermediate.subscribers, status: 'success', message: 'Created list ' + intermediate.listId + ' (' + intermediate.name + ')' }]; }"
+      }
+    }
+  ],
+  "api_endpoint": "twitter-list-create",
+  "category": "interact",
+  "description": "Create a new Twitter/X list",
+  "is_public": true,
+  "method": "POST",
+  "name": "ListCreate",
+  "output_schema": [
+    { "name": "listId", "type": "string", "description": "新列表ID" },
+    { "name": "name", "type": "string", "description": "列表名称" },
+    { "name": "isPrivate", "type": "boolean", "description": "是否私有" },
+    { "name": "members", "type": "number", "description": "成员数" },
+    { "name": "subscribers", "type": "number", "description": "订阅数" },
+    { "name": "status", "type": "string", "description": "状态(success/error)" },
+    { "name": "message", "type": "string", "description": "结果消息" }
+  ],
+  "variables": [
+    { "name": "name", "type": "string", "required": true, "help": "List name", "test": "TestList" },
+    { "name": "description", "type": "string", "default": "", "help": "List description (optional)", "test": "" },
+    { "name": "is_private", "type": "boolean", "default": false, "help": "Make list private", "test": false }
+  ],
+  "website_domain": "x.com",
+  "website_id": "website-x.com"
+}

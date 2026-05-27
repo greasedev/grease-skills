@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-05-12T04:00:54.069Z",
+  "json_file": "./clis/twitter/following.json",
+  "command": "Following",
+  "website": "x.com",
+  "params": {
+    "user": "elonmusk",
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "screen_name": "jordanbpeterson",
+      "name": "Dr Jordan B Peterson",
+      "bio": "Best-Selling Author | Clinical Psychologist | #1 Education Podcast | Co-founder of @petersonacademy | Order my new book \"We Who Wrestle With God\" here:",
+      "followers": 6182177
+    },
+    {
+      "screen_name": "DonaldJTrumpJr",
+      "name": "Donald Trump Jr.",
+      "bio": "Co-Founder @worldlibertyfi",
+      "followers": 16256744
+    },
+    {
+      "screen_name": "hodgetwins",
+      "name": "Hodgetwins",
+      "bio": "Merch & Giveaways at: https://t.co/kxb8qjHatu —— PODCAST: @hodgetwinspod",
+      "followers": 3513956
+    },
+    {
+      "screen_name": "TheBabylonBee",
+      "name": "The Babylon Bee",
+      "bio": "Fake news you can trust 🐝",
+      "followers": 5264602
+    },
+    {
+      "screen_name": "dbongino",
+      "name": "Dan Bongino",
+      "bio": "Just here for the comments.",
+      "followers": 7480615
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

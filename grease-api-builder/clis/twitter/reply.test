@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-11T10:39:00.434Z",
+  "json_file": "clis/twitter/reply.json",
+  "command": "Reply",
+  "website": "x.com",
+  "params": {
+    "tweet_id": "2044315118583066738",
+    "text": "Great tweet!",
+    "submit": false
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "ok": true,
+      "message": "Reply text entered (not submitted).",
+      "text": "Great tweet!",
+      "submitted": false
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter reply \"https://x.com/elonmusk/status/2044315118583066738\" \"Great tweet!\" --submit \"false\" -f json\nerror: unknown option '--submit'\n"
+    ]
+  }
+}

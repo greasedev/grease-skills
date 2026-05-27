@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-12T04:25:35.700Z",
+  "json_file": "./clis/twitter/unbookmark.json",
+  "command": "Unbookmark",
+  "website": "x.com",
+  "params": {
+    "url": "https://x.com/elonmusk/status/2044315118583066738"
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "ok": true,
+      "message": "Unbookmarked"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 1,
+    "match": false,
+    "differences": [
+      "Item 1 \"message\": Grease=\"Unbookmarked\" vs OpenCLI=\"Tweet is not bookmarked (already removed).\""
+    ]
+  }
+}

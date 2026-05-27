@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-05-12T04:30:26.657Z",
+  "json_file": "./clis/twitter/reply-dm.json",
+  "command": "ReplyDM",
+  "website": "x.com",
+  "params": {
+    "text": "Hello!",
+    "max": 2,
+    "skip_replied": true
+  },
+  "success": false,
+  "data_count": 0,
+  "sample_data": [],
+  "comparison": {
+    "grease_count": 0,
+    "opencli_count": 1,
+    "match": false,
+    "differences": [
+      "Count mismatch: GreaseAI=0, OpenCLI=1"
+    ]
+  }
+}

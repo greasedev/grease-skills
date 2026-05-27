@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-05-12T08:02:14.856Z",
+  "json_file": "./clis/twitter/list-create.json",
+  "command": "ListCreate",
+  "website": "x.com",
+  "params": {
+    "name": "TestList",
+    "description": "",
+    "is_private": false
+  },
+  "success": true,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "listId": "2054109886146105506",
+      "name": "TestList",
+      "isPrivate": false,
+      "members": 0,
+      "subscribers": 0,
+      "status": "success",
+      "message": "Created list 2054109886146105506 (TestList)"
+    }
+  ]
+}

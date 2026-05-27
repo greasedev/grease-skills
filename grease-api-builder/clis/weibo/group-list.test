@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-05-12T15:06:44.415Z",
+  "json_file": "clis/weibo/group-list.json",
+  "command": "GroupList",
+  "website": "weibo.com",
+  "params": {},
+  "success": false,
+  "data_count": 69,
+  "sample_data": [
+    {
+      "name": "全部关注",
+      "id": "100012791653847",
+      "type": "1"
+    },
+    {
+      "name": "最新微博",
+      "id": "110002791653847",
+      "type": "20"
+    },
+    {
+      "name": "特别关注",
+      "id": "201207161000537360",
+      "type": "0"
+    },
+    {
+      "name": "互相关注",
+      "id": "100092791653847",
+      "type": "9"
+    },
+    {
+      "name": "原创",
+      "id": "110012791653847",
+      "type": "20"
+    }
+  ],
+  "comparison": {
+    "grease_count": 69,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli weibo group-list   -f json 2>/dev/null\n"
+    ]
+  }
+}

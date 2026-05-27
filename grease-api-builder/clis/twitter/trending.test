@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-05-11T10:36:53.118Z",
+  "json_file": "clis/twitter/trending.json",
+  "command": "Trending",
+  "website": "x.com",
+  "params": {
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "rank": 1,
+      "topic": "Mother's Day",
+      "category": "Entertainment industry · Trending"
+    },
+    {
+      "rank": 2,
+      "topic": "Wemby",
+      "category": "Sports · Trending"
+    },
+    {
+      "rank": 3,
+      "topic": "Good Monday",
+      "category": "Trending in United States"
+    },
+    {
+      "rank": 4,
+      "topic": "#UFC328",
+      "category": "Sports · Trending"
+    },
+    {
+      "rank": 5,
+      "topic": "#euphoria",
+      "category": "Euphoria · Trending"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

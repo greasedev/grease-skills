@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-05-12T03:45:39.159Z",
+  "json_file": "./clis/twitter/timeline.json",
+  "command": "Timeline",
+  "website": "x.com",
+  "params": {
+    "limit": 5,
+    "type": "for-you"
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "2053939702110269822",
+      "author": "OpenAI",
+      "text": "Introducing Daybreak: frontier AI for cyber defenders.\n\nDaybreak brings together the most capable OpenAI models, Codex, and our security partners to accelerate cyber defense and continuously secure software.\n\nA step toward a future where security teams can move at the speed defense demands.",
+      "likes": 6269,
+      "retweets": 621,
+      "replies": 353,
+      "views": 1856040,
+      "created_at": "Mon May 11 20:45:59 +0000 2026",
+      "url": "https://x.com/OpenAI/status/2053939702110269822"
+    },
+    {
+      "id": "2053940934736228454",
+      "author": "claudeai",
+      "text": "New in Claude Code: agent view.\n\nOne list of all your sessions, available today as a research preview. https://t.co/NnbsAQjSPW",
+      "likes": 15032,
+      "retweets": 1110,
+      "replies": 514,
+      "views": 1388175,
+      "created_at": "Mon May 11 20:50:53 +0000 2026",
+      "url": "https://x.com/claudeai/status/2053940934736228454"
+    },
+    {
+      "id": "2053954753550238041",
+      "author": "BarackObama",
+      "text": "I first met Clark Reynolds when he was just three years old at our Black History Month reception at the White House.\n\nOver the last ten years, it's been wonderful getting updates about his life through his letters. Check out how he’s doing now: https://t.co/lOKmuGPz9l",
+      "likes": 59955,
+      "retweets": 6411,
+      "replies": 3376,
+      "views": 9026799,
+      "created_at": "Mon May 11 21:45:48 +0000 2026",
+      "url": "https://x.com/BarackObama/status/2053954753550238041"
+    },
+    {
+      "id": "2053872850101285137",
+      "author": "karpathy",
+      "text": "This works really well btw, at the end of your query ask your LLM to \"structure your response as HTML\", then view the generated file in your browser. I've also had some success asking the LLM to present its output as slideshows, etc.\n\nMore generally, imo audio is the human-preferred input to AIs but vision (images/animations/video) is the preferred output from them. Around a ~third of our brains are a massively parallel processor dedicated to vision, it is the 10-lane superhighway of information into brain. As AI improves, I think we'll see a progression that takes advantage:\n\n1) raw text (hard/effortful to read)\n2) markdown (bold, italic, headings, tables, a bit easier on the eyes) <-- current default\n3) HTML (still procedural with underlying code, but a lot more flexibility on the graphics, layout, even interactivity) <-- early but forming new good default\n...4,5,6,...\nn) interactive neural videos/simulations\n\nImo the extrapolation (though the technology doesn't exist just yet) ends in some kind of interactive videos generated directly by a diffusion neural net. Many open questions as to how exact/procedural \"Software 1.0\" artifacts (e.g. interactive simulations) may be woven together with neural artifacts (diffusion grids), but generally something in the direction of the recently viral https://t.co/z21CP5iQfu\n\nThere are also improvements necessary and pending at the input. Audio nor text nor video alone are not enough, e.g. I feel a need to point/gesture to things on the screen, similar to all the things you would do with a person physically next to you and your computer screen.\n\nTLDR The input/output mind meld between humans and AIs is ongoing and there is a lot of work to do and significant progress to be made, way before jumping all the way into neuralink-esque BCIs and all that. For what's worth exploring at the current stage, hot tip try ask for HTML.",
+      "likes": 11168,
+      "retweets": 1115,
+      "replies": 593,
+      "views": 1164211,
+      "created_at": "Mon May 11 16:20:21 +0000 2026",
+      "url": "https://x.com/karpathy/status/2053872850101285137"
+    },
+    {
+      "id": "2053917032425590795",
+      "author": "TairanHe99",
+      "text": "some news: I’ve joined OpenAI.\n\nAfter wrapping up my PhD in Robotics, I’m excited to keep working toward AGI in the physical world.\n\nexciting journey ahead :) https://t.co/9kEC375a3w",
+      "likes": 1263,
+      "retweets": 29,
+      "replies": 126,
+      "views": 43810,
+      "created_at": "Mon May 11 19:15:55 +0000 2026",
+      "url": "https://x.com/TairanHe99/status/2053917032425590795"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": false,
+    "differences": [
+      "Item 2 \"likes\": Grease=\"15032\" vs OpenCLI=\"15036\"",
+      "Item 3 \"likes\": Grease=\"59955\" vs OpenCLI=\"59965\"",
+      "Item 3 \"views\": Grease=\"9026799\" vs OpenCLI=\"9036704\""
+    ]
+  }
+}

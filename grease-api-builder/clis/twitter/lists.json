@@ -1,0 +1,46 @@
+{
+  "actions": [
+    {
+      "action": "open",
+      "argument": { "url": "https://x.com/home", "waitUntil": "load" }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const op = 'ListsManagementPageTimeline'; const fallback = '78UbkyXwXBD98IgUWXOy9g'; let scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length < 5) { for (let i = 0; i < 10; i++) { await new Promise(r => setTimeout(r, 500)); scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length >= 5) break; } } let queryId = fallback; for (const scriptUrl of scripts.slice(0, 30)) { try { const text = await (await fetch(scriptUrl)).text(); const re = new RegExp('queryId:\"([A-Za-z0-9_-]+)\"[^}]{0,200}operationName:\"' + op + '\"'); const match = text.match(re); if (match) { queryId = match[1]; break; } } catch {} } return { queryId }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const queryId = intermediate.queryId; const limit = {{ limit }} || 50; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; const bearer = 'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'; const headers = { 'Authorization': 'Bearer ' + decodeURIComponent(bearer), 'X-Csrf-Token': ct0, 'X-Twitter-Auth-Type': 'OAuth2Session', 'X-Twitter-Active-User': 'yes' }; const features = JSON.stringify({ rweb_video_screen_enabled: false, profile_label_improvements_pcf_label_in_post_enabled: true, rweb_tipjar_consumption_enabled: true, verified_phone_label_enabled: false, creator_subscriptions_tweet_preview_api_enabled: true, responsive_web_graphql_timeline_navigation_enabled: true, responsive_web_graphql_skip_user_profile_image_extensions_enabled: false, premium_content_api_read_enabled: false, communities_web_enable_tweet_community_results_fetch: true, c9s_tweet_anatomy_moderator_badge_enabled: true, responsive_web_grok_analyze_button_fetch_trends_enabled: false, responsive_web_grok_analyze_post_followups_enabled: true, responsive_web_jetfuel_frame: false, responsive_web_grok_share_attachment_enabled: true, articles_preview_enabled: true, responsive_web_edit_tweet_api_enabled: true, graphql_is_translatable_rweb_tweet_is_translatable_enabled: true, view_counts_everywhere_api_enabled: true, longform_notetweets_consumption_enabled: true, responsive_web_twitter_article_tweet_consumption_enabled: true, tweet_awards_web_tipping_enabled: false, responsive_web_grok_show_grok_translated_post: false, responsive_web_grok_analysis_button_from_backend: false, creator_subscriptions_quote_tweet_preview_enabled: false, freedom_of_speech_not_reach_fetch_enabled: true, standardized_nudges_misinfo: true, tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true, longform_notetweets_rich_text_read_enabled: true, longform_notetweets_inline_media_enabled: true, responsive_web_grok_image_annotation_enabled: true, responsive_web_enhance_cards_enabled: false }); const resp = await fetch('/i/api/graphql/' + queryId + '/ListsManagementPageTimeline?features=' + encodeURIComponent(features), { headers, credentials: 'include' }); if (!resp.ok) return { error: 'HTTP ' + resp.status }; const d = await resp.json(); const instructions = d?.data?.viewer?.list_management_timeline?.timeline?.instructions || d?.data?.viewer_v2?.user_results?.result?.list_management_timeline?.timeline?.instructions || d?.data?.list_management_timeline?.timeline?.instructions || []; const lists = []; const seen = new Set(); for (const inst of instructions) { for (const entry of inst.entries || []) { const moduleType = entry?.content?.clientEventInfo?.component || ''; if (entry?.content?.items) { for (const item of entry?.content?.items) { const itemComponent = item?.item?.clientEventInfo?.component || moduleType; const list = item?.item?.itemContent?.list; if (!list) continue; const id = list?.id_str || list?.id; if (!id || seen.has(id)) continue; seen.add(id); const mode = typeof list.mode === 'string' && /private/i.test(list.mode) ? 'private' : 'public'; lists.push({ id: String(id), name: list?.name || '', members: list?.member_count || 0, followers: list?.subscriber_count || 0, mode, type: itemComponent || 'unknown' }); } } else { const list = entry?.content?.itemContent?.list || entry?.content?.list; if (!list) continue; const id = list?.id_str || list?.id; if (!id || seen.has(id)) continue; seen.add(id); const mode = typeof list.mode === 'string' && /private/i.test(list.mode) ? 'private' : 'public'; const entryComponent = entry?.content?.clientEventInfo?.component || 'owned'; lists.push({ id: String(id), name: list?.name || '', members: list?.member_count || 0, followers: list?.subscriber_count || 0, mode, type: entryComponent }); } } } return { lists: lists.slice(0, limit) }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ id: '', name: '', members: 0, followers: 0, mode: '', type: '', error: intermediate.error }]; return intermediate.lists || []; }"
+      }
+    }
+  ],
+  "api_endpoint": "twitter-lists",
+  "category": "auth",
+  "description": "List your Twitter/X lists",
+  "is_public": true,
+  "method": "GET",
+  "name": "Lists",
+  "output_schema": [
+    { "name": "id", "type": "string", "description": "列表ID" },
+    { "name": "name", "type": "string", "description": "名称" },
+    { "name": "members", "type": "number", "description": "成员数" },
+    { "name": "followers", "type": "number", "description": "关注数" },
+    { "name": "mode", "type": "string", "description": "模式(Public/Private)" },
+    { "name": "type", "type": "string", "description": "类型" },
+    { "name": "error", "type": "string", "description": "错误信息(可选)" }
+  ],
+  "variables": [
+    { "name": "limit", "type": "int", "default": 50, "help": "Number of lists", "test": 5 }
+  ],
+  "website_domain": "x.com",
+  "website_id": "website-x.com"
+}

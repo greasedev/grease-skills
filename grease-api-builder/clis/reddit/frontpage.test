@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-04-16T04:18:12.813Z",
+  "json_file": "./clis/reddit/frontpage.json",
+  "command": "Frontpage",
+  "website": "reddit.com",
+  "params": {
+    "limit": 5
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "rank": 1,
+      "title": "Billboard in my very red area",
+      "subreddit": "r/pics",
+      "author": "clumsypeach1",
+      "upvotes": 9942,
+      "comments": 282,
+      "url": "https://www.reddit.com/r/pics/comments/1sms99u/billboard_in_my_very_red_area/"
+    },
+    {
+      "rank": 2,
+      "title": "Johnny Somali just got 6 months in a South Korean labor prison for doing a lap dance on a monument honoring wartime sexual abuse victims. He traveled the world disrespecting every country he visited for content. South Korea said no, you work here now.",
+      "subreddit": "r/SipsTea",
+      "author": "This_Proof_5153",
+      "upvotes": 28442,
+      "comments": 2615,
+      "url": "https://www.reddit.com/r/SipsTea/comments/1smnt74/johnny_somali_just_got_6_months_in_a_south_korean/"
+    },
+    {
+      "rank": 3,
+      "title": "Pete Hegseth quotes fake Pulp Fiction Bible verse during Pentagon sermon",
+      "subreddit": "r/politics",
+      "author": "goteamnick",
+      "upvotes": 17305,
+      "comments": 1024,
+      "url": "https://www.reddit.com/r/politics/comments/1smn6rk/pete_hegseth_quotes_fake_pulp_fiction_bible_verse/"
+    },
+    {
+      "rank": 4,
+      "title": "Police search you house &amp; you notice dents on your car",
+      "subreddit": "r/interesting",
+      "author": "ZookeepergameIcy6089",
+      "upvotes": 35612,
+      "comments": 1585,
+      "url": "https://www.reddit.com/r/interesting/comments/1smk97x/police_search_you_house_you_notice_dents_on_your/"
+    },
+    {
+      "rank": 5,
+      "title": "Senate Democratic leader Chuck Schumer (D-Tel Aviv) votes NO on Bernie Sanders’ measures to block arms sales to Israel",
+      "subreddit": "r/WhitePeopleTwitter",
+      "author": "MoreMotivation",
+      "upvotes": 9118,
+      "comments": 343,
+      "url": "https://www.reddit.com/r/WhitePeopleTwitter/comments/1smoe5n/senate_democratic_leader_chuck_schumer_dtel_aviv/"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": false,
+    "differences": [
+      "Item 1 \"upvotes\": Grease=\"9942\" vs OpenCLI=\"9944\"",
+      "Item 2 \"upvotes\": Grease=\"28442\" vs OpenCLI=\"28444\"",
+      "Item 3 \"upvotes\": Grease=\"17305\" vs OpenCLI=\"17319\"",
+      "Item 3 \"comments\": Grease=\"1024\" vs OpenCLI=\"1025\""
+    ]
+  }
+}

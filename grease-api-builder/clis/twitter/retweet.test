@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-12T04:25:18.690Z",
+  "json_file": "./clis/twitter/retweet.json",
+  "command": "Retweet",
+  "website": "x.com",
+  "params": {
+    "url": "https://x.com/elonmusk/status/2044315118583066738"
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "ok": true,
+      "message": "Retweeted"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 1,
+    "match": false,
+    "differences": [
+      "Item 1 \"message\": Grease=\"Retweeted\" vs OpenCLI=\"Tweet is already retweeted.\""
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-05-12T08:36:33.463Z",
+  "json_file": "./clis/weibo/search.json",
+  "command": "Search",
+  "website": "weibo.com",
+  "params": {
+    "keyword": "AI",
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "rank": 1,
+      "id": "QETaBwbzn",
+      "title": "难绷 （AI还是太权威了⋯⋯ ​",
+      "author": "阑夕",
+      "time": "05月11日 18:13",
+      "url": "https://weibo.com/1560906700/QETaBwbzn?refer_flag=1001030103_"
+    },
+    {
+      "rank": 2,
+      "id": "QETy76BD4",
+      "title": "AI泡沫不再提了，但紧缺度高估确实存在，只是短期还不影响交易。解释一下：假设紧缺度为0-5，目前有些领域交易到了5+，但产业评估只有1-2。这种过度交易遇到扩产，大概率会回调。回调后要等需求进一步放大，才能修复。所以市场定价充分的高位大票，已经开始走逐季验证的模式。小票只要叙事和成交在，问题不大，还能抱紧缺叙事。特别注意：在一些“这种设备拿不到，不好扩产”的方向，如果突然出现设备巨头推出全套设备的时候，可以参考一下今天这段话。等看这条什么时候被翻出来。 收起d",
+      "author": "唐史主任司马迁",
+      "time": "05月11日 19:11",
+      "url": "https://weibo.com/2014433131/QETy76BD4?refer_flag=1001030103_"
+    },
+    {
+      "rank": 3,
+      "id": "QEQSKtzTy",
+      "title": "AI发展背后，是数据中心对水资源的巨量消耗。亚马逊、谷歌数据中心年耗水超量级西班牙农民抗议“你的云晒干我的河”，乌拉圭孩子喝着发咸的水质问总统……科技进步，不该以普通人的生存资源为代价#AI 掠夺水资源##AI创造营#cr：糯米熊子 L32号科技所的微博视频 ​",
+      "author": "32号科技所",
+      "time": "05月11日 12:24",
+      "url": "https://weibo.com/1792759374/QEQSKtzTy?refer_flag=1001030103_"
+    },
+    {
+      "rank": 4,
+      "id": "QETCEsfBW",
+      "title": "当我以为外卖app里的ai已经很智能并尝试使用期待被惊艳时。 ​",
+      "author": "兔耳草泥马",
+      "time": "05月11日 19:23",
+      "url": "https://weibo.com/2316252772/QETCEsfBW?refer_flag=1001030103_"
+    },
+    {
+      "rank": 5,
+      "id": "QESnTdmsP",
+      "title": "#AI 掠夺水资源#AI掠夺水资源算个屁啊，开心果牛油果橙子掠夺水资源了解一下？多掠夺，爱看。 ​",
+      "author": "王虎的舰桥",
+      "time": "05月11日 16:13",
+      "url": "https://weibo.com/6545577536/QESnTdmsP?refer_flag=1001030103_"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

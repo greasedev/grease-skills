@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-05-12T04:08:30.637Z",
+  "json_file": "./clis/twitter/followers.json",
+  "command": "Followers",
+  "website": "x.com",
+  "params": {
+    "user": "elonmusk",
+    "limit": 5
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "screen_name": "jordanbpeterson",
+      "name": "Dr Jordan B Peterson",
+      "bio": "Best-Selling Author | Clinical Psychologist | #1 Education Podcast | Co-founder of @petersonacademy | Order my new book \"We Who Wrestle With God\" here:"
+    },
+    {
+      "screen_name": "DonaldJTrumpJr",
+      "name": "Donald Trump Jr.",
+      "bio": "Co-Founder @worldlibertyfi"
+    },
+    {
+      "screen_name": "hodgetwins",
+      "name": "Hodgetwins",
+      "bio": "Merch & Giveaways at: http:// officialhodgetwins.com —— PODCAST: @hodgetwinspod"
+    },
+    {
+      "screen_name": "TheBabylonBee",
+      "name": "The Babylon Bee",
+      "bio": "Fake news you can trust"
+    },
+    {
+      "screen_name": "Jim_Jordan",
+      "name": "Rep. Jim Jordan",
+      "bio": "Proudly serving Ohio's beautiful Fourth District. Chairman @JudiciaryGOP . Fighting to #DoWhatWeSaid"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": false,
+    "differences": [
+      "Item 1 \"screen_name\": Grease=\"jordanbpeterson\" vs OpenCLI=\"adskflowstudio\"",
+      "Item 1 \"name\": Grease=\"Dr Jordan B Peterson\" vs OpenCLI=\"Autodesk Flow Studio\"",
+      "Item 2 \"screen_name\": Grease=\"DonaldJTrumpJr\" vs OpenCLI=\"people\"",
+      "Item 2 \"name\": Grease=\"Donald Trump Jr.\" vs OpenCLI=\"People\"",
+      "Item 3 \"screen_name\": Grease=\"hodgetwins\" vs OpenCLI=\"ch402\"",
+      "Item 3 \"name\": Grease=\"Hodgetwins\" vs OpenCLI=\"Chris Olah\""
+    ]
+  }
+}

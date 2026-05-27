@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-14T01:47:03.523Z",
+  "json_file": "./clis/twitter/list-add.json",
+  "command": "ListAdd",
+  "website": "x.com",
+  "params": {
+    "list_id": "2046117032786378819",
+    "username": "AndrewYNg"
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "listId": "2046117032786378819",
+      "username": "AndrewYNg",
+      "userId": "216939636",
+      "status": "success",
+      "message": "Added @AndrewYNg to list 2046117032786378819 (AI Signal)"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter list-add \"2046117032786378819\" \"AndrewYNg\"  -f json 2>/dev/null\n"
+    ]
+  }
+}

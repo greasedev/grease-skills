@@ -1,0 +1,46 @@
+{
+  "actions": [
+    {
+      "action": "open",
+      "argument": { "url": "https://weibo.com", "waitUntil": "load" }
+    },
+    {
+      "action": "wait",
+      "argument": { "timeMs": 2000 }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const id = '{{ id }}'; const isUid = /^\\d+$/.test(id); const query = isUid ? 'uid=' + id : 'screen_name=' + encodeURIComponent(id); const resp = await fetch('/ajax/profile/info?' + query, {credentials: 'include'}); if (!resp.ok) return {error: 'HTTP ' + resp.status}; const data = await resp.json(); if (!data.ok || !data.data?.user) return {error: 'User not found'}; const u = data.data.user; const detailResp = await fetch('/ajax/profile/detail?uid=' + u.id, {credentials: 'include'}); const detail = detailResp.ok ? await detailResp.json() : null; const d = detail?.data || {}; return { screen_name: u.screen_name, uid: u.id, followers: u.followers_count, following: u.friends_count, statuses: u.statuses_count, verified: u.verified || false, verified_reason: u.verified_reason || '', description: u.description || d.description || '', location: u.location || '', gender: u.gender === 'm' ? 'male' : u.gender === 'f' ? 'female' : '', avatar: u.avatar_hd || u.avatar_large || '', url: 'https://weibo.com' + (u.profile_url || '/u/' + u.id), birthday: d.birthday || '', created_at: d.created_at || '', ip_location: d.ip_location || '' }; }"
+      }
+    }
+  ],
+  "api_endpoint": "weibo-user",
+  "category": "scrape",
+  "description": "Get Weibo user profile",
+  "is_public": true,
+  "method": "GET",
+  "name": "User",
+  "output_schema": [
+    { "name": "screen_name", "type": "string", "description": "用户名" },
+    { "name": "uid", "type": "string", "description": "用户ID" },
+    { "name": "followers", "type": "number", "description": "粉丝数" },
+    { "name": "following", "type": "number", "description": "关注数" },
+    { "name": "statuses", "type": "number", "description": "微博数" },
+    { "name": "verified", "type": "boolean", "description": "是否认证" },
+    { "name": "verified_reason", "type": "string", "description": "认证原因" },
+    { "name": "description", "type": "string", "description": "简介" },
+    { "name": "location", "type": "string", "description": "位置" },
+    { "name": "gender", "type": "string", "description": "性别" },
+    { "name": "avatar", "type": "string", "description": "头像" },
+    { "name": "url", "type": "string", "description": "主页链接" },
+    { "name": "birthday", "type": "string", "description": "生日" },
+    { "name": "created_at", "type": "string", "description": "注册时间" },
+    { "name": "ip_location", "type": "string", "description": "IP属地" }
+  ],
+  "variables": [
+    { "name": "id", "type": "string", "required": true, "help": "User ID (numeric uid) or screen name", "test": "人民日报" }
+  ],
+  "website_domain": "weibo.com",
+  "website_id": "website-weibo.com"
+}

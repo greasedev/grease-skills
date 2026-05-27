@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-04-14T03:09:46.070Z",
+  "json_file": "./clis/jimeng/generate.json",
+  "command": "Generate",
+  "website": "jimeng.jianying.com",
+  "params": {
+    "prompt": "a cute cat",
+    "wait": 20,
+    "model": "high_aes_general_v50"
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "status": "timeout",
+      "prompt": "a cute cat",
+      "image_count": 0,
+      "image_urls": "Generation may still be in progress"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 1,
+    "match": false,
+    "differences": [
+      "Item 1 \"status\": Grease=\"timeout\" vs OpenCLI=\"success\"",
+      "Item 1 \"image_count\": Grease=\"0\" vs OpenCLI=\"1\"",
+      "Item 1 \"image_urls\": Grease=\"Generation may still be in progress\" vs OpenCLI=\"https://p11-dreamina-sign.byteimg.com/tos-cn-i-tb4\""
+    ]
+  }
+}

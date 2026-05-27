@@ -1,0 +1,216 @@
+{
+  "timestamp": "2026-05-26T12:03:50.712Z",
+  "json_file": "clis/twitter/list-tweets.json",
+  "command": "ListTweets",
+  "website": "x.com",
+  "params": {
+    "list_id": "2055292495400210857",
+    "limit": 100
+  },
+  "success": false,
+  "data_count": 100,
+  "sample_data": [
+    {
+      "id": "2059241070370644278",
+      "user": {
+        "id": "23511272",
+        "name": "Bojan Tunguz",
+        "screen_name": "tunguz",
+        "avatar_url": "https://pbs.twimg.com/profile_images/1876996209421742080/RostTdnj_normal.jpg",
+        "is_verified": true,
+        "description": "Founder and CEO @tabul_ai. Creator of @trainxgb. ML ex Nvidia. Data Scientist. Physicist. Catholic. Husband. Father. Stanford Alum. Memelord. e/xgb. AMDG.",
+        "followers_count": 282350,
+        "location": "United States"
+      },
+      "text": "Too many rules and regulations on the nano scale. Nanocrats are the new Eurocrats.",
+      "likes": 4,
+      "retweets": 0,
+      "replies": 0,
+      "quotes": 0,
+      "bookmarks": 0,
+      "created_at": "Tue May 26 11:51:44 +0000 2026",
+      "lang": "en",
+      "conversation_id": "2059241070370644278",
+      "url": "https://x.com/i/status/2059241070370644278",
+      "media": [],
+      "hashtags": [],
+      "mentions": [],
+      "urls": []
+    },
+    {
+      "id": "2059240225725907221",
+      "user": {
+        "id": "23511272",
+        "name": "Bojan Tunguz",
+        "screen_name": "tunguz",
+        "avatar_url": "https://pbs.twimg.com/profile_images/1876996209421742080/RostTdnj_normal.jpg",
+        "is_verified": true,
+        "description": "Founder and CEO @tabul_ai. Creator of @trainxgb. ML ex Nvidia. Data Scientist. Physicist. Catholic. Husband. Father. Stanford Alum. Memelord. e/xgb. AMDG.",
+        "followers_count": 282350,
+        "location": "United States"
+      },
+      "text": "This is the next level.",
+      "likes": 7,
+      "retweets": 2,
+      "replies": 0,
+      "quotes": 0,
+      "bookmarks": 6,
+      "created_at": "Tue May 26 11:48:23 +0000 2026",
+      "lang": "en",
+      "conversation_id": "2059240225725907221",
+      "url": "https://x.com/i/status/2059240225725907221",
+      "media": [],
+      "hashtags": [],
+      "mentions": [],
+      "urls": []
+    },
+    {
+      "id": "2059239812259803634",
+      "user": {
+        "id": "23511272",
+        "name": "Bojan Tunguz",
+        "screen_name": "tunguz",
+        "avatar_url": "https://pbs.twimg.com/profile_images/1876996209421742080/RostTdnj_normal.jpg",
+        "is_verified": true,
+        "description": "Founder and CEO @tabul_ai. Creator of @trainxgb. ML ex Nvidia. Data Scientist. Physicist. Catholic. Husband. Father. Stanford Alum. Memelord. e/xgb. AMDG.",
+        "followers_count": 282350,
+        "location": "United States"
+      },
+      "text": "As I was saying. Therapeuticals that are already in the pipeline are nothing short of miracles. AI will turbocharge this by several orders of magnitude.",
+      "likes": 4,
+      "retweets": 0,
+      "replies": 0,
+      "quotes": 0,
+      "bookmarks": 1,
+      "created_at": "Tue May 26 11:46:44 +0000 2026",
+      "lang": "en",
+      "conversation_id": "2059239812259803634",
+      "url": "https://x.com/i/status/2059239812259803634",
+      "media": [],
+      "hashtags": [],
+      "mentions": [],
+      "urls": []
+    },
+    {
+      "id": "2059237606701801765",
+      "user": {
+        "id": "23511272",
+        "name": "Bojan Tunguz",
+        "screen_name": "tunguz",
+        "avatar_url": "https://pbs.twimg.com/profile_images/1876996209421742080/RostTdnj_normal.jpg",
+        "is_verified": true,
+        "description": "Founder and CEO @tabul_ai. Creator of @trainxgb. ML ex Nvidia. Data Scientist. Physicist. Catholic. Husband. Father. Stanford Alum. Memelord. e/xgb. AMDG.",
+        "followers_count": 282350,
+        "location": "United States"
+      },
+      "text": "What people don’t realize about the recent phenomenal success of the metabolic drugs is that ALL of them were designed/created *pre* the current AI boom. We have not even started to scratch the surface of what is possible with these new tools. But the promises are unbelievable.",
+      "likes": 19,
+      "retweets": 1,
+      "replies": 1,
+      "quotes": 0,
+      "bookmarks": 0,
+      "created_at": "Tue May 26 11:37:58 +0000 2026",
+      "lang": "en",
+      "conversation_id": "2059237606701801765",
+      "url": "https://x.com/i/status/2059237606701801765",
+      "media": [],
+      "hashtags": [],
+      "mentions": [],
+      "urls": []
+    },
+    {
+      "id": "2059231470544163287",
+      "user": {
+        "id": "25401953",
+        "name": "Peter Steinberger 🦞",
+        "screen_name": "steipete",
+        "avatar_url": "https://pbs.twimg.com/profile_images/1131851609774985216/OcsssQ9J_normal.png",
+        "is_verified": true,
+        "description": "Polyagentmorous ClawFather. Came back from retirement to mess with AI and help a lobster take over the world.\n@OpenClaw🦞 + @OpenAI",
+        "followers_count": 528371,
+        "location": "Vienna & London"
+      },
+      "text": "RT @pwk: 𝗢𝗽𝗲𝗻𝗖𝗹𝗮𝘄 𝘃𝘀. 𝗖𝗹𝗮𝘂𝗱𝗲? 𝗧𝗵𝗲 𝗷𝘂𝗿𝘆 𝗶𝘀 𝗼𝘂𝘁!🏛️🥊 \n\nLast night, our 𝗚𝗿𝗮𝗻𝗱 𝗔𝗴𝗲𝗻𝘁𝗶𝗰 𝗙𝗿𝗮𝗺𝗲𝘄𝗼𝗿𝗸 𝗕𝗮𝘁𝘁𝗹𝗲 𝗠𝗲𝗲𝘁𝘂𝗽 issued the verdict with over 400…",
+      "likes": 0,
+      "retweets": 1,
+      "replies": 0,
+      "quotes": 0,
+      "bookmarks": 0,
+      "created_at": "Tue May 26 11:13:35 +0000 2026",
+      "lang": "en",
+      "conversation_id": "2059231470544163287",
+      "url": "https://x.com/i/status/2059231470544163287",
+      "media": [],
+      "hashtags": [],
+      "mentions": [
+        {
+          "id": "11585552",
+          "name": "Peter W. Kruger",
+          "screen_name": "pwk"
+        }
+      ],
+      "urls": [],
+      "is_retweet": true,
+      "retweeted_tweet": {
+        "id": "2059205524646764877",
+        "user": {
+          "id": "11585552",
+          "name": "Peter W. Kruger",
+          "screen_name": "pwk",
+          "avatar_url": "https://pbs.twimg.com/profile_images/1554012910921326592/C2uMzsoJ_normal.jpg",
+          "is_verified": true,
+          "description": "25Y in startups and VC. CEO Bot Scanner, SBC FoodTech, eZecute, Agrifood-tech Italia. https://t.co/K7SAx2ZiHx. Physics.\n1/2 Polish, 1/2 S. African, born in Milan, grownup Roman.",
+          "followers_count": 13252,
+          "location": "Rome, Italy"
+        },
+        "text": "𝗢𝗽𝗲𝗻𝗖𝗹𝗮𝘄 𝘃𝘀. 𝗖𝗹𝗮𝘂𝗱𝗲? 𝗧𝗵𝗲 𝗷𝘂𝗿𝘆 𝗶𝘀 𝗼𝘂𝘁!🏛️🥊 \n\nLast night, our 𝗚𝗿𝗮𝗻𝗱 𝗔𝗴𝗲𝗻𝘁𝗶𝗰 𝗙𝗿𝗮𝗺𝗲𝘄𝗼𝗿𝗸 𝗕𝗮𝘁𝘁𝗹𝗲 𝗠𝗲𝗲𝘁𝘂𝗽 issued the verdict with over 400 votes cast in the room and via the live stream. Participants judged 5 live, zero-BS demos across three ruthless metrics: 𝘾𝙤𝙤𝙡𝙣𝙚𝙨𝙨, 𝙀𝙛𝙛𝙚𝙘𝙩𝙞𝙫𝙚𝙣𝙚𝙨𝙨, and 𝙀𝙛𝙛𝙞𝙘𝙞𝙚𝙣𝙘𝙮.   \n\nHere is the definitive verdict:  \n\n🏆 THE FRAMEWORK CHAMPION: @openclaw   Team OpenClaw took the crown with an overall average of 𝟯.𝟲𝟯, defeating closely @claudeai 𝟯.𝟮𝟱.   \n\nOpenClaw didn't just win the grand total. It swept every single category:    \n\n• 𝘾𝙤𝙤𝙡𝙣𝙚𝙨𝙨: OpenClaw 3.72 vs. Claude 3.09 (+0.63)     \n• 𝙀𝙛𝙛𝙚𝙘𝙩𝙞𝙫𝙚𝙣𝙚𝙨𝙨: OpenClaw 3.57 vs. Claude 3.42 (+0.15)    \n • 𝙀𝙛𝙛𝙞𝙘𝙞𝙚𝙣𝙘𝙮: OpenClaw 3.61 vs. Claude 3.25 (+0.36)    \n\nWhile Claude proved it is highly effective, the developer community clearly favors the infinite scaffolding, adaptability, and true sovereignty of OpenClaw when it comes to building real agentic architecture.  \n\n𝗧𝗛𝗘 𝗨𝗦𝗘 𝗖𝗔𝗦𝗘 𝗖𝗛𝗔𝗠𝗣𝗜𝗢𝗡𝗦 Massive respect to the individual builders who stepped into the arena:   \n\n🥇 1st Place (score: 4.01): @lucaronin and 𝗧𝗼𝗹𝗮𝗿𝗶𝗮 (OpenClaw) absolutely dominated the board with his record breaking agentic knowledgebase system and automated Open Source Review/ticket Management application.\n\n🥈 2nd Place: Marco Paga and Pecus 𝗖𝗵𝗮𝗶𝗻 (Claude) put up an incredible fight for second place with their agentic animal husbandry management platform.\n\n🥉 3rd Place: 𝗔𝗱𝗮𝗺 𝗔𝘇𝘇𝗮𝗺 and 𝗠𝗮𝘇𝘇𝗮 𝗛𝗤 (OpenClaw) secured the podium showcasing his amazing agentic infra spanning 150+ subagents.   A huge thank you to everyone who showed up to vote. \n\nShoutout to my co-hosts @margal96 and @RMagnifico, and to the partners who made this battle possible: @urbeEth, @AISalonAI Rome, #AutoBench, @moveaxlab, @RomaStartup, and @binariof (@Meta).   \n\nThe era of the chatbot is over. The era of agents has just begun. Let’s keep building!\n\n@GCarnovale @marcotrombetti @matteofago @rstagi_ @MGVitagliano @FutureDies @tensorqt @lukaszkaiser",
+        "likes": 18,
+        "retweets": 1,
+        "replies": 7,
+        "quotes": 0,
+        "bookmarks": 13,
+        "created_at": "Tue May 26 09:30:29 +0000 2026",
+        "lang": "en",
+        "conversation_id": "2059205524646764877",
+        "url": "https://x.com/i/status/2059205524646764877",
+        "media": [
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJPEZo6W0AAuQV-.jpg",
+            "width": 2048,
+            "height": 1536
+          },
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJPEZm9WoAAKvGI.jpg",
+            "width": 2048,
+            "height": 1536
+          },
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJPEZnCXUAAVjgN.jpg",
+            "width": 1086,
+            "height": 1448
+          },
+          {
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HJPEZm8XQAA1fy1.jpg",
+            "width": 768,
+            "height": 1024
+          }
+        ],
+        "hashtags": [],
+        "mentions": [],
+        "urls": []
+      }
+    }
+  ],
+  "comparison": {
+    "grease_count": 100,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter list-tweets \"2055292495400210857\" --limit 100 -f json 2>/dev/null\n"
+    ]
+  }
+}

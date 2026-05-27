@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-05-12T03:46:08.901Z",
+  "json_file": "./clis/twitter/bookmarks.json",
+  "command": "Bookmarks",
+  "website": "x.com",
+  "params": {
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 0,
+  "sample_data": [],
+  "comparison": {
+    "grease_count": 0,
+    "opencli_count": 0,
+    "match": true,
+    "differences": []
+  }
+}

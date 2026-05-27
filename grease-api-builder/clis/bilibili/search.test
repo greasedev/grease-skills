@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-04-11T01:24:13.472Z",
+  "json_file": "./clis/bilibili/search.json",
+  "command": "Search",
+  "website": "www.bilibili.com",
+  "params": {
+    "keyword": "test",
+    "limit": 5,
+    "type": "video",
+    "page": 1
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "rank": 1,
+      "title": "【2020年9月合集 全107集】Excel Power Query 零基础入门到M函数  Excel PowerQuery教程",
+      "author": "孙兴华zz",
+      "score": 1283180,
+      "url": "https://www.bilibili.com/video/BV1oa4y1j75e"
+    },
+    {
+      "rank": 2,
+      "title": "30分钟入门Excel Power Query，最强数据处理/数据分析神器，Excel高阶应用，文员/行政/电商/数据分析/财会/金融/数据处理神器",
+      "author": "之了学吧",
+      "score": 44781,
+      "url": "https://www.bilibili.com/video/BV11NetzpE3h"
+    },
+    {
+      "rank": 3,
+      "title": "Power Query-M语言进阶应用-朱仕平",
+      "author": "朱仕平Excel学习视频",
+      "score": 1674,
+      "url": ""
+    },
+    {
+      "rank": 4,
+      "title": "【Excel技巧】Excel Power Query教程_数据整理｜数据分析｜表连接与数据透视图",
+      "author": "三味书院",
+      "score": 75019,
+      "url": "https://www.bilibili.com/video/BV1wS411w7Wz"
+    },
+    {
+      "rank": 5,
+      "title": "SSRS Report 第八讲 from Cube MDX query",
+      "author": "翔哥开播啦",
+      "score": 1331,
+      "url": "https://www.bilibili.com/video/BV1HE411j7LJ"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": false,
+    "differences": [
+      "Item 1 \"title\": Grease=\"【2020年9月合集 全107集】Excel Power Query 零基础入门到M函数  Exce\" vs OpenCLI=\"不要进入这个实验室！看到不对劲请立即回头！我的世界恐怖地图《Test Subject || 恐怖实验\"",
+      "Item 1 \"author\": Grease=\"孙兴华zz\" vs OpenCLI=\"轻秋秋秋秋秋秋\"",
+      "Item 1 \"score\": Grease=\"1283180\" vs OpenCLI=\"292936\"",
+      "Item 1 \"url\": Grease=\"https://www.bilibili.com/video/BV1oa4y1j75e\" vs OpenCLI=\"https://www.bilibili.com/video/BV1wFYfzPEVN\"",
+      "Item 2 \"title\": Grease=\"30分钟入门Excel Power Query，最强数据处理/数据分析神器，Excel高阶应用，文员\" vs OpenCLI=\"🤣又挖到一张究极血腥的MC恐怖地图！我的世界《Test Subject》恐怖地图实况解说！快来感受\"",
+      "Item 2 \"author\": Grease=\"之了学吧\" vs OpenCLI=\"宇靈_NIGHT_\"",
+      "Item 2 \"score\": Grease=\"44781\" vs OpenCLI=\"74535\"",
+      "Item 2 \"url\": Grease=\"https://www.bilibili.com/video/BV11NetzpE3h\" vs OpenCLI=\"https://www.bilibili.com/video/BV1uN411s7Kb\"",
+      "Item 3 \"title\": Grease=\"Power Query-M语言进阶应用-朱仕平\" vs OpenCLI=\"阿Test：百万up主的涨粉秘诀\"",
+      "Item 3 \"author\": Grease=\"朱仕平Excel学习视频\" vs OpenCLI=\"阿Test正经比比\"",
+      "Item 3 \"score\": Grease=\"1674\" vs OpenCLI=\"1438918\""
+    ]
+  }
+}

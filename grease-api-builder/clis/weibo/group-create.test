@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-05-12T09:39:24.682Z",
+  "json_file": "clis/weibo/group-create.json",
+  "command": "GroupCreate",
+  "website": "weibo.com",
+  "params": {
+    "name": "测试",
+    "dryrun": true
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "status": "dryrun",
+      "message": "Dryrun mode - title filled but not submitted",
+      "name": "测试"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli weibo group-create \"测试\" --dryrun \"true\" -f json 2>/dev/null\n"
+    ]
+  }
+}

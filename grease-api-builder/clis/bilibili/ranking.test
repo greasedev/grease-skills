@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-04-10T18:33:39.087Z",
+  "json_file": "./clis/bilibili/ranking.json",
+  "command": "Ranking",
+  "website": "www.bilibili.com",
+  "params": {
+    "limit": 5
+  },
+  "success": true,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "rank": 1,
+      "title": "《百米自由搏击》",
+      "author": "伤心欲茄222",
+      "score": 6646475,
+      "url": "https://www.bilibili.com/video/BV1ktDpBFEQN"
+    },
+    {
+      "rank": 2,
+      "title": "我嫁给你是来享福的，不是来吃苦的！别再被这句话洗脑了！",
+      "author": "晓艳教英语",
+      "score": 3620077,
+      "url": "https://www.bilibili.com/video/BV1o7DYB2Exe"
+    },
+    {
+      "rank": 3,
+      "title": "《崩坏：星穹铁道》原创动画•概念PV——「死于午后」",
+      "author": "崩坏星穹铁道",
+      "score": 1520573,
+      "url": "https://www.bilibili.com/video/BV1YXDfBUETP"
+    },
+    {
+      "rank": 4,
+      "title": "五年了，他还是坐上了这个位置…",
+      "author": "小潮院长",
+      "score": 1512980,
+      "url": "https://www.bilibili.com/video/BV1H7QFBaERe"
+    },
+    {
+      "rank": 5,
+      "title": "【檀健次】【B站独家】「多见一次」个人巡回演唱会大电影",
+      "author": "檀健次",
+      "score": 1299261,
+      "url": "https://www.bilibili.com/video/BV115DEBpENi"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 5,
+    "match": true,
+    "differences": []
+  }
+}

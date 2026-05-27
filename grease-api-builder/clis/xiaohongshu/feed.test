@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-04-11T08:21:59.016Z",
+  "json_file": "./clis/xiaohongshu/feed.json",
+  "command": "Feed",
+  "website": "www.xiaohongshu.com",
+  "params": {
+    "limit": 3
+  },
+  "success": false,
+  "data_count": 3,
+  "sample_data": [
+    {
+      "id": "69d9c7c00000000023026acd",
+      "title": "真人快打11:全员表演卡诺残忍",
+      "type": "video",
+      "author": "老张快打",
+      "likes": "17",
+      "url": "https://www.xiaohongshu.com/explore/69d9c7c00000000023026acd"
+    },
+    {
+      "id": "69d7b4440000000022027396",
+      "title": "psp和nds两大顶流大神对比",
+      "type": "normal",
+      "author": "林燕娜",
+      "likes": "2",
+      "url": "https://www.xiaohongshu.com/explore/69d7b4440000000022027396"
+    },
+    {
+      "id": "69d9be5c000000001a02d531",
+      "title": "各厂的 coding plan 什么时候支持 glm5.1[萌萌哒R]",
+      "type": "normal",
+      "author": "达不溜勾勾",
+      "likes": "1",
+      "url": "https://www.xiaohongshu.com/explore/69d9be5c000000001a02d531"
+    }
+  ],
+  "comparison": {
+    "grease_count": 3,
+    "opencli_count": 3,
+    "match": false,
+    "differences": [
+      "Item 1 \"id\": Grease=\"69d9c7c00000000023026acd\" vs OpenCLI=\"69d1a59f0000000023010cdc\"",
+      "Item 1 \"title\": Grease=\"真人快打11:全员表演卡诺残忍\" vs OpenCLI=\"胡不归问题 \"",
+      "Item 1 \"author\": Grease=\"老张快打\" vs OpenCLI=\"大磊\"",
+      "Item 1 \"likes\": Grease=\"17\" vs OpenCLI=\"729\"",
+      "Item 1 \"url\": Grease=\"https://www.xiaohongshu.com/explore/69d9c7c0000000\" vs OpenCLI=\"https://www.xiaohongshu.com/explore/69d1a59f000000\"",
+      "Item 2 \"id\": Grease=\"69d7b4440000000022027396\" vs OpenCLI=\"69ba7d3c000000002103b07a\"",
+      "Item 2 \"title\": Grease=\"psp和nds两大顶流大神对比\" vs OpenCLI=\"心向星辰，何惧蜚语；步履不停，自有光芒\"",
+      "Item 2 \"type\": Grease=\"normal\" vs OpenCLI=\"video\"",
+      "Item 2 \"author\": Grease=\"林燕娜\" vs OpenCLI=\"瓜哥一直在努力\"",
+      "Item 2 \"likes\": Grease=\"2\" vs OpenCLI=\"8055\"",
+      "Item 2 \"url\": Grease=\"https://www.xiaohongshu.com/explore/69d7b444000000\" vs OpenCLI=\"https://www.xiaohongshu.com/explore/69ba7d3c000000\"",
+      "Item 3 \"id\": Grease=\"69d9be5c000000001a02d531\" vs OpenCLI=\"69d472c2000000001e00d94a\"",
+      "Item 3 \"title\": Grease=\"各厂的 coding plan 什么时候支持 glm5.1[萌萌哒R]\" vs OpenCLI=\"收一个阿里云coding plan lite账号（更改个人认证），私聊我给我报价\"",
+      "Item 3 \"author\": Grease=\"达不溜勾勾\" vs OpenCLI=\"nickname\"",
+      "Item 3 \"url\": Grease=\"https://www.xiaohongshu.com/explore/69d9be5c000000\" vs OpenCLI=\"https://www.xiaohongshu.com/explore/69d472c2000000\""
+    ]
+  }
+}

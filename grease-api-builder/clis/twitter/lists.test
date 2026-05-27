@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-05-14T01:32:57.541Z",
+  "json_file": "./clis/twitter/lists.json",
+  "command": "Lists",
+  "website": "x.com",
+  "params": {
+    "limit": 5
+  },
+  "success": false,
+  "data_count": 5,
+  "sample_data": [
+    {
+      "id": "1266049291765891072",
+      "name": "LA Fire",
+      "members": 68,
+      "followers": 17918,
+      "mode": "public",
+      "type": "suggest_list_to_follow"
+    },
+    {
+      "id": "1307414745629118464",
+      "name": "Emergency",
+      "members": 53,
+      "followers": 729,
+      "mode": "public",
+      "type": "suggest_list_to_follow"
+    },
+    {
+      "id": "1245921263576477698",
+      "name": "CA / SoCal",
+      "members": 35,
+      "followers": 1239,
+      "mode": "public",
+      "type": "suggest_list_to_follow"
+    },
+    {
+      "id": "2046117032786378819",
+      "name": "AI Signal",
+      "members": 3,
+      "followers": 0,
+      "mode": "public",
+      "type": "suggest_owned_subscribed_list"
+    },
+    {
+      "id": "2054102476664758725",
+      "name": "Web3",
+      "members": 0,
+      "followers": 0,
+      "mode": "public",
+      "type": "suggest_owned_subscribed_list"
+    }
+  ],
+  "comparison": {
+    "grease_count": 5,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter lists  --limit 5 -f json 2>/dev/null\n"
+    ]
+  }
+}

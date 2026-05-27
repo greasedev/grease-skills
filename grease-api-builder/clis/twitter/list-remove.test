@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-21T09:22:50.948Z",
+  "json_file": "./clis/twitter/list-remove.json",
+  "command": "ListRemove",
+  "website": "x.com",
+  "params": {
+    "list_id": "2055292495400210857",
+    "username": "jerryjliu0"
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "listId": "2055292495400210857",
+      "username": "jerryjliu0",
+      "userId": "369777416",
+      "status": "success",
+      "message": "Removed @jerryjliu0 from list 2055292495400210857 (AI - Core)"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli twitter list-remove \"2055292495400210857\" \"jerryjliu0\"  -f json 2>/dev/null\n"
+    ]
+  }
+}

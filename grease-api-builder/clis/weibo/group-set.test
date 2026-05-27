@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-12T14:08:18.314Z",
+  "json_file": "clis/weibo/group-set.json",
+  "command": "GroupSet",
+  "website": "weibo.com",
+  "params": {
+    "user_id": "5903980664",
+    "group_id": "0",
+    "dryrun": false
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "status": "success",
+      "message": "User removed from all groups",
+      "user_id": "5903980664",
+      "group_id": "0"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli weibo group-set \"5903980664\" \"0\" --dryrun \"false\" -f json 2>/dev/null\n"
+    ]
+  }
+}
