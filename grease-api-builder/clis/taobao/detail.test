@@ -1,25 +1,38 @@
 {
-  "timestamp": "2026-04-21T07:53:26.377Z",
-  "json_file": "./clis/taobao/detail.json",
+  "timestamp": "2026-05-28T05:19:35.490Z",
+  "json_file": "clis/taobao/detail.json",
   "command": "Detail",
   "website": "item.taobao.com",
   "params": {
-    "id": "827563850178"
+    "id": "990986496753"
   },
-  "success": true,
-  "data_count": 3,
+  "success": false,
+  "data_count": 1,
   "sample_data": [
     {
-      "field": "商品名称",
-      "value": "登录"
-    },
-    {
-      "field": "ID",
-      "value": "827563850178"
-    },
-    {
-      "field": "链接",
-      "value": "https://login.taobao.com/havanaone/login/login.htm?bizName=taobao"
+      "title": "【有机】美羚羊奶粉成人老年人无蔗糖有机中老年羊奶粉400g新品",
+      "itemId": "990986496753",
+      "skuId": "5956875180531",
+      "skuName": "31560:41118566193",
+      "price": "108",
+      "couponPrice": "62",
+      "sales": "8000+",
+      "shopName": "美羚旗舰店",
+      "sellerType": "天猫",
+      "creditLevel": "15",
+      "location": "陕西渭南",
+      "delivery": "预计后天送达",
+      "quantity": 200,
+      "reviewCount": "400+",
+      "favorableRate": "近3个月好评率高达98.6%"
     }
-  ]
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli item.taobao detail \"990986496753\"  -f json 2>/dev/null\n"
+    ]
+  }
 }

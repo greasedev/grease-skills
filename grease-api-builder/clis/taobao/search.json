@@ -1,9 +1,16 @@
 {
 	"actions": [
 		{
+			"action": "track",
+			"argument": {
+				"urlPattern": "mtop.relationrecommend.wirelessrecommend.recommend",
+				"script": "async (globalVars) => {\n  const response = globalVars.response;\n ; const prev = globalVars.extractData || [];\n  const seenIds = new Set(prev.map(i => i.item_id));\n  try {\n    let body = (response.body || '').trim();\n    if (typeof body === 'string' && body.startsWith('mtopjsonp')) {\n    const m = body.match(/^mtopjsonp\\d+\\(([\\s\\S]*)\\);?$/);\n      if (m) body = m[1];\n    }\n    if (typeof body === 'string') {\n      try { body = JSON.parse(body); } catch(e) { return [e]; }\n    }\n    if (body?.ret?.[0]?.includes('FAIL')) return [];\n    const items = body?.data?.itemsArray || [];\n    const results = [];\n    for (const item of items) {\n      if (!item.item_id || seenIds.has(String(item.item_id))) continue;\n      seenIds.add(String(item.item_id));\n      const ps = item.priceShow || {};\n      const si = item.shopInfo || {};\n      const title = (item.title || '').replace(/<[^>]+>/g, '').trim();\n      results.push({\n        rank: prev.length + results.length + 1,\n        title: title.slice(0, 80),\n        item_id: String(item.item_id),\n        price: (ps.unit || '¥') + (ps.price || item.price || ''),\n        realSales: item.realSales || '',\n        shop: si.title || item.nick || '',\n        procity: item.procity || '',\n        isP4p: item.isP4p === 'true',\n        url: 'https://item.taobao.com/item.htm?id=' + item.item_id,\n        auctionUrl: item.auctionURL || ''\n      });\n    }\n    return results;\n  } catch (e) { return []; }\n}"
+			}
+		},
+		{
 			"action": "open",
 			"argument": {
-				"url": "https://www.taobao.com",
+				"url": "https://s.taobao.com/",
 				"waitUntil": "load"
 			}
 		},
@@ -14,75 +21,91 @@
 			}
 		},
 		{
-			"action": "evaluate",
+			"action": "input",
 			"argument": {
-				"script": "async (intermediate) => { const query = '{{ query }}'; const sortInput = '{{ sort }}' || 'default'; const sortMap = { default: '', sale: 'sale-desc', price: 'price-asc' }; const sortParam = sortMap[sortInput] || ''; const url = `https://s.taobao.com/search?q=${encodeURIComponent(query)}${sortParam ? '&sort=' + sortParam : ''}`; location.href = url; return { navigated: true }; }"
-			}
+				"delay": 20,
+				"target": "商品搜索框",
+				"text": "{{ query }}",
+				"withReturn": true
+			},
+			"selectors": [
+				{
+					"selector": ".search-combobox-input",
+					"reason": "请输入要搜索的内容"
+				}
+			]
 		},
 		{
-			"action": "wait",
+			"action": "loop",
 			"argument": {
-				"timeMs": 8000
-			}
-		},
-		{
-			"action": "scroll",
-			"argument": {
-				"target": "页面滚动加载更多商品"
-			}
-		},
-		{
-			"action": "wait",
-			"argument": {
-				"timeMs": 2000
-			}
-		},
-		{
-			"action": "scroll",
-			"argument": {
-				"target": "页面滚动加载更多商品"
-			}
-		},
-		{
-			"action": "wait",
-			"argument": {
-				"timeMs": 2000
-			}
-		},
-		{
-			"action": "scroll",
-			"argument": {
-				"target": "页面滚动加载更多商品"
-			}
-		},
-		{
-			"action": "wait",
-			"argument": {
-				"timeMs": 2000
+				"script": "async (globalVars) => { const limit = {{ limit }} || 10; const maxPages = 5; const data = globalVars.extractData || []; if (data.length >= limit) return false; globalVars.pageCount = (globalVars.pageCount || 0) + 1; if (globalVars.pageCount > maxPages) return false; window.scrollTo(0, document.body.scrollHeight); const nextBtn = document.querySelector('.next-next'); if (nextBtn) { nextBtn.click(); } else { return false; } return {pageCount: globalVars.pageCount}; }",
+				"intervalMs": 2000
 			}
 		},
 		{
 			"action": "evaluate",
 			"argument": {
-				"script": "async (intermediate) => { const limit = {{ limit }} || 10; const normalize = v => (v || '').replace(/\\s+/g, ' ').trim(); const bodyText = document.body?.innerText || ''; if (bodyText.length < 1000 && bodyText.includes('请登录')) { return { error: 'auth-required' }; } for (let i = 0; i < 30; i++) { if (document.querySelectorAll('[class*=\"doubleCard--\"]').length > 3) break; await new Promise(r => setTimeout(r, 500)); } const cards = document.querySelectorAll('[class*=\"doubleCard--\"]'); const results = []; const seenTitles = new Set(); for (const card of cards) { const titleEl = card.querySelector('[class*=\"title--\"]'); const title = titleEl ? normalize(titleEl.textContent) : ''; if (!title || title.length < 3 || seenTitles.has(title)) continue; seenTitles.add(title); const intEl = card.querySelector('[class*=\"priceInt--\"]'); const floatEl = card.querySelector('[class*=\"priceFloat--\"]'); let price = ''; if (intEl) { price = '¥' + normalize(intEl.textContent) + (floatEl ? normalize(floatEl.textContent) : ''); } const salesEl = card.querySelector('[class*=\"realSales--\"]'); const sales = salesEl ? normalize(salesEl.textContent) : ''; const shopEl = card.querySelector('[class*=\"shopName--\"]'); let shop = shopEl ? normalize(shopEl.textContent) : ''; shop = shop.replace(/^\\d+年老店/, '').replace(/^回头客[\\d万]+/, ''); const locEls = card.querySelectorAll('[class*=\"procity--\"]'); const location = Array.from(locEls).map(el => normalize(el.textContent)).join(''); let itemId = ''; let wrapper = card.parentElement; for (let i = 0; i < 3 && wrapper; i++) { const spmId = wrapper.getAttribute('data-spm-act-id'); if (spmId && /^\\d{10,}$/.test(spmId)) { itemId = spmId; break; } wrapper = wrapper.parentElement; } results.push({ rank: results.length + 1, title: title.slice(0, 80), price, sales, shop, location, item_id: itemId, url: itemId ? 'https://item.taobao.com/item.htm?id=' + itemId : '' }); if (results.length >= limit) break; } return results; }"
+				"script": "(globalVars) => { const limit = {{ limit }} || 10; globalVars.extractData = (globalVars.extractData || []).slice(0, limit); return globalVars; }"
 			}
 		}
 	],
 	"api_endpoint": "taobao-search",
-	"category": "search",
-	"description": "淘宝商品搜索",
+	"category": "intercept",
+	"description": "淘宝商品搜索（通过拦截 mtop API 提取结果）",
 	"is_public": true,
 	"method": "GET",
 	"name": "Search",
 	"output_schema": [
-		{ "name": "rank", "type": "number", "description": "排名" },
-		{ "name": "title", "type": "string", "description": "商品标题" },
-		{ "name": "price", "type": "string", "description": "价格" },
-		{ "name": "sales", "type": "string", "description": "销量" },
-		{ "name": "shop", "type": "string", "description": "店铺" },
-		{ "name": "location", "type": "string", "description": "地区" },
-		{ "name": "item_id", "type": "string", "description": "商品ID" },
-		{ "name": "url", "type": "string", "description": "商品链接" }
+		{
+			"name": "rank",
+			"type": "number",
+			"description": "排名"
+		},
+		{
+			"name": "title",
+			"type": "string",
+			"description": "商品标题"
+		},
+		{
+			"name": "item_id",
+			"type": "string",
+			"description": "商品ID"
+		},
+		{
+			"name": "price",
+			"type": "string",
+			"description": "价格"
+		},
+		{
+			"name": "realSales",
+			"type": "string",
+			"description": "销量"
+		},
+		{
+			"name": "shop",
+			"type": "string",
+			"description": "店铺"
+		},
+		{
+			"name": "procity",
+			"type": "string",
+			"description": "发货地"
+		},
+		{
+			"name": "isP4p",
+			"type": "boolean",
+			"description": "是否广告"
+		},
+		{
+			"name": "url",
+			"type": "string",
+			"description": "商品链接"
+		},
+		{
+			"name": "auctionUrl",
+			"type": "string",
+			"description": "拍卖链接"
+		}
 	],
 	"variables": [
 		{
@@ -103,8 +126,8 @@
 			"name": "limit",
 			"type": "int",
 			"default": 10,
-			"help": "返回结果数量 (max 40)",
-			"test": 20
+			"help": "返回结果数量 (max 60)",
+			"test": 100
 		}
 	],
 	"website_domain": "s.taobao.com",

@@ -137,6 +137,26 @@ type ActionType = "click" | "close" | "evaluate" | "extract" | "extractList" | "
 
 **contentType options**: `"text" | "link" | "markdown" | "html" | "all"`
 
+### Evaluate Return Convention
+
+The last `evaluate` action in a scrape API must return an **array**. Each element in the array represents one extracted record and must conform to the `output_schema` definition.
+
+```javascript
+// Correct: return array
+return [{ title: "xxx", rank: 1 }, { title: "yyy", rank: 2 }];
+
+// Wrong: return single object
+return { title: "xxx", rank: 1 };
+```
+
+For detail-page APIs (single item), wrap the object in an array:
+
+```javascript
+return [{ title: item.title, price: price.priceText, shopName: seller.shopName }];
+```
+
+The array return format is required because the runtime uses it to determine that the evaluate step produced the final extraction result. A non-array return is treated as an intermediate result passed to the next action, not as the final output.
+
 ### TargetElement & Selector
 
 Actions targeting elements can include:
