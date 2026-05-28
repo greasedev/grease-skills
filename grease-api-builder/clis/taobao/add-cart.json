@@ -91,6 +91,6 @@
 		},
 		{ "name": "spec", "type": "string", "help": "规格关键词", "test": "" }
 	],
-	"website_domain": "item.taobao.com",
-	"website_id": "website-item.taobao.com"
+	"website_domain": "www.taobao.com",
+	"website_id": "website-www.taobao.com"
 }

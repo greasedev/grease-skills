@@ -1,38 +1,98 @@
 {
-  "timestamp": "2026-05-28T05:19:35.490Z",
-  "json_file": "clis/taobao/detail.json",
+  "timestamp": "2026-05-28T14:55:06.704Z",
+  "json_file": "./clis/taobao/detail.json",
   "command": "Detail",
-  "website": "item.taobao.com",
+  "website": "www.taobao.com",
   "params": {
-    "id": "990986496753"
+    "url": "https://item.taobao.com/item.htm?ali_refid=a3_420434_1006%3A1106391041%3AH%3A9XYpci2uTQLHkAe6JJrO3eF5uM1MPwKx%3A6027969c601b7693a39718b147b25a26&ali_trackid=282_6027969c601b7693a39718b147b25a26&id=985292694039&mi_id=0000S0WDUMDID2OsB2tQQbXS4bvOGL43TBXvZQcqNxwLmxc&mm_sceneid=1_0_46543800_0&priceTId=215044d217799463890736358e0f8b&skuId=5948894545147&spm=a21n57.1.hoverItem.2&utparam=%7B%22aplus_abtest%22%3A%228de885679a632dad8fbfdd7c969fc524%22%7D&xxc=ad_ztc"
   },
-  "success": false,
-  "data_count": 1,
+  "success": true,
+  "data_count": 32,
   "sample_data": [
     {
-      "title": "【有机】美羚羊奶粉成人老年人无蔗糖有机中老年羊奶粉400g新品",
-      "itemId": "990986496753",
-      "skuId": "5956875180531",
-      "skuName": "31560:41118566193",
-      "price": "108",
-      "couponPrice": "62",
-      "sales": "8000+",
-      "shopName": "美羚旗舰店",
-      "sellerType": "天猫",
-      "creditLevel": "15",
-      "location": "陕西渭南",
-      "delivery": "预计后天送达",
+      "title": "Apple/苹果 iPhone 14 Pro Max 原封 苹果 14promax 全新正品手机",
+      "itemId": "985292694039",
+      "skuId": "5948894545174",
+      "skuName": "1627207:28330;12304035:11835346;5919063:3266779",
+      "price": "3610",
+      "couponPrice": "3477",
+      "sales": "9000+",
+      "shopName": "领域数码3C",
+      "sellerType": "淘宝",
+      "creditLevel": "18",
+      "location": "广东汕头",
+      "delivery": "承诺24小时内发货",
       "quantity": 200,
-      "reviewCount": "400+",
-      "favorableRate": "近3个月好评率高达98.6%"
+      "reviewCount": "8000+",
+      "favorableRate": "近3个月好评率高达100.0%"
+    },
+    {
+      "title": "Apple/苹果 iPhone 14 Pro Max 原封 苹果 14promax 全新正品手机",
+      "itemId": "985292694039",
+      "skuId": "5948894545175",
+      "skuName": "1627207:28330;12304035:25484125;5919063:6536025",
+      "price": "3610",
+      "couponPrice": "3477",
+      "sales": "9000+",
+      "shopName": "领域数码3C",
+      "sellerType": "淘宝",
+      "creditLevel": "18",
+      "location": "广东汕头",
+      "delivery": "承诺24小时内发货",
+      "quantity": 200,
+      "reviewCount": "8000+",
+      "favorableRate": "近3个月好评率高达100.0%"
+    },
+    {
+      "title": "Apple/苹果 iPhone 14 Pro Max 原封 苹果 14promax 全新正品手机",
+      "itemId": "985292694039",
+      "skuId": "5948894545172",
+      "skuName": "1627207:28330;12304035:3222910;5919063:3266779",
+      "price": "3610",
+      "couponPrice": "3477",
+      "sales": "9000+",
+      "shopName": "领域数码3C",
+      "sellerType": "淘宝",
+      "creditLevel": "18",
+      "location": "广东汕头",
+      "delivery": "承诺24小时内发货",
+      "quantity": 200,
+      "reviewCount": "8000+",
+      "favorableRate": "近3个月好评率高达100.0%"
+    },
+    {
+      "title": "Apple/苹果 iPhone 14 Pro Max 原封 苹果 14promax 全新正品手机",
+      "itemId": "985292694039",
+      "skuId": "5948894545173",
+      "skuName": "1627207:28330;12304035:11835346;5919063:6536025",
+      "price": "3610",
+      "couponPrice": "3477",
+      "sales": "9000+",
+      "shopName": "领域数码3C",
+      "sellerType": "淘宝",
+      "creditLevel": "18",
+      "location": "广东汕头",
+      "delivery": "承诺24小时内发货",
+      "quantity": 200,
+      "reviewCount": "8000+",
+      "favorableRate": "近3个月好评率高达100.0%"
+    },
+    {
+      "title": "Apple/苹果 iPhone 14 Pro Max 原封 苹果 14promax 全新正品手机",
+      "itemId": "985292694039",
+      "skuId": "5948894545170",
+      "skuName": "1627207:28328;12304035:118104;5919063:3266779",
+      "price": "3610",
+      "couponPrice": "3477",
+      "sales": "9000+",
+      "shopName": "领域数码3C",
+      "sellerType": "淘宝",
+      "creditLevel": "18",
+      "location": "广东汕头",
+      "delivery": "承诺24小时内发货",
+      "quantity": 200,
+      "reviewCount": "8000+",
+      "favorableRate": "近3个月好评率高达100.0%"
     }
-  ],
-  "comparison": {
-    "grease_count": 1,
-    "opencli_count": 0,
-    "match": false,
-    "differences": [
-      "OpenCLI failed: Command failed: opencli item.taobao detail \"990986496753\"  -f json 2>/dev/null\n"
-    ]
-  }
+  ]
 }
