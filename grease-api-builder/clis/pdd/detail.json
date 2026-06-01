@@ -1,0 +1,105 @@
+{
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "{{ url }}",
+				"waitUntil": "domcontentloaded"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 3000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const wait = (ms) => new Promise(r => setTimeout(r, ms)); for (let i = 0; i < 20; i++) { const rd = window.rawData; const goods = rd?.store?.initDataObj?.goods; if (goods && goods.goodsID) { const mall = rd.store.initDataObj.mall || {}; const gallery = (goods.topGallery || []).map(g => g.url || g).slice(0, 5); return [{ title: goods.goodsName || '', goods_id: String(goods.goodsID || ''), price: '¥' + (goods.minGroupPrice || ''), original_price: goods.minNormalPrice ? '¥' + goods.minNormalPrice : '', sales: goods.sideSalesTip || '', shop_name: mall.mallName || '', shop_sales: mall.salesTip || '', img_url: goods.thumbUrl || '', gallery: gallery.join(','), url: 'https://mobile.pinduoduo.com/goods.html?goods_id=' + goods.goodsID }]; } await wait(500); } return [{error: 'initDataObj.goods not ready after 10s'}]; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => {\n  const delay = {{ delay }} || 3000;\n  const totalMs = delay + Math.floor(Math.random() * delay);\n  let scrollDir = 1;\n  let scrollSpeed = 0.8 + Math.random() * 0.7;\n  let sameDirCount = 0;\n  const start = Date.now();\n  while (Date.now() - start < totalMs) {\n    const remaining = totalMs - (Date.now() - start);\n    const r = Math.random();\n    if (r < 0.5) {\n      sameDirCount++;\n      if (sameDirCount > 2 + Math.floor(Math.random() * 4)) {\n        scrollDir *= -1;\n        sameDirCount = 0;\n        scrollSpeed = 0.6 + Math.random() * 0.9;\n      }\n      const step = Math.floor((500 + Math.random() * 1500) * scrollSpeed) * scrollDir;\n      window.scrollBy({top: step, behavior: 'smooth'});\n      await new Promise(res => setTimeout(res, 300 + Math.floor(Math.random() * 600)));\n    } else {\n      const pause = 1000 + Math.floor(Math.random() * 3000);\n      await new Promise(res => setTimeout(res, Math.min(pause, remaining)));\n    }\n    await new Promise(res => setTimeout(res, Math.min(remaining, 200 + Math.floor(Math.random() * 500))));\n  }\n}"
+			}
+		}
+	],
+	"api_endpoint": "pdd-detail",
+	"category": "scrape",
+	"description": "拼多多商品详情",
+	"is_public": true,
+	"method": "GET",
+	"name": "Detail",
+	"output_schema": [
+		{
+			"name": "title",
+			"type": "string",
+			"description": "商品标题"
+		},
+		{
+			"name": "goods_id",
+			"type": "string",
+			"description": "商品ID"
+		},
+		{
+			"name": "price",
+			"type": "string",
+			"description": "拼团价"
+		},
+		{
+			"name": "original_price",
+			"type": "string",
+			"description": "原价"
+		},
+		{
+			"name": "sales",
+			"type": "string",
+			"description": "销量"
+		},
+		{
+			"name": "shop_name",
+			"type": "string",
+			"description": "店铺名称"
+		},
+		{
+			"name": "shop_sales",
+			"type": "string",
+			"description": "店铺销量"
+		},
+		{
+			"name": "img_url",
+			"type": "string",
+			"description": "主图"
+		},
+		{
+			"name": "gallery",
+			"type": "string",
+			"description": "轮播图"
+		},
+		{
+			"name": "url",
+			"type": "string",
+			"description": "商品链接"
+		}
+	],
+	"variables": [
+		{
+			"name": "url",
+			"type": "string",
+			"required": true,
+			"help": "商品链接",
+			"test": "https://mobile.pinduoduo.com/goods.html?goods_id=477399992833&_oak_rcto=YWLQZz9LR00kIqj8ippuxrLcgaTTyYsxoXcSNyQNg2uOHn0nZhK6aTsw&_oc_refer_ad=0&_oak_search_term=%E5%90%89%E5%88%97%E5%89%83%E9%A1%BB%E5%88%80"
+		},
+		{
+			"name": "delay",
+			"type": "int",
+			"default": 3000,
+			"help": "随机浏览时间基数(ms), 实际时间为 delay ~ 2*delay",
+			"test": 5000
+		}
+	],
+	"website_domain": "mobile.pinduoduo.com",
+	"website_id": "website-mobile.pinduoduo.com"
+}
