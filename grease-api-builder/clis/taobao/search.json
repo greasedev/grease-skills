@@ -39,7 +39,7 @@
 			"action": "loop",
 			"argument": {
 				"script": "async (globalVars) => { const limit = {{ limit }} || 10; const maxPages = 5; const data = globalVars.extractData || []; if (data.length >= limit) return false; globalVars.pageCount = (globalVars.pageCount || 0) + 1; if (globalVars.pageCount > maxPages) return false; window.scrollTo(0, document.body.scrollHeight); const nextBtn = document.querySelector('.next-next'); if (nextBtn) { nextBtn.click(); } else { return false; } return {pageCount: globalVars.pageCount}; }",
-				"intervalMs": 2000
+				"intervalMs": 5000
 			}
 		},
 		{
@@ -113,7 +113,7 @@
 			"type": "string",
 			"required": true,
 			"help": "搜索关键词",
-			"test": "iPhone"
+			"test": "JavaScript 编程教程"
 		},
 		{
 			"name": "sort",

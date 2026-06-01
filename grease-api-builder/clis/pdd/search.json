@@ -1,0 +1,148 @@
+{
+	"actions": [
+		{
+			"action": "track",
+			"argument": {
+				"urlPattern": "mobile.pinduoduo.com/proxy/api/search",
+				"script": "async (globalVars) => {\n  const response = globalVars.response;\n  try {\n    let body = (response.body || '').trim();\n    if (typeof body === 'string') {\n      try { body = JSON.parse(body); } catch(e) { return []; }\n    }\n    const items = body?.items || [];\n    const results = [];\n    for (const item of items) {\n      const goods = item?.item_data?.goods_model;\n      if (!goods?.goods_id) continue;\n      const tags = (goods.tag_list || []).map(t => t.text).filter(Boolean).join(',');\n      const img = goods.thumb_url || goods.hd_thumb_url || goods.hd_url || '';\n      results.push({\n        title: (goods.goods_name || '').slice(0, 80),\n        goods_id: String(goods.goods_id),\n        price: '¥' + (goods.price_info || (goods.price / 100).toFixed(2)),\n        sales: goods.sales_tip || '',\n        tags: tags,\n        img_url: img,\n        url: 'https://mobile.pinduoduo.com/' + (goods.link_url || 'goods.html?goods_id=' + goods.goods_id)\n      });\n    }\n    return results;\n  } catch (e) { return []; }\n}"
+			}
+		},
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://mobile.pinduoduo.com/",
+				"waitUntil": "load"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 2000
+			}
+		},
+		{
+			"action": "click",
+			"argument": {
+				"target": "顶部搜索区域"
+			},
+			"selectors": [
+				{
+					"selector": "div[lang='zh-cmn-Hans']",
+					"reason": "顶部搜索框区域"
+				}
+			]
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 500
+			}
+		},
+		{
+			"action": "input",
+			"argument": {
+				"delay": 20,
+				"target": "搜索输入框",
+				"text": "{{ query }}",
+				"withReturn": true
+			},
+			"selectors": [
+				{
+					"selector": "input[type='search']",
+					"reason": "搜索输入框"
+				}
+			]
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 3000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const rawData = window.rawData; if (!rawData) return []; const list = rawData?.stores?.store?.data?.ssrListData?.list || []; const results = []; for (const item of list) { if (!item.goodsID) continue; const tags = (item.tagList || []).map(t => t.text).filter(Boolean).join(','); results.push({ title: (item.goodsName || '').slice(0, 80), goods_id: String(item.goodsID), price: '¥' + (item.priceInfo || (item.price / 100).toFixed(2)), sales: item.salesTip || '', tags: tags, img_url: item.imgUrl || '', url: 'https://mobile.pinduoduo.com/' + (item.linkURL || 'goods.html?goods_id=' + item.goodsID) }); } return results; }"
+			}
+		},
+		{
+			"action": "loop",
+			"argument": {
+				"script": "async (globalVars) => { const limit = {{ limit }} || 10; const maxPages = 5; const data = globalVars.extractData || []; if (data.length >= limit) return false; globalVars.pageCount = (globalVars.pageCount || 0) + 1; if (globalVars.pageCount > maxPages) return false; const scrollHeight = document.documentElement.scrollHeight || document.body?.scrollHeight || 0; window.scrollTo(0, scrollHeight); return {pageCount: globalVars.pageCount}; }",
+				"intervalMs": 3000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "(globalVars) => { const limit = {{ limit }} || 10; const all = globalVars.extractData || []; const seen = new Set(); const deduped = []; for (const item of all) { if (!item.goods_id || seen.has(item.goods_id)) continue; seen.add(item.goods_id); deduped.push(item); } globalVars.extractData = deduped.slice(0, limit).map((item, i) => ({ ...item, rank: i + 1 })); return globalVars; }"
+			}
+		}
+	],
+	"api_endpoint": "pdd-search",
+	"category": "intercept",
+	"description": "拼多多商品搜索（通过拦截 API 提取结果）",
+	"is_public": true,
+	"method": "GET",
+	"name": "Search",
+	"output_schema": [
+		{
+			"name": "rank",
+			"type": "number",
+			"description": "排名"
+		},
+		{
+			"name": "title",
+			"type": "string",
+			"description": "商品标题"
+		},
+		{
+			"name": "goods_id",
+			"type": "string",
+			"description": "商品ID"
+		},
+		{
+			"name": "price",
+			"type": "string",
+			"description": "价格"
+		},
+		{
+			"name": "sales",
+			"type": "string",
+			"description": "销量"
+		},
+		{
+			"name": "tags",
+			"type": "string",
+			"description": "标签"
+		},
+		{
+			"name": "img_url",
+			"type": "string",
+			"description": "图片链接"
+		},
+		{
+			"name": "url",
+			"type": "string",
+			"description": "商品链接"
+		}
+	],
+	"variables": [
+		{
+			"name": "query",
+			"type": "string",
+			"required": true,
+			"help": "搜索关键词",
+			"test": "吉列剃须刀"
+		},
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 10,
+			"help": "返回结果数量",
+			"test": 30
+		}
+	],
+	"website_domain": "mobile.pinduoduo.com",
+	"website_id": "website-mobile.pinduoduo.com"
+}

@@ -3,7 +3,7 @@
 		{
 			"action": "open",
 			"argument": {
-				"url": "https://www.taobao.com",
+				"url": "{{ url }}",
 				"waitUntil": "domcontentloaded"
 			}
 		},
@@ -16,19 +16,13 @@
 		{
 			"action": "evaluate",
 			"argument": {
-				"script": "async (intermediate) => { location.href = \"{{ url }}\"; return { navigated: true }; }"
-			}
-		},
-		{
-			"action": "wait",
-			"argument": {
-				"timeMs": 8000
+				"script": "async (intermediate) => {\n  const ctx = window.__ICE_APP_CONTEXT__;\n  if (!ctx) return [{ error: \"__ICE_APP_CONTEXT__ not found\" }];\n  const d = ctx.loaderData?.home?.data?.res;\n  if (!d) return [{ error: \"res data not found\" }];\n  const item = d.item || {};\n  const seller = d.seller || {};\n  const skuCore = d.skuCore || {};\n  const skuBase = d.skuBase || {};\n  const comp = d.componentsVO || {};\n  const titleVO = comp.titleVO || {};\n  const storeCardVO = comp.storeCardVO || {};\n  const deliveryVO = comp.deliveryVO || {};\n  const rateVO = comp.rateVO || {};\n  const priceVO = comp.priceVO || {};\n  const sku2info = skuCore.sku2info || {};\n  const skuList = skuBase.skus || [];\n  const sales = item.vagueSellCount || titleVO.salesDesc || \"\";\n  const fallbackCouponPrice = priceVO.extraPrice?.priceText || \"\";\n  const baseInfo = {\n    title: item.title || titleVO.title?.title || \"\",\n    itemId: item.itemId || \"\",\n    sales: sales,\n    shopName: seller.shopName || storeCardVO.shopName || \"\",\n    shopUrl: seller.pcShopUrl || storeCardVO.shopUrl || \"\",\n    sellerType: seller.sellerType === \"B\" ? \"天猫\" : \"淘宝\",\n    creditLevel: seller.creditLevel || storeCardVO.creditLevel || \"\",\n    location: deliveryVO.deliveryFromAddr || \"\",\n    reviewCount: rateVO.totalCount || \"\",\n    favorableRate: rateVO.favorableRate?.rateText || \"\",\n    images: (item.images || comp.headImageVO?.images || []).slice(0, 5)\n  };\n  const results = [];\n  for (const [skuId, skuData] of Object.entries(sku2info)) {\n    if (skuId === \"0\") continue;\n    const price = skuData.price || {};\n    const subPrice = skuData.subPrice || {};\n    let skuName = \"\";\n    const matchSku = skuList.find(s => s.skuId === skuId);\n    if (matchSku) {\n      skuName = matchSku.propPath || \"\";\n    }\n    const couponPrice = subPrice.priceText || fallbackCouponPrice;\n    results.push({\n      ...baseInfo,\n      skuId,\n      skuName,\n      price: price.priceText || priceVO.price?.priceText || \"\",\n      couponPrice: couponPrice,\n      delivery: skuData.logisticsTime || deliveryVO.agingDesc || \"\",\n      quantity: skuData.quantity || 0\n    });\n  }\n  if (results.length === 0) {\n    const defaultSku = sku2info[\"0\"] || {};\n    const price = defaultSku.price || {};\n    const subPrice = defaultSku.subPrice || {};\n    const couponPrice = subPrice.priceText || priceVO.extraPrice?.priceText || fallbackCouponPrice;\n    results.push({\n      ...baseInfo,\n      skuId: \"0\",\n      skuName: \"默认\",\n      price: price.priceText || \"\",\n      couponPrice: couponPrice,\n      delivery: defaultSku.logisticsTime || deliveryVO.agingDesc || \"\",\n      quantity: defaultSku.quantity || 0\n    });\n  }\n  return results;\n}"
 			}
 		},
 		{
 			"action": "evaluate",
 			"argument": {
-				"script": "async (intermediate) => {\n  const ctx = window.__ICE_APP_CONTEXT__;\n  if (!ctx) return [{ error: \"__ICE_APP_CONTEXT__ not found\" }];\n  const d = ctx.loaderData?.home?.data?.res;\n  if (!d) return [{ error: \"res data not found\" }];\n  const item = d.item || {};\n  const seller = d.seller || {};\n  const skuCore = d.skuCore || {};\n  const skuBase = d.skuBase || {};\n  const comp = d.componentsVO || {};\n  const titleVO = comp.titleVO || {};\n  const storeCardVO = comp.storeCardVO || {};\n  const deliveryVO = comp.deliveryVO || {};\n  const rateVO = comp.rateVO || {};\n  const priceVO = comp.priceVO || {};\n  const sku2info = skuCore.sku2info || {};\n  const skuList = skuBase.skus || [];\n  const sales = item.vagueSellCount || titleVO.salesDesc || \"\";\n  const fallbackCouponPrice = priceVO.extraPrice?.priceText || \"\";\n  const baseInfo = {\n    title: item.title || titleVO.title?.title || \"\",\n    itemId: item.itemId || \"\",\n    sales: sales,\n    shopName: seller.shopName || storeCardVO.shopName || \"\",\n    shopUrl: seller.pcShopUrl || storeCardVO.shopUrl || \"\",\n    sellerType: seller.sellerType === \"B\" ? \"天猫\" : \"淘宝\",\n    creditLevel: seller.creditLevel || storeCardVO.creditLevel || \"\",\n    location: deliveryVO.deliveryFromAddr || \"\",\n    reviewCount: rateVO.totalCount || \"\",\n    favorableRate: rateVO.favorableRate?.rateText || \"\",\n    images: (item.images || comp.headImageVO?.images || []).slice(0, 5)\n  };\n  const results = [];\n  for (const [skuId, skuData] of Object.entries(sku2info)) {\n    if (skuId === \"0\") continue;\n    const price = skuData.price || {};\n    const subPrice = skuData.subPrice || {};\n    let skuName = \"\";\n    const matchSku = skuList.find(s => s.skuId === skuId);\n    if (matchSku) {\n      skuName = matchSku.propPath || \"\";\n    }\n    const couponPrice = subPrice.priceText || fallbackCouponPrice;\n    results.push({\n      ...baseInfo,\n      skuId,\n      skuName,\n      price: price.priceText || priceVO.price?.priceText || \"\",\n      couponPrice: couponPrice,\n      delivery: skuData.logisticsTime || deliveryVO.agingDesc || \"\",\n      quantity: skuData.quantity || 0\n    });\n  }\n  if (results.length === 0) {\n    const defaultSku = sku2info[\"0\"] || {};\n    const price = defaultSku.price || {};\n    const subPrice = defaultSku.subPrice || {};\n    const couponPrice = subPrice.priceText || priceVO.extraPrice?.priceText || fallbackCouponPrice;\n    results.push({\n      ...baseInfo,\n      skuId: \"0\",\n      skuName: \"默认\",\n      price: price.priceText || \"\",\n      couponPrice: couponPrice,\n      delivery: defaultSku.logisticsTime || deliveryVO.agingDesc || \"\",\n      quantity: defaultSku.quantity || 0\n    });\n  }\n  return results;\n}"
+				"script": "async (intermediate) => {\n  const delay = {{ delay }} || 3000;\n  const totalMs = delay + Math.floor(Math.random() * delay);\n  const skuArea = document.getElementById('skuOptionsArea');\n  const clickables = skuArea ? skuArea.querySelectorAll('div[data-vid]') : [];\n  const phase = Math.random();\n  let scrollDir = 1;\n  let scrollSpeed = 0.5 + Math.random() * 0.5;\n  let sameDirCount = 0;\n  const actions = [];\n  const start = Date.now();\n  while (Date.now() - start < totalMs) {\n    const remaining = totalMs - (Date.now() - start);\n    const wait = Math.min(remaining, 500 + Math.floor(Math.random() * 1500));\n    const r = Math.random();\n    if (r < 0.6) {\n      sameDirCount++;\n      if (sameDirCount > 3 + Math.floor(Math.random() * 3)) {\n        scrollDir *= -1;\n        sameDirCount = 0;\n        scrollSpeed = 0.3 + Math.random() * 0.7;\n      }\n      const step = Math.floor((200 + Math.random() * 600) * scrollSpeed) * scrollDir;\n      window.scrollBy({top: step, behavior: 'smooth'});\n      actions.push('scroll:' + step);\n    } else if (r < 0.8 && clickables.length > 0) {\n      const el = clickables[Math.floor(Math.random() * clickables.length)];\n      el.scrollIntoView({behavior: 'smooth', block: 'center'});\n      await new Promise(res => setTimeout(res, 300 + Math.floor(Math.random() * 500)));\n      el.click();\n      actions.push('click');\n    } else {\n      const pause = 800 + Math.floor(Math.random() * 2000);\n      await new Promise(res => setTimeout(res, Math.min(pause, remaining)));\n      actions.push('pause');\n    }\n    await new Promise(res => setTimeout(res, wait));\n  }\n}"
 			}
 		}
 	],
@@ -122,6 +116,13 @@
 			"required": true,
 			"help": "商品链接",
 			"test": "https://item.taobao.com/item.htm?ali_refid=a3_420434_1006%3A1106391041%3AH%3A9XYpci2uTQLHkAe6JJrO3eF5uM1MPwKx%3A6027969c601b7693a39718b147b25a26&ali_trackid=282_6027969c601b7693a39718b147b25a26&id=985292694039&mi_id=0000S0WDUMDID2OsB2tQQbXS4bvOGL43TBXvZQcqNxwLmxc&mm_sceneid=1_0_46543800_0&priceTId=215044d217799463890736358e0f8b&skuId=5948894545147&spm=a21n57.1.hoverItem.2&utparam=%7B%22aplus_abtest%22%3A%228de885679a632dad8fbfdd7c969fc524%22%7D&xxc=ad_ztc"
+		},
+		{
+			"name": "delay",
+			"type": "int",
+			"default": 3000,
+			"help": "随机浏览时间基数(ms), 实际时间为 delay ~ 2*delay",
+			"test": 10000
 		}
 	],
 	"website_domain": "www.taobao.com",
