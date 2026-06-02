@@ -1,0 +1,85 @@
+{
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "https://www.amazon.com/",
+				"waitUntil": "domcontentloaded"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 2000
+			}
+		},
+		{
+			"action": "input",
+			"argument": {
+				"target": "搜索输入框",
+				"text": "{{ query }}",
+				"withReturn": true
+			},
+			"selectors": [
+				{
+					"selector": "input#twotabsearchtextbox",
+					"reason": "Amazon首页搜索框"
+				}
+			]
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 5000
+			}
+		},
+		{
+			"action": "loop",
+			"argument": {
+				"script": "async (globalVars) => { try { const limit = {{ limit }}; const maxPages = 5; const data = globalVars.extractData || []; globalVars.pageCount = (globalVars.pageCount || 0) + 1; if (data.length >= limit || globalVars.pageCount > maxPages) return false; const url = location.href; const cards = document.querySelectorAll('[data-component-type=\"s-search-result\"]'); if (!cards.length) return { extractData: data, _log: 'no cards, url=' + url }; for (const card of cards) { const asin = card.getAttribute('data-asin') || ''; if (!asin || data.some(d => d.asin === asin)) continue; const title = (card.querySelector('h2')?.textContent || '').trim(); if (!title) continue; const href = card.querySelector('a.a-link-normal[href*=\"/dp/\"]')?.href || ''; const priceEl = card.querySelector('.a-price .a-offscreen'); const price = priceEl ? priceEl.textContent.trim() : ''; const ratingEl = card.querySelector('[aria-label*=\"out of 5 stars\"]'); const rating = ratingEl ? ratingEl.getAttribute('aria-label') || '' : ''; const reviewEl = card.querySelector('a[href*=\"#customerReviews\"]'); const reviews = reviewEl ? reviewEl.textContent.trim() : ''; const sponsored = /sponsored/i.test(card.innerText || ''); const badges = Array.from(card.querySelectorAll('.a-badge-text')).map(n => (n.textContent || '').trim()).filter(Boolean); data.push({ title: title.slice(0, 120), price, rating, reviews, asin, sponsored, badges: badges.join(', '), url: href }); } if (data.length >= limit) return { extractData: data }; const nextBtn = document.querySelector('a.s-pagination-next'); if (!nextBtn || nextBtn.classList.contains('s-pagination-disabled')) return { extractData: data }; nextBtn.click(); return { pageCount: globalVars.pageCount, extractData: data }; } catch(e) { return { extractData: [], _log: 'error: ' + String(e) }; } }",
+				"intervalMs": 8000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const limit = {{ limit }}; const all = intermediate.extractData || []; const seen = new Set(); const deduped = []; for (const item of all) { if (!item.asin || seen.has(item.asin)) continue; seen.add(item.asin); deduped.push(item); } const items = deduped.slice(0, limit); for (let i = 0; i < items.length; i++) { items[i].rank = i + 1; } return {extractData: items}; }"
+			}
+		}
+	],
+	"api_endpoint": "amazon-search",
+	"category": "scrape",
+	"description": "Amazon搜索商品",
+	"is_public": true,
+	"method": "GET",
+	"name": "Search",
+	"output_schema": [
+		{ "name": "rank", "type": "number", "description": "排名" },
+		{ "name": "title", "type": "string", "description": "商品标题" },
+		{ "name": "price", "type": "string", "description": "价格" },
+		{ "name": "rating", "type": "string", "description": "评分" },
+		{ "name": "reviews", "type": "string", "description": "评价数量" },
+		{ "name": "asin", "type": "string", "description": "ASIN" },
+		{ "name": "sponsored", "type": "boolean", "description": "是否广告" },
+		{ "name": "badges", "type": "string", "description": "标签" },
+		{ "name": "url", "type": "string", "description": "商品链接" }
+	],
+	"variables": [
+		{
+			"name": "query",
+			"type": "string",
+			"required": true,
+			"help": "搜索关键词",
+			"test": "iPhone"
+		},
+		{
+			"name": "limit",
+			"type": "int",
+			"default": 10,
+			"help": "返回结果数量 (max 50)",
+			"test": 50
+		}
+	],
+	"website_domain": "www.amazon.com",
+	"website_id": "website-www.amazon.com"
+}

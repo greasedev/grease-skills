@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-06-02T15:13:19.702Z",
+  "json_file": "./clis/amazon/search.json",
+  "command": "Search",
+  "website": "www.amazon.com",
+  "params": {
+    "query": "iPhone",
+    "limit": 50
+  },
+  "success": true,
+  "data_count": 50,
+  "sample_data": [
+    {
+      "rank": 1,
+      "title": "Apple iPhone 13, 128GB, Midnight - Unlocked (Renewed)",
+      "price": "",
+      "rating": "4.1 out of 5 stars, rating details",
+      "reviews": "(26.5K)",
+      "asin": "B09LNW3CY2",
+      "sponsored": false,
+      "badges": "",
+      "url": "https://www.amazon.com/Apple-iPhone-13-128GB-Midnight/dp/B09LNW3CY2/ref=sr_1_1?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-1"
+    },
+    {
+      "rank": 2,
+      "title": "Apple iPhone 17, US Version, 256GB, eSIM, Lavender- Unlocked (Renewed)",
+      "price": "",
+      "rating": "4.2 out of 5 stars, rating details",
+      "reviews": "(114)",
+      "asin": "B0FRKLQMM2",
+      "sponsored": false,
+      "badges": "",
+      "url": "https://www.amazon.com/Apple-Version-Lavender-Unlocked-Renewed/dp/B0FRKLQMM2/ref=sr_1_2?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-2"
+    },
+    {
+      "rank": 3,
+      "title": "Apple iPhone 15, 128GB, Black - Unlocked (Renewed)",
+      "price": "",
+      "rating": "4.0 out of 5 stars, rating details",
+      "reviews": "(5.7K)",
+      "asin": "B0CMPMY9ZZ",
+      "sponsored": false,
+      "badges": "",
+      "url": "https://www.amazon.com/Apple-iPhone-15-128GB-Black/dp/B0CMPMY9ZZ/ref=sr_1_3?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-3"
+    },
+    {
+      "rank": 4,
+      "title": "Apple iPhone 13, 128GB, Blue - Unlocked (Renewed)",
+      "price": "",
+      "rating": "4.1 out of 5 stars, rating details",
+      "reviews": "(26.5K)",
+      "asin": "B09LNX6KQS",
+      "sponsored": false,
+      "badges": "",
+      "url": "https://www.amazon.com/Apple-iPhone-13-128GB-Blue/dp/B09LNX6KQS/ref=sr_1_4?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-4"
+    },
+    {
+      "rank": 5,
+      "title": "Apple iPhone 16 Plus, 128GB, Pink - Unlocked (Renewed)",
+      "price": "$593.99",
+      "rating": "4.4 out of 5 stars, rating details",
+      "reviews": "(1.3K)",
+      "asin": "B0DHJ86J4R",
+      "sponsored": false,
+      "badges": "",
+      "url": "https://www.amazon.com/Apple-iPhone-Plus-Version-128GB/dp/B0DHJ86J4R/ref=sr_1_5?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-5"
+    }
+  ]
+}
