@@ -1,0 +1,71 @@
+{
+	"actions": [
+		{
+			"action": "open",
+			"argument": {
+				"url": "{{ url }}",
+				"waitUntil": "domcontentloaded"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 3000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const PRODUCT_TITLE_SELECTOR = '#productTitle, #title span, [data-feature-name=\"title\"] h1 span'; const BYLINE_SELECTOR = '#bylineInfo, [data-feature-name=\"bylineInfo\"] #bylineInfo'; const PRIMARY_PRICE_SELECTORS = ['#corePrice_feature_div .a-offscreen','#corePriceDisplay_desktop_feature_div .a-offscreen','#corePrice_desktop .a-offscreen','#apex_desktop .a-offscreen','#newAccordionRow_0 .a-offscreen','#price_inside_buybox','#priceblock_ourprice','#priceblock_dealprice','#tp_price_block_total_price_ww']; const normalize = v => (v || '').replace(/\\u00a0/g, ' ').replace(/\\s+/g, ' ').trim(); const href = normalize(window.location.href); const asinMatch = href.match(/\\/(?:dp|gp\\/product)\\/([A-Z0-9]{10})/i); const asin = asinMatch ? asinMatch[1].toUpperCase() : ''; const title = normalize(document.querySelector(PRODUCT_TITLE_SELECTOR)?.textContent || ''); const brand = normalize(document.querySelector(BYLINE_SELECTOR)?.textContent || ''); let price_text = ''; for (const sel of PRIMARY_PRICE_SELECTORS) { const text = document.querySelector(sel)?.textContent || ''; if (text.trim()) { price_text = normalize(text); break; } } const priceMatch = price_text.match(/([$\\u20ac\\u00a3])\\s*(\\d+(?:,\\d{3})*(?:\\.\\d+)?)/); const price_value = priceMatch ? parseFloat(priceMatch[2].replace(/,/g, '')) : null; const currency = priceMatch ? {'$':'USD','\\u20ac':'EUR','\\u00a3':'GBP'}[priceMatch[1]] : ''; const rating_text = normalize(document.querySelector('#acrPopover')?.getAttribute('title') || document.querySelector('#acrPopover')?.textContent || ''); const ratingMatch = rating_text.match(/(\\d+(?:\\.\\d+)?)\\s*out of 5/i); const rating_value = ratingMatch ? parseFloat(ratingMatch[1]) : null; const review_count_text = normalize(document.querySelector('#acrCustomerReviewText')?.textContent || ''); const reviewCountMatch = review_count_text.match(/(\\d+(?:\\.\\d+)?)\\s*([kKmM])/); let review_count = null; if (reviewCountMatch) { const v = parseFloat(reviewCountMatch[1]); const m = /[mM]/.test(reviewCountMatch[2]) ? 1000000 : 1000; review_count = Math.round(v * m); } else { const m2 = review_count_text.match(/([\\d,]+)/); review_count = m2 ? parseInt(m2[1].replace(/,/g, ''), 10) : null; } const review_url = normalize(document.querySelector('a[href*=\"#customerReviews\"]')?.href || ''); const qa_url = normalize(document.querySelector('a[href*=\"ask/questions\"]')?.href || ''); const bullets = [...new Set(Array.from(document.querySelectorAll('#feature-bullets li .a-list-item')).map(n => normalize(n.textContent || '')).filter(Boolean))]; const breadcrumbs = [...new Set(Array.from(document.querySelectorAll('#wayfinding-breadcrumbs_feature_div a')).map(n => normalize(n.textContent || '')).filter(Boolean))]; const mainImg = document.querySelector('#landingImage')?.src || document.querySelector('#main-image-container img')?.src || ''; return [{ asin, title, brand, price_text, price_value, currency, rating_text, rating_value, review_count_text, review_count, review_url, qa_url, bullets: bullets.join(', '), breadcrumbs: breadcrumbs.join(' > '), main_img: mainImg, url: href }]; }"
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => {\n  const delay = {{ delay }} || 3000;\n  const totalMs = delay + Math.floor(Math.random() * delay);\n  let scrollDir = 1;\n  let scrollSpeed = 0.8 + Math.random() * 0.7;\n  let sameDirCount = 0;\n  const start = Date.now();\n  while (Date.now() - start < totalMs) {\n    const remaining = totalMs - (Date.now() - start);\n    const r = Math.random();\n    if (r < 0.5) {\n      sameDirCount++;\n      if (sameDirCount > 2 + Math.floor(Math.random() * 4)) {\n        scrollDir *= -1;\n        sameDirCount = 0;\n        scrollSpeed = 0.6 + Math.random() * 0.9;\n      }\n      const step = Math.floor((500 + Math.random() * 1500) * scrollSpeed) * scrollDir;\n      window.scrollBy({top: step, behavior: 'smooth'});\n      await new Promise(res => setTimeout(res, 300 + Math.floor(Math.random() * 600)));\n    } else {\n      const pause = 1000 + Math.floor(Math.random() * 3000);\n      await new Promise(res => setTimeout(res, Math.min(pause, remaining)));\n    }\n    await new Promise(res => setTimeout(res, Math.min(remaining, 200 + Math.floor(Math.random() * 500))));\n  }\n}"
+			}
+		}
+	],
+	"api_endpoint": "amazon-detail",
+	"category": "scrape",
+	"description": "Amazon商品详情（DOM提取）",
+	"is_public": true,
+	"method": "GET",
+	"name": "Detail",
+	"output_schema": [
+		{ "name": "asin", "type": "string", "description": "ASIN" },
+		{ "name": "title", "type": "string", "description": "商品标题" },
+		{ "name": "brand", "type": "string", "description": "品牌/店铺" },
+		{ "name": "price_text", "type": "string", "description": "价格文本" },
+		{ "name": "price_value", "type": "number", "description": "价格数值" },
+		{ "name": "currency", "type": "string", "description": "货币" },
+		{ "name": "rating_text", "type": "string", "description": "评分文本" },
+		{ "name": "rating_value", "type": "number", "description": "评分数值" },
+		{ "name": "review_count_text", "type": "string", "description": "评价数量文本" },
+		{ "name": "review_count", "type": "number", "description": "评价数量" },
+		{ "name": "review_url", "type": "string", "description": "评价链接" },
+		{ "name": "qa_url", "type": "string", "description": "问答链接" },
+		{ "name": "bullets", "type": "string", "description": "产品特点" },
+		{ "name": "breadcrumbs", "type": "string", "description": "分类路径" },
+		{ "name": "main_img", "type": "string", "description": "主图" },
+		{ "name": "url", "type": "string", "description": "商品链接" }
+	],
+	"variables": [
+		{
+			"name": "url",
+			"type": "string",
+			"required": true,
+			"help": "商品链接或ASIN",
+			"test": "https://www.amazon.com/Apple-iPhone-13-128GB-Midnight/dp/B09LNW3CY2/ref=sr_1_1?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-1"
+		},
+		{
+			"name": "delay",
+			"type": "int",
+			"default": 3000,
+			"help": "随机浏览时间基数(ms), 实际时间为 delay ~ 2*delay",
+			"test": 5000
+		}
+	],
+	"website_domain": "www.amazon.com",
+	"website_id": "website-www.amazon.com"
+}

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-06-02T15:32:50.331Z",
+  "json_file": "./clis/amazon/detail.json",
+  "command": "Detail",
+  "website": "www.amazon.com",
+  "params": {
+    "url": "https://www.amazon.com/Apple-iPhone-13-128GB-Midnight/dp/B09LNW3CY2/ref=sr_1_1?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-1",
+    "delay": 5000
+  },
+  "success": false,
+  "data_count": 1,
+  "sample_data": [
+    {
+      "asin": "B09LNW3CY2",
+      "title": "Apple iPhone 13, 128GB, Midnight - Unlocked (Renewed)",
+      "brand": "Visit the Amazon Renewed Store",
+      "price_text": "",
+      "price_value": null,
+      "currency": "",
+      "rating_text": "4.1 out of 5 stars",
+      "rating_value": 4.1,
+      "review_count_text": "(26,515)",
+      "review_count": 26515,
+      "review_url": "https://www.amazon.com/Apple-iPhone-13-128GB-Midnight/dp/B09LNW3CY2/ref=sr_1_1?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-1&th=1#customerReviews",
+      "qa_url": "",
+      "bullets": "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers., There will be no visible cosmetic imperfections when held at an arm’s length., This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied., Product may come in generic Box.",
+      "breadcrumbs": "Cell Phones & Accessories > Cell Phones",
+      "main_img": "https://m.media-amazon.com/images/I/61VuVU94RnL._AC_SX679_.jpg",
+      "url": "https://www.amazon.com/Apple-iPhone-13-128GB-Midnight/dp/B09LNW3CY2/ref=sr_1_1?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-1&th=1"
+    }
+  ],
+  "comparison": {
+    "grease_count": 1,
+    "opencli_count": 0,
+    "match": false,
+    "differences": [
+      "OpenCLI failed: Command failed: opencli amazon detail \"https://www.amazon.com/Apple-iPhone-13-128GB-Midnight/dp/B09LNW3CY2/ref=sr_1_1?crid=QO0PE5TWGGUE&dib=eyJ2IjoiMSJ9.0PSHy2tNLsZX9i3zcxvepXBfM1a5slKdT8VuGlv-xXnRo1Ao4xPMQlc1d_363ZPFutZjdlKIsQK1_9FmUQZTnfU-w9F8BVPJiG3IXcQDAWWpzDcFFfXT_qWJvQPe-Ve9JLBx4Bqxmhrl4Qu-7_gOSJcTUBna0yKzEv-9yI5ahoTtkUK64eH7H57llkcGATSeIBK06l1mcvJm_RFvSv-mfE6YPJyZZrlDVtMlSJVUpYw.-DHJBQdqyZrhGHhGSIhAMaRqQ59AUypdZmcuPamY3nY&dib_tag=se&keywords=iPhone&qid=1780413162&sprefix=iphon%2Caps%2C666&sr=8-1\" --delay \"5000\" -f json 2>/dev/null\n"
+    ]
+  }
+}
