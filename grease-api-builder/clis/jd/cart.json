@@ -28,6 +28,6 @@
 		{ "name": "sku", "type": "string", "description": "商品SKU" }
 	],
 	"variables": [],
-	"website_domain": "cart.jd.com",
-	"website_id": "website-cart.jd.com"
+	"website_domain": "www.jd.com",
+	"website_id": "website-www.jd.com"
 }

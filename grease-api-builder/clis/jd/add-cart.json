@@ -16,7 +16,7 @@
 		{
 			"action": "evaluate",
 			"argument": {
-				"script": "async (intermediate) => { const dryRun = '{{ dry-run }}' === 'true'; if (dryRun) { return [{ status: 'dry-run', title: (intermediate.title || '').slice(0, 80), price: intermediate.price || '', sku: intermediate.sku }]; } return { needCart: true, title: intermediate.title, price: intermediate.price, sku: intermediate.sku, num: {{ num }} }; }"
+				"script": "async (intermediate) => { const dryRun = '{{ dryrun }}' === 'true'; if (dryRun) { return [{ status: 'dryrun', title: (intermediate.title || '').slice(0, 80), price: intermediate.price || '', sku: intermediate.sku }]; } return { needCart: true, title: intermediate.title, price: intermediate.price, sku: intermediate.sku, num: {{ num }} }; }"
 			}
 		},
 		{
@@ -55,13 +55,13 @@
 		},
 		{ "name": "num", "type": "int", "default": 1, "help": "数量", "test": 1 },
 		{
-			"name": "dry-run",
+			"name": "dryrun",
 			"type": "bool",
 			"default": false,
 			"help": "仅预览，不实际加入购物车",
 			"test": true
 		}
 	],
-	"website_domain": "item.jd.com",
-	"website_id": "website-item.jd.com"
+	"website_domain": "www.jd.com",
+	"website_id": "website-www.jd.com"
 }

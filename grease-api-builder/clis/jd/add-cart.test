@@ -6,7 +6,7 @@
   "params": {
     "sku": "100291143898",
     "num": 1,
-    "dry-run": true
+    "dryrun": true
   },
   "success": true,
   "data_count": 1,
