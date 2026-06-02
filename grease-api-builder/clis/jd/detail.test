@@ -1,33 +1,29 @@
 {
-  "timestamp": "2026-04-21T06:14:37.233Z",
+  "timestamp": "2026-06-02T10:13:53.519Z",
   "json_file": "./clis/jd/detail.json",
   "command": "Detail",
   "website": "item.jd.com",
   "params": {
-    "sku": "100291143898"
+    "url": "https://item.jd.com/100209267857.html?pcdk=9MkFnKXmOCvcat_FLEN7BHgAGe3lF31Zie6g_UKrl92o8UfL8hPGRYgRS4X1Y7ha.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjIlMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NTQlMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMzIxNzk3ODI3",
+    "delay": 5000
   },
   "success": true,
-  "data_count": 8,
+  "data_count": 1,
   "sample_data": [
     {
-      "field": "商品名称",
-      "value": "美的（Midea）清风明月2.0洗烘塔 洗烘套装 12KG大容量 滚筒洗衣机全自动+热泵式烘干机 全变频 MGH24PROMAX-W"
-    },
-    {
-      "field": "价格",
-      "value": "¥1500"
-    },
-    {
-      "field": "SKU",
-      "value": "100291143898"
-    },
-    {
-      "field": "店铺",
-      "value": "美的京东自营旗舰店"
-    },
-    {
-      "field": "评价数量",
-      "value": "1万+"
+      "title": "Apple/苹果 iPhone 17 256GB 白色 支持移动联通电信5G 双卡双待手机",
+      "sku": "100209267857",
+      "price": "¥5299",
+      "original_price": "¥5999.00",
+      "shop_name": "Apple产品京东自营旗舰店",
+      "shop_id": "1000000127",
+      "is_self": true,
+      "stock_state": 33,
+      "delivery": "23:10前付款，预计明天(06月03日)送达",
+      "img_url": "https://img14.360buyimg.com/jfs/t20280530/446311/9/2432/52166/6a1bf872F4bdebe3f/0a02320320afea9f.jpg",
+      "gallery": "https://img14.360buyimg.com/jfs/t20280530/446311/9/2432/52166/6a1bf872F4bdebe3f/0a02320320afea9f.jpg,https://img14.360buyimg.com/jfs/t1/345253/5/1460/15581/68c087ecFe365064d/71c8ea6ea43903cf.jpg,https://img14.360buyimg.com/jfs/t1/351412/27/1598/26670/68c087ecF96d35ceb/063e28e905efd4b3.jpg,https://img14.360buyimg.com/jfs/t1/330396/34/11414/11222/68c087ecF82285248/a5a6ec6b61e0f950.jpg,https://img14.360buyimg.com/jfs/t1/343329/22/1573/51028/68c087ebF866a5899/9ca7df9a531b84c7.jpg",
+      "category": "手机通讯 > 手机 > 手机 > Apple",
+      "url": "https://item.jd.com/100209267857.html"
     }
   ]
 }

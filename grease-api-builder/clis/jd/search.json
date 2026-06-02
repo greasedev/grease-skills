@@ -3,14 +3,53 @@
 		{
 			"action": "open",
 			"argument": {
-				"url": "https://search.jd.com/Search?keyword={{ query }}&enc=utf-8",
+				"url": "https://www.jd.com/",
 				"waitUntil": "domcontentloaded"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 2000
+			}
+		},
+		{
+			"action": "input",
+			"argument": {
+				"target": "搜索输入框",
+				"text": "{{ query }}",
+				"withReturn": true
+			},
+			"selectors": [
+				{
+					"selector": "input.jd_pc_search_bar_react_search_input",
+					"reason": "京东首页搜索框"
+				}
+			]
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 10000
 			}
 		},
 		{
 			"action": "evaluate",
 			"argument": {
-				"script": "async (intermediate) => { await new Promise(r => setTimeout(r, 5000)); for (let i = 0; i < 2; i++) { window.scrollTo(0, document.body.scrollHeight); await new Promise(r => setTimeout(r, 1500)); } const limit = {{ limit }}; const normalize = v => (v || '').replace(/\\s+/g, ' ').trim(); for (let i = 0; i < 20; i++) { if (document.querySelectorAll('div[data-sku]').length > 0) break; await new Promise(r => setTimeout(r, 500)); } const items = document.querySelectorAll('div[data-sku]'); const results = []; for (const el of items) { const sku = el.getAttribute('data-sku') || ''; if (!sku) continue; const text = normalize(el.textContent); if (text.length < 10) continue; const priceMatch = text.match(/¥([\\d,.]+)/); const price = priceMatch ? '¥' + priceMatch[1] : ''; let title = ''; if (priceMatch) { const beforePrice = text.substring(0, text.indexOf('¥')); title = beforePrice.replace(/^(海外无货|京东超市|自营|秒杀|新品|预售|PLUS)/, '').trim(); } if (!title || title.length < 4) continue; let shop = ''; const shopMatch = text.match(/(\\S{2,15}(?:旗舰店|专卖店|自营店|官方旗舰店|京东自营旗舰店|京东自营))/); if (shopMatch) shop = shopMatch[1]; results.push({ rank: results.length + 1, title: title.slice(0, 80), price, shop, sku, url: 'https://item.jd.com/' + sku + '.html' }); if (results.length >= limit) break; } return results; }"
+				"script": "async (intermediate) => { const origOpen = window.open; window.__jdUrlMap = {}; window.open = function(url, target, features) { const idMatch = url.match(/(\\d{6,})/); if (idMatch) window.__jdUrlMap[idMatch[1]] = url; return null; }; return { hooked: true }; }"
+			}
+		},
+		{
+			"action": "loop",
+			"argument": {
+				"script": "async (globalVars) => { const limit = {{ limit }}; const maxPages = 5; const data = globalVars.extractData || []; globalVars.pageCount = (globalVars.pageCount || 0) + 1; if (data.length >= limit || globalVars.pageCount > maxPages) return false; const normalize = v => (v || '').replace(/\\s+/g, ' ').trim(); const cards = document.querySelectorAll('div.plugin_goodsCardWrapper'); for (const el of cards) { const skuEl = el.closest('[data-sku]') || el.querySelector('[data-sku]'); const sku = skuEl?.getAttribute('data-sku') || el.getAttribute('data-sku') || ''; if (!sku) continue; const text = normalize(el.textContent); if (text.length < 10) continue; const priceMatch = text.match(/¥([\\d,.]+)/); const price = priceMatch ? '¥' + priceMatch[1] : ''; let title = ''; if (priceMatch) { const beforePrice = text.substring(0, text.indexOf('¥')); title = beforePrice.replace(/^(海外无货|京东超市|自营|秒杀|新品|预售|PLUS)/, '').trim(); } if (!title || title.length < 4) continue; let shop = ''; const shopMatch = text.match(/(\\S{2,15}(?:旗舰店|专卖店|自营店|官方旗舰店|京东自营旗舰店|京东自营))/); if (shopMatch) shop = shopMatch[1]; if (skuEl && skuEl.children[0]) skuEl.children[0].click(); data.push({ title: title.slice(0, 80), price, shop, sku, url: '' }); } if (data.length >= limit) return false; window.scrollTo(0, document.documentElement.scrollHeight || document.body?.scrollHeight || 0); await new Promise(r => setTimeout(r, 500)); const nextBtn = document.querySelector('div[class*=\"_pagination_next_\"]'); if (!nextBtn) return false; nextBtn.click(); return { pageCount: globalVars.pageCount, extractData: data }; }",
+				"intervalMs": 10000
+			}
+		},
+		{
+			"action": "evaluate",
+			"argument": {
+				"script": "async (intermediate) => { const limit = {{ limit }}; const all = intermediate.extractData || []; const seen = new Set(); const deduped = []; for (const item of all) { if (!item.sku || seen.has(item.sku)) continue; seen.add(item.sku); deduped.push(item); } const items = deduped.slice(0, limit); for (const item of items) { item.url = window.__jdUrlMap?.[item.sku] || ''; item.rank = items.indexOf(item) + 1; } return {extractData: items}; }"
 			}
 		}
 	],
@@ -41,9 +80,9 @@
 			"type": "int",
 			"default": 10,
 			"help": "返回结果数量 (max 30)",
-			"test": 5
+			"test": 100
 		}
 	],
-	"website_domain": "search.jd.com",
-	"website_id": "website-search.jd.com"
+	"website_domain": "www.jd.com",
+	"website_id": "website-www.jd.com"
 }

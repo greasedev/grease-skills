@@ -1,54 +1,54 @@
 {
-  "timestamp": "2026-04-21T06:15:01.367Z",
+  "timestamp": "2026-06-02T09:55:53.896Z",
   "json_file": "./clis/jd/search.json",
   "command": "Search",
-  "website": "search.jd.com",
+  "website": "www.jd.com",
   "params": {
     "query": "iPhone",
-    "limit": 5
+    "limit": 100
   },
   "success": true,
-  "data_count": 5,
+  "data_count": 88,
   "sample_data": [
     {
       "rank": 1,
-      "title": "Apple/苹果 iPhone 17e（A3635）256GB 白色 支持移动联通电信5G 单实体卡槽 支持双eSIMApple手机热卖榜第5名256GB起步|",
-      "price": "¥4476.51",
-      "shop": "0天加购飙升5倍Apple产品京东自营旗舰店",
-      "sku": "100327533584",
-      "url": "https://item.jd.com/100327533584.html"
+      "title": "广告广告广告广告广告广告广告Apple/苹果 iPhone 17 256GB 薰衣草紫色 支持移动联通电信5G 双卡双待手机7万+手机达人收藏|100万+店铺老",
+      "price": "¥5299",
+      "shop": "500万+人看过Apple产品京东自营旗舰店",
+      "sku": "100278222276",
+      "url": "https://item.jd.com/100278222276.html?pcdk=9MkFnKXmOCvcat_FLEN7BHgAGe3lF31Zie6g_UKrl91hj4Rz98Ja-FVU1ujXlCDL.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjElMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NDclMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjc1OTY5MTY2"
     },
     {
       "rank": 2,
-      "title": "Apple/苹果 iPhone 17 256GB 白色 支持移动联通电信5G 双卡双待手机手机热卖榜第1名自适应高刷|4800万像素|A19芯片手机热卖榜第1名",
-      "price": "¥5969.01",
+      "title": "苹果 17 256GB 白色手机热卖榜第1名“直接可以换滤镜”自适应高刷|4800万像素|A19芯片领国家补贴减￥500手机热卖榜第1名",
+      "price": "¥5299",
       "shop": "0天加购飙升5倍Apple产品京东自营旗舰店",
       "sku": "100209267857",
-      "url": "https://item.jd.com/100209267857.html"
+      "url": "https://item.jd.com/100209267857.html?pcdk=9MkFnKXmOCvcat_FLEN7BHgAGe3lF31Zie6g_UKrl92o8UfL8hPGRYgRS4X1Y7ha.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjIlMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NTQlMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMzIxNzk3ODI3"
     },
     {
       "rank": 3,
-      "title": "广告【准新机】Apple苹果【分期0首付】苹果iPhone16/15/14/13 iphone16plus/15plus/14plus//16e双卡双待 全网通",
-      "price": "¥4788",
-      "shop": "",
-      "sku": "10199163018264",
-      "url": "https://item.jd.com/10199163018264.html"
+      "title": "苹果 Air 256GB 天蓝色蓝色系手机热卖榜第10名“完美iPhone，不玩游戏不爱拍照”无卡更省心|芯片超流畅|超薄极轻领国家补贴减￥500蓝色系手机热卖",
+      "price": "¥5269.01",
+      "shop": "0天加购飙升5倍Apple产品京东自营旗舰店",
+      "sku": "100278222346",
+      "url": "https://item.jd.com/100278222346.html?pcdk=9MkFnKXmOCvcat_FLEN7BHgAGe3lF31Zie6g_UKrl90sL81-7LF6db3XnFdP3ffV.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjMlMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NTclMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMTU0MjE2MzI0MA"
     },
     {
       "rank": 4,
-      "title": "Apple/苹果【以旧换新大额补贴】iPhone Air 256GB 天蓝色 【仅支持eSIM】无卡更省心|芯片超流畅|超薄极轻",
-      "price": "¥5969.01",
-      "shop": "0天加购飙升5倍Apple产品京东自营旗舰店",
-      "sku": "100278222346",
-      "url": "https://item.jd.com/100278222346.html"
+      "title": "Apple/苹果 iPhone 17e（A3635）256GB 白色 支持移动联通电信5G 单实体卡槽 支持双eSIM焕新机手机热卖榜第2名“非常好用，非常合适",
+      "price": "¥3976.51",
+      "shop": "条评价94%好评Apple产品京东自营旗舰店",
+      "sku": "100327533584",
+      "url": "https://item.jd.com/100327533584.html?pcdk=9MkFnKXmOCvcat_FLEN7BIgduNwFN5m9mOonqyvzzOCdrvw5RFPrgShLHn8-TeCN.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjQlMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NjAlMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzNzI0MzA1OTEw"
     },
     {
       "rank": 5,
-      "title": "广告【准新机】Apple【现货速发】iPhone16手机 16plus系列双卡双待全网通5G手机 苹果16plus群青色 128G【配件礼包+店保2年】",
-      "price": "¥4896",
-      "shop": "",
-      "sku": "10138940612250",
-      "url": "https://item.jd.com/10138940612250.html"
+      "title": "广告广告广告广告广告广告广告Apple 苹果 iPhone 14 (A2884) 128GB 午夜色 支持移动联通电信5G 双卡双待手机3万+人加购|20万+人",
+      "price": "¥5969.01",
+      "shop": "看过拍拍二手Apple产品自营旗舰店",
+      "sku": "100336285642",
+      "url": "https://item.jd.com/100336285642.html?pcdk=9MkFnKXmOCvcat_FLEN7BIgduNwFN5m9mOonqyvzzOBn5k329eWw8ePPLCD9YFnC.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjUlMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NjMlMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMTY3OTQzNjE5MA"
     }
   ]
 }

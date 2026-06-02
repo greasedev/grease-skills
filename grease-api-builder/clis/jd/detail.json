@@ -1,36 +1,67 @@
 {
 	"actions": [
 		{
+			"action": "track",
+			"argument": {
+				"urlPattern": "pc_detailpage_wareBusiness",
+				"script": "async (globalVars) => { const response = globalVars.response; try { let body = (response.body || '').trim(); if (typeof body === 'string') { try { body = JSON.parse(body); } catch(e) { return []; } } const d = body?.data || body; if (!d || !d.price) return []; const price = d.price || {}; const shop = d.itemShopInfo || {}; const skuHead = d.skuHeadVO || {}; const pageConfig = d.pageConfigVO || {}; const stock = d.stockInfo || {}; const sku = String(pageConfig.skuid || price.id || ''); const title = skuHead.skuTitle || ''; const p = price.p || price.m || ''; const op = price.op || ''; const finalPrice = price.finalPrice?.price || ''; const shopName = shop.shopName || ''; const shopId = String(shop.shopId || ''); const isSelf = pageConfig.isSelf || false; const stockState = stock.stockState || 0; const delivery = stock.promiseInfoText || ''; const mainImg = pageConfig.src ? 'https://img14.360buyimg.com/' + pageConfig.src : ''; const gallery = (d.mainImageVO?.carouselArea || []).filter(a => a.siteType === '1').map(a => 'https://img14.360buyimg.com/' + a.imageUrl).slice(0, 5); const cat = (d.crumbInfoVO?.crumbs || []).map(c => c.text).join(' > '); return [{ title, sku, price: finalPrice ? '¥' + finalPrice : (p ? '¥' + p : ''), original_price: op ? '¥' + op : '', shop_name: shopName, shop_id: shopId, is_self: isSelf, stock_state: stockState, delivery: delivery.replace(/<[^>]+>/g, ''), img_url: mainImg, gallery: gallery.join(','), category: cat, url: 'https://item.jd.com/' + sku + '.html' }]; } catch (e) { return [{error: String(e)}]; } }"
+			}
+		},
+		{
 			"action": "open",
 			"argument": {
-				"url": "https://item.jd.com/{{ sku }}.html",
+				"url": "{{ url }}",
 				"waitUntil": "domcontentloaded"
+			}
+		},
+		{
+			"action": "wait",
+			"argument": {
+				"timeMs": 3000
 			}
 		},
 		{
 			"action": "evaluate",
 			"argument": {
-				"script": "async (intermediate) => { await new Promise(r => setTimeout(r, 5000)); const normalize = v => (v || '').replace(/\\s+/g, ' ').trim(); const text = document.body?.innerText || ''; const titleMatch = document.title.match(/^【[^】]*】(.+?)【/); const title = titleMatch ? titleMatch[1].trim() : normalize(document.title.split('【')[0]); const priceMatch = text.match(/¥([\\d,.]+)/); const price = priceMatch ? '¥' + priceMatch[1] : ''; const ratingMatch = text.match(/(超\\d+%[^\\n]{2,20})/); const rating = ratingMatch ? ratingMatch[1] : ''; const reviewMatch = text.match(/买家评价\\(([\\d万+]+)\\)/); const reviews = reviewMatch ? reviewMatch[1] : ''; const shopMatch = text.match(/(\\S{2,15}(?:京东自营旗舰店|旗舰店|专卖店|自营店))/); const shop = shopMatch ? shopMatch[1] : ''; const tagPattern = /([\u4e00-\u9fa5]{2,8})\\s+(\\d+)/g; const tags = []; let m; const tagStart = text.indexOf('买家评价'); const tagSection = tagStart >= 0 ? text.substring(tagStart, tagStart + 500) : ''; while ((m = tagPattern.exec(tagSection)) && tags.length < 6) { if (parseInt(m[2], 10) > 1) tags.push(m[1] + '(' + m[2] + ')'); } const sku = '{{ sku }}'; const results = [ { field: '商品名称', value: title }, { field: '价格', value: price }, { field: 'SKU', value: sku }, { field: '店铺', value: shop }, { field: '评价数量', value: reviews }, { field: '好评率', value: rating }, { field: '评价标签', value: tags.join(' | ') }, { field: '链接', value: location.href } ]; return results.filter(r => r.value); }"
+				"script": "async (intermediate) => {\n  const delay = {{ delay }} || 3000;\n  const totalMs = delay + Math.floor(Math.random() * delay);\n  let scrollDir = 1;\n  let scrollSpeed = 0.8 + Math.random() * 0.7;\n  let sameDirCount = 0;\n  const start = Date.now();\n  while (Date.now() - start < totalMs) {\n    const remaining = totalMs - (Date.now() - start);\n    const r = Math.random();\n    if (r < 0.5) {\n      sameDirCount++;\n      if (sameDirCount > 2 + Math.floor(Math.random() * 4)) {\n        scrollDir *= -1;\n        sameDirCount = 0;\n        scrollSpeed = 0.6 + Math.random() * 0.9;\n      }\n      const step = Math.floor((500 + Math.random() * 1500) * scrollSpeed) * scrollDir;\n      window.scrollBy({top: step, behavior: 'smooth'});\n      await new Promise(res => setTimeout(res, 300 + Math.floor(Math.random() * 600)));\n    } else {\n      const pause = 1000 + Math.floor(Math.random() * 3000);\n      await new Promise(res => setTimeout(res, Math.min(pause, remaining)));\n    }\n    await new Promise(res => setTimeout(res, Math.min(remaining, 200 + Math.floor(Math.random() * 500))));\n  }\n}"
 			}
 		}
 	],
 	"api_endpoint": "jd-detail",
-	"category": "scrape",
-	"description": "京东商品详情",
+	"category": "intercept",
+	"description": "京东商品详情（通过拦截 pc_detailpage_wareBusiness API 提取数据）",
 	"is_public": true,
 	"method": "GET",
 	"name": "Detail",
 	"output_schema": [
-		{ "name": "field", "type": "string", "description": "字段名" },
-		{ "name": "value", "type": "string", "description": "字段值" }
+		{ "name": "title", "type": "string", "description": "商品标题" },
+		{ "name": "sku", "type": "string", "description": "商品SKU" },
+		{ "name": "price", "type": "string", "description": "商品价格" },
+		{ "name": "original_price", "type": "string", "description": "原价" },
+		{ "name": "shop_name", "type": "string", "description": "店铺名称" },
+		{ "name": "shop_id", "type": "string", "description": "店铺ID" },
+		{ "name": "is_self", "type": "boolean", "description": "是否自营" },
+		{ "name": "stock_state", "type": "number", "description": "库存状态" },
+		{ "name": "delivery", "type": "string", "description": "配送信息" },
+		{ "name": "img_url", "type": "string", "description": "主图" },
+		{ "name": "gallery", "type": "string", "description": "轮播图" },
+		{ "name": "category", "type": "string", "description": "分类" },
+		{ "name": "url", "type": "string", "description": "商品链接" }
 	],
 	"variables": [
 		{
-			"name": "sku",
+			"name": "url",
 			"type": "string",
 			"required": true,
-			"help": "商品 SKU ID",
-			"test": "100291143898"
+			"help": "商品链接",
+			"test": "https://item.jd.com/100209267857.html?pcdk=9MkFnKXmOCvcat_FLEN7BHgAGe3lF31Zie6g_UKrl92o8UfL8hPGRYgRS4X1Y7ha.3z6a.aI3x&spmTag=YTAyMTkuYjAwMjM1Ni5jMDAwMDcyMTAua2V5d29yZF9lbnRlciU0MDE3ODAzOTQxMTg0MjElMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMjE0NjI5MTM0NCUyQ2EwMjQwLmIwMDI0OTMuYzAwMDA0MDI3LjIlMjNza3VfY2FyZCU0MDE3ODAzOTQxMjE5NTQlMjMxNzgwMjg4MzcwNTMyODMzNjE3NTU4JTIzMzIxNzk3ODI3"
+		},
+		{
+			"name": "delay",
+			"type": "int",
+			"default": 3000,
+			"help": "随机浏览时间基数(ms), 实际时间为 delay ~ 2*delay",
+			"test": 5000
 		}
 	],
 	"website_domain": "item.jd.com",
