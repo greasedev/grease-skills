@@ -1,7 +1,7 @@
 // Tweet sync utilities shared between workflow and UI
 
 import type { Agent } from '@greaseclaw/workflow-sdk';
-import { createWorkflowApis } from '../workflows/api';
+import { createWorkflowApis } from '../api';
 import {
   extractSearchTweets,
   extractTwitterLists,

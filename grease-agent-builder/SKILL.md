@@ -1,6 +1,6 @@
 ---
 name: grease-agent-builder
-description: Build Grease Agent projects with workflow-sdk. 1) Understand agent structure 2) Write workflows 3) Write Pages 4) Use API routes 5) Build and deploy.
+description: Build Grease Agent projects with workflow-sdk. 1) Understand agent structure 2) Write agent MD files 3) Use workflow-sdk APIs 4) Write workflows 5) Write Pages 6) Test and deploy.
 user-invocable: true
 ---
 
@@ -27,26 +27,35 @@ files/
       ...
   workflows/
     package.json           # Dependencies (must include @greaseclaw/workflow-sdk)
-    tsconfig.json          # TypeScript config (target ES2022, module ESNext)
-    src/
+    tsconfig.json          # TypeScript config
+    src/                   # Source code (structure is up to you)
+    dist/                  # Built output — this is what the runtime loads
       pages/
-        simple.ts          # Page component (vanilla JS, no framework)
-        simple.html        # Page HTML template
-        tweets.ts
+        simple.html        # Page HTML files
         tweets.html
-      shared/
-        types.ts           # Shared type definitions
-        utils.ts           # Utility functions (extract, clean, format)
-        db.ts              # Dexie database operations (save, query, sync)
-        portfolio.ts       # Portfolio schema + AI prompts (JsonSchema)
-        sync.ts            # Tweet/member sync logic
-        index.ts           # Barrel export
-      workflows/
-        api.ts               # Auto-generated API client (agent.call() wrappers)
-        default_workflow.ts  # Default workflow handler
-        sync_list_tweets_workflow.ts
-        read_saved_tweets_workflow.ts
-    dist/                  # Built output (JS + HTML pages)
+      workflows/           # Workflow JS bundles
+        sync_list_tweets.js
+        read_saved_tweets.js
+```
+
+The `src/` directory structure is flexible — organize it however you like. The only hard requirement is that `dist/` must contain:
+- `dist/pages/` — HTML files for each page
+- `dist/workflows/` — JS bundles for each workflow
+
+One example `src/` layout:
+
+```
+src/
+  api.ts               # Auto-generated API client (agent.call() wrappers)
+  default_workflow.ts  # Default workflow handler
+  pages/
+    simple.ts / simple.html
+    tweets.ts / tweets.html
+  shared/
+    types.ts / utils.ts / db.ts / portfolio.ts / sync.ts / index.ts
+  workflows/
+    sync_list_tweets_workflow.ts
+    read_saved_tweets_workflow.ts
 ```
 
 ### agent.json
@@ -112,11 +121,181 @@ Each session, the agent reads `SOUL.md` first, then `USER.md`, then checks `MEMO
 
 Use `pnpm install` to install dependencies.
 
-## Part 2: workflow-sdk Usage
+## Part 2: Agent Markdown Files
+
+The five markdown files define the agent's personality, behavior, and context. They are read at the start of every session.
+
+### IDENTITY.md — Who the Agent IS
+
+Defines the agent's persona, capabilities, and character.
+
+**Structure:**
+```markdown
+# IDENTITY.md - Who Am I?
+
+- **Name:** <agent name>
+- **Creature:** <one-line description of what the agent is>
+- **Vibe:** <personality traits, separated by dashes>
+- **Emoji:** <single emoji>
+
+---
+
+<2-3 sentences: what the agent is and does>
+
+My core capabilities:
+
+- **<Capability 1>** — <one-line explanation>
+- **<Capability 2>** — <one-line explanation>
+- **<Capability 3>** — <one-line explanation>
+
+---
+
+*<One-line tagline summarizing the agent's value>*
+```
+
+**Guidelines:**
+- Keep it concise — this is identity, not documentation
+- `Creature` should be evocative, not generic (e.g. "Digital investigator living in the data streams", not "AI assistant")
+- `Vibe` uses 3-4 adjective traits, ending with a behavioral anchor (e.g. "Methodical, discerning, precise — never rushes to judgment")
+- Core capabilities: 3-5 items, each with a bold name and one-line explanation
+- The tagline at the end should be memorable and concise
+
+### SOUL.md — How the Agent THINKS
+
+Defines behavioral principles, boundaries, and decision-making rules.
+
+**Structure:**
+```markdown
+# SOUL.md - Who You Are
+
+## Core Truths
+
+**<Truth 1>.** <Explanation and implication>
+
+**<Truth 2>.** <Explanation and implication>
+
+## Boundaries
+
+- <Hard rule 1>
+- <Hard rule 2>
+- <Hard rule 3>
+
+## Vibe
+
+<One paragraph: the agent's conversational personality>
+
+## Continuity
+
+<How the agent handles memory across sessions>
+```
+
+**Guidelines:**
+- Core Truths are **bold statements** followed by explanation — they are non-negotiable rules
+- Boundaries are hard lines the agent will not cross (safety, ethics, accuracy)
+- Vibe describes conversational style, not capabilities — it's about *how* the agent communicates
+- Continuity explains the agent's relationship with memory/files across sessions
+- Keep it under 30 lines — this is injected into every prompt
+
+### AGENTS.md — How the Agent WORKS
+
+Workspace instructions: session startup sequence, memory management, and safety rules.
+
+**Key sections:**
+```markdown
+# AGENTS.md - Your Workspace
+
+## Every Session
+
+Before doing anything else:
+
+1. Read `SOUL.md` — this is who you are
+2. Read `USER.md` — this is who you're helping
+3. Check `MEMORY.md` for user-curated long-term context
+4. Check agent memory files (`memory/*.md`) for your own saved notes
+
+## Memory
+
+- **MEMORY.md** — curated long-term memory (injected into every prompt, keep concise)
+- **memory/*.md** — daily/topic notes (raw logs, not injected)
+- "remember this" → save to `memory/*.md` or update `MEMORY.md` if important
+
+## Safety
+
+- Don't exfiltrate private data
+- Don't take destructive actions without asking
+- When in doubt, ask
+```
+
+**Guidelines:**
+- The "Every Session" startup sequence is critical — it ensures the agent loads context before acting
+- Memory section explains the two-tier system: `MEMORY.md` (curated, injected) vs `memory/*.md` (raw, on-demand)
+- Safety rules should be explicit and short
+- This file is the most "structural" — it defines workflow, not personality
+
+### TOOLS.md — Agent's Cheat Sheet
+
+Local conventions, output preferences, and environment-specific notes.
+
+**Structure:**
+```markdown
+# TOOLS.md - Local Notes
+
+## Preferences
+- Always use TypeScript over JavaScript
+- Prefer concise bullet-point answers over long prose
+- Use metric units
+
+## Conventions
+- Code examples should include error handling
+- Use ISO 8601 for dates
+```
+
+**Guidelines:**
+- This is the most flexible file — put whatever helps the agent do its job
+- Preferences section: output format, language, units, style
+- Conventions section: coding standards, naming, documentation rules
+- Keep it short — this is a reference, not a manual
+
+### USER.md — Who the Agent SERVES
+
+User profile and context. The agent learns about the user over time.
+
+**Structure:**
+```markdown
+# USER.md - About Your Human
+
+- **Name:**
+- **What to call them:**
+- **Pronouns:** _(optional)_
+- **Timezone:**
+- **Notes:**
+
+## Context
+
+_(What do they care about? What projects are they working on? Build this over time.)_
+```
+
+**Guidelines:**
+- Start minimal — fill in details as you learn them across sessions
+- `Context` section is the most valuable — it helps the agent tailor responses
+- Respect privacy — this is about helping, not profiling
+- The agent can update this file as it learns, but should be transparent about changes
+
+### Writing Tips
+
+1. **Keep all files short** — they are injected into prompts, so every line costs tokens
+2. **IDENTITY.md and SOUL.md are the personality layer** — they shape how the agent talks and decides
+3. **AGENTS.md and TOOLS.md are the operational layer** — they shape how the agent works
+4. **USER.md is the personalization layer** — it shapes who the agent serves
+5. **Use bold for key terms** — the agent weights bold text more heavily
+6. **Be specific, not generic** — "never presents unverified claims as fact" beats "be accurate"
+7. **Test by reading the files as a whole** — after writing all five, read them in sequence (IDENTITY → SOUL → AGENTS → TOOLS → USER) and check if the persona is coherent
+
+## Part 3: workflow-sdk Usage
 
 ### Agent Class
 
-The `Agent` class is the core SDK object. Create it with agent options:
+The `Agent` class is the core SDK object:
 
 ```typescript
 import { Agent } from '@greaseclaw/workflow-sdk';
@@ -124,14 +303,100 @@ import { Agent } from '@greaseclaw/workflow-sdk';
 const agent = new Agent(context.agentOptions || {});
 ```
 
-**Key methods:**
+**Properties:**
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `agentId` | `string` (readonly) | Unique identifier for the agent instance |
+| `signal` | `AbortSignal \| undefined` (readonly) | Abort signal for cancellation |
+| `browserContext` | `BrowserContext \| undefined` (readonly) | Current browser context (tabs, windows) |
+| `stateful` | `boolean` (readonly) | Whether the agent is stateful |
+| `scheduler` | `Scheduler` (readonly) | Scheduler instance for cron/delayed tasks |
+| `sessionId` | `string \| null` | Current session ID (get/set) |
+
+**Methods:**
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `agent.call<T>(endpoint, options?)` | `Promise<CallResult<T>>` | Low-level API call. Prefer using `createWorkflowApis(agent)` instead |
+| `agent.getDb()` | `Dexie` | Get Dexie database instance (name: `db-{agentId}`) |
+| `agent.getPageLink(pageId, params?)` | `string` | Generate `<pageLink>` XML tag for page navigation |
+| `agent.complete(prompt, options?)` | `Promise<CompleteResult>` | LLM completion with optional system prompt |
+| `agent.sendText(chatId, title, content)` | `Promise<SendTextResult>` | Send a text message to the chat |
+| `agent.sendImage(chatId, base64Image)` | `Promise<SendImageResult>` | Send an image to the chat |
+| `agent.dispose()` | `Promise<void>` | Clean up agent resources |
+| `agent.throwIfAborted()` | `void` | Throw if the agent has been aborted |
+
+> **Note:** Avoid calling `agent.call()` directly. Use the auto-generated API client instead:
+> ```typescript
+> // Don't
+> const { data } = await agent.call('/v1/custom/twitter-list-tweets', { method: 'POST', body: { list_id: id } });
+>
+> // Do
+> const apis = createWorkflowApis(agent);
+> const result = await apis.twitter_list_tweets(id, limit);
+> ```
+
+### BrowserContext
+
+```typescript
+interface BrowserContext {
+  windowId?: number;
+  activeTab?: Tab;
+  selectedTabs?: Tab[];
+  tabs?: Tab[];
+  enabledMcpServers?: string[];
+}
+
+interface Tab {
+  id: number;
+  url?: string;
+  title?: string;
+  pageId?: number;
+}
+```
+
+### Scheduler
+
+The `agent.scheduler` manages scheduled jobs (cron, one-shot, recurring):
+
+```typescript
+// List all scheduled tasks
+const { tasks } = await agent.scheduler.list();
+
+// Add a cron job
+await agent.scheduler.add({
+  name: 'sync-tweets',
+  schedule: { kind: 'cron', expr: '0 */4 * * *' },
+  payload: { kind: 'invokeWorkflow', workflowName: 'sync_list_tweets' },
+});
+
+// Run a task immediately
+await agent.scheduler.run(taskId);
+```
 
 | Method | Description |
 |--------|-------------|
-| `agent.call<T>(endpoint, options)` | Call a GreaseApi endpoint. Returns `{ data: T }` |
-| `agent.getDb()` | Get Dexie database instance for persistent storage |
-| `agent.sendText(chatId, title, text)` | Send a text message to the chat |
-| `agent.getPageLink(pageName, params)` | Generate a link to a registered page |
+| `scheduler.status()` | Get scheduler running status |
+| `scheduler.list(includeDisabled?)` | List all scheduled tasks |
+| `scheduler.add(job)` | Add a new scheduled job |
+| `scheduler.update(taskId, patch)` | Update an existing job |
+| `scheduler.remove(taskId)` | Remove a scheduled job |
+| `scheduler.run(taskId)` | Trigger a job immediately |
+| `scheduler.runs(taskId)` | Get execution history for a job |
+
+### Error Classes
+
+```typescript
+// All extend WorkflowSDKError (code + statusCode)
+ConnectionError    // Network/connectivity issues
+ActionError        // Workflow action failures
+CompletionError    // LLM completion failures
+CallError          // agent.call() failures
+SendTextError      // agent.sendText() failures
+SendImageError     // agent.sendImage() failures
+SchedulerError     // Scheduler operation failures
+```
 
 ### WorkflowContext
 
@@ -141,9 +406,10 @@ Every workflow receives a `WorkflowContext`:
 import { type WorkflowContext } from '@greaseclaw/workflow-sdk';
 
 interface WorkflowContext {
-  agentOptions?: Record<string, unknown>;
-  params?: Record<string, unknown>;
-  chatId?: string;
+  agentOptions?: AgentOptions;  // Options for creating the agent instance
+  task: string;                 // Task description for the workflow to accomplish
+  chatId?: string;              // Chat ID for the current conversation
+  params?: Record<string, unknown>;  // Key-value pairs for workflow parameters
 }
 ```
 
@@ -152,7 +418,7 @@ interface WorkflowContext {
 `api.ts` is auto-generated from `apiDependencies`. It provides typed wrapper functions:
 
 ```typescript
-import { createWorkflowApis, type ExecutionResult } from '../workflows/api';
+import { createWorkflowApis, type ExecutionResult } from '../api';
 
 const apis = createWorkflowApis(agent);
 
@@ -202,14 +468,16 @@ await table.orderBy('savedAt').reverse().limit(200).toArray();
 
 Key: `&` = primary key, regular fields = indexed, `*` = multi-entry index.
 
-### JsonSchema and AI Prompts
+### agent.complete and AI Prompts
 
-Use `JsonSchema` for structured AI responses:
+Use `agent.complete()` to call the LLM with a structured prompt and optional JSON schema for parsing the response:
 
 ```typescript
-import type { JsonSchema } from '@greaseclaw/workflow-sdk';
+// Basic completion
+const result = await agent.complete('Analyze these tweets and summarize key themes');
 
-const schema: JsonSchema = {
+// With system prompt and JSON schema for structured output
+const portfolioSchema: JsonSchema = {
   type: 'object',
   required: ['sources'],
   properties: {
@@ -224,16 +492,46 @@ const schema: JsonSchema = {
           name: { type: 'string' },
           handle: { type: 'string' },
           type: { type: 'string', enum: ['Core', 'Diversity', 'Radar'] },
+          reason: { type: 'string' },
         },
       },
     },
   },
 };
+
+const result = await agent.complete(
+  `Based on the following tweets, suggest a portfolio of sources:\n${JSON.stringify(tweets)}`,
+  { system: 'You are a media analyst.', schema: portfolioSchema },
+);
+
+// result.data contains the parsed JSON matching the schema
+const sources: Source[] = result.data.sources;
 ```
 
-## Part 3: Writing Workflows
+**`agent.complete(prompt, options?)` parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `prompt` | `string` | The user prompt / task description |
+| `options.system` | `string?` | System prompt to set the AI persona |
+| `options.schema` | `JsonSchema?` | JSON schema for structured response parsing |
+
+**Return value (`CompleteResult`):**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `data` | `T` | Parsed response matching the schema (or raw text if no schema) |
+| `usage` | `{ input_tokens, output_tokens }` | Token usage stats |
+
+## Part 4: Writing Workflows
 
 A workflow is a TypeScript file with a YAML frontmatter header and an `execute()` function.
+
+**Key point:** Each workflow is compiled into a single, self-contained JS bundle with all dependencies inlined. There are no `node_modules` or external imports at runtime — everything the workflow needs is in one JS file. This means:
+
+- All imports (shared modules, utility functions, even `@greaseclaw/workflow-sdk`) are bundled into each workflow independently
+- Node.js built-in modules (`fs`, `path`, etc.) are not available — workflows run in a sandboxed environment
+- The only runtime entry point is `globalThis.execute`
 
 ### Workflow Frontmatter
 
@@ -352,15 +650,22 @@ async function callWithLimit<T>(call: () => Promise<T>): Promise<T> {
 }
 ```
 
-## Part 4: Writing Pages
+## Part 5: Writing Pages
 
-Pages are interactive HTML views served by the agent. Each page consists of:
-- A TypeScript component file (`*.ts`) that manipulates the DOM
-- An HTML template file (`*.html`) that provides the shell
+Pages are interactive HTML views rendered inside the agent's chat UI. Each page consists of:
+- An HTML template (`*.html`) — the page shell
+- A TypeScript component (`*.ts`) — logic, DOM manipulation, API calls
 
-### HTML Template
+**Key point:** Each page is compiled into a single, self-contained HTML file with CSS inlined in `<style>` and the TS component bundled into an inline `<script>`. There are no external file references in the output — everything the page needs is embedded in one HTML file. This means:
 
-Minimal template with module script import:
+- Images and icons should use inline SVG or data URIs, not external files
+- Fonts should use system font stacks, not `@import` or external URLs
+- The `<script type="module" src="./page.ts">` in your source HTML is replaced by an inline bundle at build time — write it as a module import, the build handles the rest
+- Shared modules (e.g. `../shared/utils`) are bundled into each page independently — changes to shared code will be included in every page that imports it
+
+### HTML Template (Source)
+
+Write the template with external references — the build will inline them:
 
 ```html
 <!doctype html>
@@ -368,9 +673,9 @@ Minimal template with module script import:
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Simple Attention Portfolio</title>
+    <title>Page Title</title>
     <link rel="stylesheet" href="./styles.css">
-    <script type="module" src="./simple.ts"></script>
+    <script type="module" src="./page-name.ts"></script>
   </head>
   <body>
     <div id="app"></div>
@@ -378,132 +683,88 @@ Minimal template with module script import:
 </html>
 ```
 
-The `<div id="app">` is the render target. The script loads as a module.
+Rules:
+- `<div id="app">` is the render target — all dynamic content goes here
+- `<script type="module">` loads the TS component as an ES module
+- CSS is shared across pages via `styles.css`
 
-### Page Component (TypeScript)
+### Page Component
 
-Pages use vanilla JS/TS with no framework. Pattern: render HTML strings into `#app`, then bind events.
+Pages use vanilla TypeScript — no framework. The core pattern: **render HTML strings into `#app`, then bind events.**
 
 ```typescript
 import { Agent } from '@greaseclaw/workflow-sdk';
-import { createWorkflowApis } from '../workflows/api';
-import { saveInterestField, saveKols, type Source } from '../shared';
 
-// DOM helpers
 const app = document.querySelector('#app') as HTMLElement;
-const $ = <T extends HTMLElement>(sel: string, root?: HTMLElement): T | null =>
-  root?.querySelector<T>(sel) ?? document.querySelector<T>(sel);
-
-// Agent instance (available in browser via window.agentOptions)
-const agent = new Agent(window.agentOptions || {});
-const apis = createWorkflowApis(agent);
+const agent = new Agent((window as any).agentOptions || {});
 
 // State
-let step = 1;
+let items: Item[] = [];
 let loading = false;
-let model = emptyModel();
 
-// Render: generate HTML and bind events
+// Render loop: generate HTML → inject → bind events
 function render() {
-  app.innerHTML = `<main>${views[step]()}</main>`;
+  app.innerHTML = `<main>${content()}</main>`;
   bindEvents();
 }
 
-const views: Record<number, () => string> = {
-  1: landingView,
-  2: sourcesView,
-  3: reportView,
-};
-
-function landingView(): string {
-  return `<section class="view">
-    <h1>Simple attention portfolio</h1>
-    <button class="primary" id="start">生成组合</button>
-  </section>`;
+function content(): string {
+  if (loading) return '<p>Loading...</p>';
+  return items.map(itemCard).join('');
 }
 
 function bindEvents() {
-  $('#start')?.addEventListener('click', start);
-  $('#back')?.addEventListener('click', () => { step = Math.max(1, step - 1); render(); });
-  $('#next')?.addEventListener('click', () => { step = Math.min(3, step + 1); render(); });
+  document.querySelector('#refresh')?.addEventListener('click', refresh);
+  document.querySelectorAll('[data-id]').forEach(el =>
+    el.addEventListener('click', () => select(el.dataset.id!))
+  );
 }
 
 // Initial render
 render();
 ```
 
-### Page Architecture Patterns
+Key principles:
+- **Single render function** — always go through `render()` to update the DOM
+- **State drives the view** — change state variables, then call `render()`
+- **Bind after render** — `innerHTML` destroys old listeners, so rebind every time
+- **No framework needed** — template literals + `addEventListener` is sufficient
 
-**Step-based wizard:**
+### Accessing Agent SDK in Pages
+
+Pages can use the full Agent SDK from the browser:
+
 ```typescript
-let step = 1;
-function render() {
-  app.innerHTML = `<main>${views[step]()}</main>`;
-  bindEvents();
-}
-// Navigation: step++ / step--, render() on each change
+import { createWorkflowApis } from '../api';
+
+const apis = createWorkflowApis(agent);
+
+// Call any API
+const result = await apis.twitter_list_tweets(listId, limit);
+
+// Read/write database
+const db = agent.getDb();
+const tweets = await db.table('tweets').orderBy('savedAt').reverse().limit(200).toArray();
+
+// Navigate to other pages
+const link = agent.getPageLink('detail', { id: '123' });
 ```
 
-**Data table with sync:**
-```typescript
-let tweets: SavedTweet[] = [];
-let syncing = false;
+### Rate Limiting
 
-async function loadTweets() {
-  tweets = await getSavedTweets(agent, 500);
-  render();
-}
-
-async function startSync() {
-  syncing = true;
-  render();
-  const result = await syncListTweets(agent, { onProgress: (p) => { syncProgress = p; render(); } });
-  await loadTweets();
-  syncing = false;
-  render();
-}
-```
-
-**Progress/loading overlay:**
-```typescript
-let loading = false;
-let loadingState = { title: '', message: '', progress: 8, steps: [] };
-
-function startLoading(title: string, message: string, steps: string[]) {
-  loading = true;
-  loadingState = { title, message, progress: 8, steps: steps.map(...) };
-  render();
-}
-
-function updateLoading(message: string, progress: number, activeIndex?: number) {
-  loadingState = { ...loadingState, message, progress, steps: ... };
-  render();
-}
-
-function stopLoading() { loading = false; }
-```
-
-### Using Agent APIs in Pages
-
-Pages can call workflow APIs directly from the browser:
+When calling external APIs from pages, always rate-limit to avoid abuse:
 
 ```typescript
-const response = await apis.twitter_list_tweets(listId, limit);
-const response = await apis.twitter_list_add(listId, username);
-const response = await apis.twitter_list_members(listId, 500);
-```
+const apiIntervalMs = 15_000;
+let nextApiAt = 0;
 
-Use the same `callWithLimit` rate-limiting pattern in pages to avoid overloading APIs.
-
-### Using Database in Pages
-
-Pages can read/write Dexie directly:
-
-```typescript
-const tweets = await getSavedTweets(agent, 500);
-await saveInterestField(agent, topic, model);
-await saveKols(agent, topic, sources);
-await saveLists(agent, topic, listRecords);
+async function callWithLimit<T>(call: () => Promise<T>): Promise<T> {
+  const now = Date.now();
+  const waitMs = Math.max(0, nextApiAt - now);
+  nextApiAt = Math.max(now, nextApiAt) + apiIntervalMs;
+  if (waitMs > 0) await sleep(waitMs);
+  return call();
+}
 ```
 
 ### XSS Prevention
@@ -511,95 +772,133 @@ await saveLists(agent, topic, listRecords);
 Always escape dynamic content in HTML templates:
 
 ```typescript
-import { escapeHtml, escapeAttr } from '../shared';
-
 // In text content
-`<h3>${escapeHtml(source.name)}</h3>`
+`<h3>${escapeHtml(name)}</h3>`
 
 // In attribute values
-`<button data-id="${escapeAttr(source.id)}">`
+`<button data-id="${escapeAttr(id)}">`
 
 // In URLs
-`<a href="${escapeAttr(tweet.url)}" target="_blank">`
+`<a href="${escapeAttr(url)}" target="_blank">`
 ```
 
-## Part 5: Shared Module
+### Common Patterns
 
-The `shared/` directory contains reusable utilities that both workflows and pages import.
-
-### Types (`types.ts`)
-
-Define all shared types here:
-
+**Loading/progress state:**
 ```typescript
-export type Source = {
-  name?: string;
-  handle?: string;
-  type?: string;
-  role?: string;
-  focus?: number;
-  diversity?: number;
-  state?: 'new' | 'add' | 'ignore' | 'existing';
-};
+let loading = false;
+let progress = { message: '', percent: 0 };
 
-export type SavedTweet = {
-  id: string;
-  interestId?: string;
-  author?: string;
-  text?: string;
-  url?: string;
-  likes?: number;
-  createdAt?: string;
-};
+function startLoading(msg: string) {
+  loading = true;
+  progress = { message: msg, percent: 0 };
+  render();
+}
+
+function updateProgress(msg: string, pct: number) {
+  progress = { message: msg, percent: pct };
+  render();
+}
+
+function stopLoading() {
+  loading = false;
+  render();
+}
 ```
 
-### Utils (`utils.ts`)
+**Async action with UI feedback:**
+```typescript
+async function handleSync() {
+  loading = true;
+  render();
+  try {
+    const result = await callWithLimit(() => apis.twitter_list_tweets(listId, limit));
+    items = extractData(result);
+  } catch (err) {
+    error = String(err);
+  } finally {
+    loading = false;
+    render();
+  }
+}
+```
 
-Common utilities for extracting data from `ExecutionResult`:
+**Preserving input focus across re-renders:**
+```typescript
+function render() {
+  const wasFocused = document.activeElement?.id === 'search';
+  const cursorPos = wasFocused ? (document.activeElement as HTMLInputElement).selectionStart : 0;
 
-| Function | Purpose |
-|----------|---------|
-| `extractSearchTweets(result)` | Extract `SearchTweet[]` from API response |
-| `extractTwitterLists(result)` | Extract `TwitterList[]` from API response |
-| `extractTwitterUserCandidates(result, source)` | Extract `TwitterUserCandidate[]` from API response |
-| `cleanHandle(value)` | Strip `@` prefix, trim handle |
-| `escapeHtml(value)` | Escape HTML entities (`&`, `<`, `>`, `"`, `'`) |
-| `escapeAttr(value)` | Escape for HTML attributes (includes backticks) |
-| `initials(value)` | Get first letters of each word (for avatars) |
-| `clampNumber(value, min, max)` | Clamp a number to range |
-| `unique(values)` | Deduplicate array, remove falsy values |
-| `sleep(ms)` | Promise-based setTimeout |
+  app.innerHTML = `<main>...</main>`;
 
-### Database (`db.ts`)
+  if (wasFocused) {
+    const input = document.querySelector('#search') as HTMLInputElement;
+    input?.focus();
+    input?.setSelectionRange(cursorPos, cursorPos);
+  }
+}
+```
 
-Database operations with Dexie:
+## Part 6: Testing and Build
 
-| Function | Purpose |
-|----------|---------|
-| `interestIdFor(topic)` | Normalize topic string to ID (lowercase, alphanumeric + CJK) |
-| `getPortfolioDb(agent)` | Initialize/open Dexie database (version 3) |
-| `saveInterestField(agent, topic, model, selectedGoals)` | Save interest metadata |
-| `saveKols(agent, topic, sources)` | Bulk save KOL records |
-| `saveKolCandidates(agent, topic, candidates)` | Bulk save candidate records |
-| `saveLists(agent, topic, lists)` | Save list records (key, name, listId, mode) |
-| `saveTweets(agent, topic, list, tweets)` | Save tweets (dedup by ID, merge listIds/listNames) |
-| `getSavedTweets(agent, limit)` | Get recent tweets ordered by savedAt |
-| `querySavedTweets(agent, options)` | Query with filters: date, keyword, interest, author |
-| `getSavedLists(agent)` | Get all saved list records |
-| `getAllInterestFields(agent)` | Get all interest topics |
+### Testing Workflows
 
-### Sync (`sync.ts`)
+Use `workflow-dev.mjs` to run a workflow locally with mock context. Pass the workflow file path and a JSON string representing `WorkflowContext`:
 
-Sync utilities for reconciling local and remote data:
+```bash
+npx tsx node_modules/@greaseclaw/workflow-sdk/bin/workflow-dev.mjs \
+  <workflow-file> \
+  '<json-context>'
+```
 
-| Function | Purpose |
-|----------|---------|
-| `syncListTweets(agent, options)` | Sync tweets from X.com lists, with progress callback |
-| `syncListMembers(agent, options)` | Sync list members bidirectional (local <-> X.com) |
+The JSON context matches the `WorkflowContext` type — must include `task`, and can include `params` and `chatId`.
 
-Both support `onProgress` callbacks for real-time UI updates.
+**Example scripts in `package.json`:**
 
-## Part 6: Build and Deploy
+```json
+{
+  "scripts": {
+    "test:workflow:portfolio": "npx tsx node_modules/@greaseclaw/workflow-sdk/bin/workflow-dev.mjs src/workflows/generate_portfolio_workflow.ts '{\"task\":\"Generate portfolio\",\"params\":{\"interest\":\"AI Agent\"}}'",
+    "test:workflow:lists": "npx tsx node_modules/@greaseclaw/workflow-sdk/bin/workflow-dev.mjs src/workflows/create_x_lists_workflow.ts '{\"task\":\"Create lists\",\"params\":{\"interest\":\"AI Agent\",\"portfolio\":{\"core\":[{\"name\":\"OpenAI\",\"handle\":\"@OpenAI\"}],\"diversity\":[{\"name\":\"Yann LeCun\",\"handle\":\"@ylecun\"}],\"radar\":[{\"name\":\"Hugging Face\",\"handle\":\"@huggingface\"}]}}}'",
+    "test:workflow:tweets": "npx tsx node_modules/@greaseclaw/workflow-sdk/bin/workflow-dev.mjs src/workflows/sync_list_tweets_workflow.ts '{\"task\":\"Sync list tweets\",\"params\":{\"interest\":\"AI Agent\",\"limit\":30}}'"
+  }
+}
+```
+
+Then run with `pnpm run test:workflow:portfolio`, etc.
+
+**Tips:**
+- The workflow runs in a sandboxed environment with a mock agent instance
+- `agent.getDb()` creates a local Dexie database for the test
+- API calls (`apis.twitter_*`) require the browser agent runtime — they will fail in local test unless the agent is connected
+- For pure logic workflows (no browser API calls), testing works fully locally
+- Check console output for the workflow return value and any errors
+
+### Testing Pages
+
+Use `page-dev.mjs` to serve pages locally with hot reload:
+
+```bash
+npx tsx node_modules/@greaseclaw/workflow-sdk/bin/page-dev.mjs src/pages 3000
+```
+
+This starts a dev server at `http://localhost:3000` serving each page as a self-contained HTML file. Open `http://localhost:3000/simple.html` or `http://localhost:3000/tweets.html` in Mises Browser.
+
+**Example script in `package.json`:**
+
+```json
+{
+  "scripts": {
+    "dev:pages": "npx tsx node_modules/@greaseclaw/workflow-sdk/bin/page-dev.mjs src/pages 3000"
+  }
+}
+```
+
+**Tips:**
+- Pages are rebuilt on every file change (hot reload)
+- `window.agentOptions` is available in the browser — the dev server provides a mock agent
+- API calls from pages require the browser agent runtime to be connected
+- Test layout and interactions first, then connect the agent runtime for API/DB testing
 
 ### Build
 
@@ -609,13 +908,7 @@ pnpm install
 pnpm run build    # Builds src -> dist (JS + HTML pages)
 ```
 
-The build script (`workflow-build.mjs`) bundles TypeScript source and HTML pages into `dist/`.
-
-### Dev Mode
-
-```bash
-pnpm run dev      # Watch mode with hot reload
-```
+The build script (`workflow-build.mjs`) bundles each workflow into `dist/workflows/*.js` and each page into `dist/pages/*.html` — all self-contained with inlined dependencies.
 
 ### Package for Upload
 
@@ -638,7 +931,7 @@ After building, register new files in `agent.json`:
 }
 ```
 
-Pages appear in `dist/pages/` after build. Workflow JS files appear in `dist/`.
+Pages appear in `dist/pages/` after build. Workflow JS files appear in `dist/workflows/`.
 
 ### API Auto-Generation
 

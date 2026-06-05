@@ -1,6 +1,6 @@
 // Shared utility functions
 
-import type { ExecutionResult } from '../workflows/api';
+import type { ExecutionResult } from '../api';
 import type { SearchTweet, Source, TwitterList, TwitterUserCandidate, TweetUser } from './types';
 
 export function profileExists(value: ExecutionResult): boolean {

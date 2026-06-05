@@ -1,5 +1,5 @@
 import { Agent } from '@greaseclaw/workflow-sdk';
-import { createWorkflowApis, type ExecutionResult } from '../workflows/api';
+import { createWorkflowApis, type ExecutionResult } from '../api';
 import {
   extractListId,
   cleanHandle,
