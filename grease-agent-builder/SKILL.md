@@ -910,6 +910,30 @@ pnpm run build    # Builds src -> dist (JS + HTML pages)
 
 The build script (`workflow-build.mjs`) bundles each workflow into `dist/workflows/*.js` and each page into `dist/pages/*.html` — all self-contained with inlined dependencies.
 
+### Validate Agent
+
+After building, use the validation tool to check agent integrity:
+
+```bash
+npx tsx grease-agent-builder/scripts/validate-agent.ts <agent-dir>
+```
+
+The validator checks four areas:
+
+| Check | What it validates |
+|-------|-------------------|
+| **Markdown Files** | All 5 MD files exist, non-empty, have proper headings and required sections |
+| **agent.json** | Valid JSON, has `formatVersion`, `agent.name`, `apiDependencies`, `files` array |
+| **API Sync** | `apis/{domain}/{command}.json` files match function names in `api.ts` |
+| **Workflow Headers** | `dist/workflows/*.js` frontmatter has required fields (`name`, `description`), valid cron expressions |
+
+**Example:**
+```bash
+npx tsx grease-agent-builder/scripts/validate-agent.ts ./samples/UaufS6duSA7NIuMTzeuT6_v8
+```
+
+Run validation before packaging to catch missing files, broken API references, or invalid workflow metadata.
+
 ### Package for Upload
 
 ```bash
