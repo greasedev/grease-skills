@@ -12,7 +12,7 @@
 	},
 	"dependencies": {
 		"dotenv": "^16.4.5",
-		"grease-driver-layer": "github:greasedev/automator#0da1c32"
+		"grease-driver-layer": "github:greasedev/automator#c96f50b"
 	},
 	"devDependencies": {
 		"@types/node": "^20.0.0",

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-06-01T10:00:18.425Z",
+  "timestamp": "2026-06-05T03:16:10.231Z",
   "json_file": "./clis/pdd/detail.json",
   "command": "Detail",
   "website": "mobile.pinduoduo.com",
@@ -15,7 +15,7 @@
       "goods_id": "477399992833",
       "price": "¥61.6",
       "original_price": "¥168",
-      "sales": "总售2875件",
+      "sales": "总售2944件",
       "shop_name": "Faleri海外专营店",
       "shop_sales": "全店总售159万+件",
       "img_url": "https://img.pddpic.com/gaudit-image/2026-04-09/dead8ef07698926970c0bb19e5fd5638.jpeg",
