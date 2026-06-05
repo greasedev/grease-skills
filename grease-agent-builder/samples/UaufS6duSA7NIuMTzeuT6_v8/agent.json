@@ -1,0 +1,437 @@
+{
+  "formatVersion": 2,
+  "exportedAt": 1780630291904,
+  "agent": {
+    "name": "社媒聚焦助手",
+    "identity": {
+      "emoji": "👀"
+    },
+    "isDefault": false,
+    "icon": "👀",
+    "description": "Expert in open-source intelligence gathering and analysis, scanning global news media, social platforms, and niche sources to deliver verified, structured intelligence reports with confidence ratings and trend predictions.",
+    "workflows": [],
+    "apiDependencies": [
+      "x.com",
+      "weibo.com"
+    ],
+    "isActive": true,
+    "source": "local",
+    "version": 8
+  },
+  "files": [
+    {
+      "name": "apis/x.com/twitter-search.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-bookmark-folder.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-quote.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-tweets.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-delete.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-tweets.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-group-posts.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-hot.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-group-list.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-unlike.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-timeline.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-search.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-block.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-unbookmark.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-unblock.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-remove.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-hide-reply.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-retweet.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-create.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-bookmark-folders.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-lists.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-following.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-unretweet.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-feed.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-post.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-delete.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-followers.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-members.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-profile.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-bookmarks.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-accept.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "AGENTS.md",
+      "enabled": true,
+      "owner": "user",
+      "predefined": true
+    },
+    {
+      "name": "IDENTITY.md",
+      "enabled": true,
+      "owner": "user",
+      "predefined": true
+    },
+    {
+      "name": "SOUL.md",
+      "enabled": true,
+      "owner": "user",
+      "predefined": true
+    },
+    {
+      "name": "TOOLS.md",
+      "enabled": true,
+      "owner": "user",
+      "predefined": true
+    },
+    {
+      "name": "USER.md",
+      "enabled": true,
+      "owner": "user",
+      "predefined": true
+    },
+    {
+      "name": "workflows/dist/pages/simple.html",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/dist/pages/tweets.html",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/dist/sync_list_tweets_workflow.js",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/package.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/src/api.ts",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/src/default_workflow.ts",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/src/untitled.md",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/tsconfig.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-user.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "workflows/dist/read_saved_tweets_workflow.js",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-bookmark.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-likes.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-follow.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-notifications.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-download.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-group-create.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-publish.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-me.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-thread.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-follow.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-unfollow.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-suggested.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-group-delete.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-reply.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-add.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-list-search.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-article.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-post.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-group-set.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-reply-dm.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-trending.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/x.com/twitter-like.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    },
+    {
+      "name": "apis/weibo.com/weibo-comments.json",
+      "enabled": true,
+      "owner": "user",
+      "predefined": false
+    }
+  ]
+}

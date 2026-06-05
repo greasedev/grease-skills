@@ -1,0 +1,49 @@
+{
+  "name": "GroupList",
+  "website_domain": "weibo.com",
+  "category": "scrape",
+  "method": "GET",
+  "api_endpoint": "weibo-group-list",
+  "description": "List Weibo follow groups with group IDs",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://weibo.com",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const resp = await fetch('https://weibo.com/ajax/feed/allGroups'); const data = await resp.json(); const groups = []; if (data.groups) { for (const category of data.groups) { if (category.group) { for (const g of category.group) { if (g.title && g.gid) { groups.push({ name: g.title, id: g.gid, type: g.type || '' }); } } } } } return groups; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "name",
+      "type": "string",
+      "description": "分组名称"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "分组ID"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "分组类型"
+    }
+  ],
+  "variables": [],
+  "version": 2
+}

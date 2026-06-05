@@ -1,0 +1,62 @@
+{
+  "name": "Follow",
+  "website_domain": "weibo.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "weibo-follow",
+  "description": "Follow a Weibo user",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://weibo.com/u/{{ user_id }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const user_id = '{{ user_id }}'; const panelTop = document.querySelector('main .woo-panel-top'); const buttons = panelTop ? panelTop.querySelectorAll('button') : []; let followBtn = null; let foundBtnText = ''; for (const btn of buttons) { const txt = (btn.innerText || btn.textContent || '').trim(); if (txt === '关注' || txt === 'Follow' || txt === '+ 关注') { followBtn = btn; foundBtnText = txt; break; } } if (!followBtn) { return [{ status: 'success', message: 'Already following this user (no follow button found)', user_id }]; } followBtn.click(); await new Promise(r => setTimeout(r, 1000)); return [{ status: 'success', message: 'Follow button clicked', user_id, btn_text: foundBtnText }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态(success/error)"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "description": "用户ID"
+    },
+    {
+      "name": "btn_text",
+      "type": "string",
+      "description": "按钮文本"
+    }
+  ],
+  "variables": [
+    {
+      "name": "user_id",
+      "type": "string",
+      "required": true,
+      "help": "User ID to follow",
+      "test": "5903980664"
+    }
+  ],
+  "version": 1
+}

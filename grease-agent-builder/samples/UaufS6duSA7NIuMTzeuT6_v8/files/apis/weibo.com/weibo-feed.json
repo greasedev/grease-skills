@@ -1,0 +1,94 @@
+{
+  "name": "Feed",
+  "website_domain": "weibo.com",
+  "category": "scrape",
+  "method": "GET",
+  "api_endpoint": "weibo-feed",
+  "description": "Fetch Weibo timeline (for-you or following)",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://weibo.com",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const timelineType = '{{ type }}' === 'following' ? 'following' : 'for-you'; const endpoints = { 'for-you': 'unreadfriendstimeline', following: 'friendstimeline' }; const endpoint = endpoints[timelineType]; const count = Math.min({{ limit }} || 15, 50); const app = document.querySelector('#app')?.__vue_app__; const store = app?.config?.globalProperties?.$store; let uid = store?.state?.config?.config?.uid; if (!uid) { const resp = await fetch('/ajax/config/get_config', {credentials: 'include'}); if (resp.ok) { const data = await resp.json(); if (data.ok && data.data?.uid) uid = String(data.data.uid); } } if (!uid) return {error: 'Not logged into weibo.com'}; const listId = '10001' + uid; const strip = (html) => (html || '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').trim(); const feedResp = await fetch('/ajax/feed/' + endpoint + '?list_id=' + listId + '&refresh=4&since_id=0&count=' + count, { credentials: 'include' }); if (!feedResp.ok) return {error: 'HTTP ' + feedResp.status}; const feedData = await feedResp.json(); if (!feedData.ok) return {error: 'API error: ' + (feedData.msg || 'unknown')}; return (feedData.statuses || []).slice(0, count).map(s => { const u = s.user || {}; const item = { id: s.mblogid || s.idstr || String(s.id || ''), author: u.screen_name || '', text: (s.text_raw || strip(s.text || '')).substring(0, 200), reposts: s.reposts_count || 0, comments: s.comments_count || 0, likes: s.attitudes_count || 0, time: s.created_at || '', url: 'https://weibo.com/' + (u.id || '') + '/' + (s.mblogid || '') }; if (s.retweeted_status) { const rt = s.retweeted_status; item.retweeted = (rt.user?.screen_name || '[deleted]') + ': ' + (rt.text_raw || strip(rt.text || '')).substring(0, 100); } return item; }); }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "微博ID"
+    },
+    {
+      "name": "author",
+      "type": "string",
+      "description": "作者"
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "description": "内容"
+    },
+    {
+      "name": "reposts",
+      "type": "number",
+      "description": "转发数"
+    },
+    {
+      "name": "comments",
+      "type": "number",
+      "description": "评论数"
+    },
+    {
+      "name": "likes",
+      "type": "number",
+      "description": "点赞数"
+    },
+    {
+      "name": "time",
+      "type": "string",
+      "description": "发布时间"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "链接"
+    },
+    {
+      "name": "retweeted",
+      "type": "string",
+      "description": "转发内容"
+    }
+  ],
+  "variables": [
+    {
+      "name": "type",
+      "type": "string",
+      "default": "for-you",
+      "help": "Timeline type: for-you or following",
+      "test": "for-you"
+    },
+    {
+      "name": "limit",
+      "type": "int",
+      "default": 15,
+      "help": "Number of posts (max 50)",
+      "test": 5
+    }
+  ],
+  "version": 1
+}

@@ -1,0 +1,76 @@
+{
+  "name": "GroupSet",
+  "website_domain": "weibo.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "weibo-group-set",
+  "description": "Set a user's follow group (group_id=0 to remove from all groups)",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://weibo.com/u/{{ user_id }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const dryrun = {{ dryrun }} || false; const user_id = '{{ user_id }}'; const group_id = '{{ group_id }}'; const panelTop = document.querySelector('main .woo-panel-top'); const buttons = panelTop ? panelTop.querySelectorAll('button') : []; let followBtn = null; for (const btn of buttons) { const txt = (btn.innerText || btn.textContent || '').trim(); if (txt === '关注' || txt === 'Follow' || txt === '+ 关注') { followBtn = btn; break; } } const isFollowing = !followBtn; if (!isFollowing && followBtn) { console.log('Need to follow first'); followBtn.click(); await new Promise(r => setTimeout(r, 1000)); } if (dryrun) return [{ status: 'dryrun', message: 'Dryrun mode - user ready for grouping', user_id, group_id, was_following: isFollowing }]; const xsrfToken = document.cookie.split(';').find(c => c.trim().startsWith('XSRF-TOKEN='))?.split('=')[1] || ''; const requestBody = new URLSearchParams(); requestBody.append('uids', user_id); if (group_id === '0') { requestBody.append('list_ids', '0'); requestBody.append('origin_list_ids', '0'); } else { requestBody.append('list_ids', '0,' + group_id); requestBody.append('origin_list_ids', '0,0'); } const requestHeaders = { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest', 'X-XSRF-TOKEN': xsrfToken }; const resp = await fetch('/ajax/profile/setGroup', { method: 'POST', headers: requestHeaders, body: requestBody.toString() }); const text = await resp.text(); let data; try { data = JSON.parse(text); } catch (e) { return [{ status: 'error', message: 'API error: ' + resp.status + ' - ' + text.substring(0, 100), user_id, group_id }]; } if (data.ok || data.result) { return [{ status: 'success', message: group_id === '0' ? 'User removed from all groups' : 'User added to group', user_id, group_id }]; } return [{ status: 'error', message: data.msg || 'Failed', user_id, group_id }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态(success/dryrun/error)"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "description": "用户ID"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "description": "分组ID(0=取消所有分组)"
+    }
+  ],
+  "variables": [
+    {
+      "name": "user_id",
+      "type": "string",
+      "required": true,
+      "help": "User ID to add to group",
+      "test": "5903980664"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "required": true,
+      "help": "Group ID (from group-list), 0 to remove from all groups",
+      "test": "201207160998946111"
+    },
+    {
+      "name": "dryrun",
+      "type": "boolean",
+      "default": false,
+      "help": "Test mode without actually adding",
+      "test": false
+    }
+  ],
+  "version": 1
+}

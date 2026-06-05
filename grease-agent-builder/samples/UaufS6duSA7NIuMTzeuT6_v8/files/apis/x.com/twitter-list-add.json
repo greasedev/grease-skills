@@ -1,0 +1,156 @@
+{
+  "name": "ListAdd",
+  "website_domain": "x.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "twitter-list-add",
+  "description": "Add a user to a Twitter/X list you own",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://x.com",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const ops = ['UserByScreenName', 'ListsManagementPageTimeline']; const fallbacks = { UserByScreenName: 'qRednkZG-rn1P6b48NINmQ', ListsManagementPageTimeline: '78UbkyXwXBD98IgUWXOy9g' }; let scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length < 5) { for (let i = 0; i < 10; i++) { await new Promise(r => setTimeout(r, 500)); scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length >= 5) break; } } const queryIds = {}; for (const op of ops) { queryIds[op] = fallbacks[op]; for (const scriptUrl of scripts.slice(0, 30)) { try { const text = await (await fetch(scriptUrl)).text(); const re = new RegExp('queryId:\"([A-Za-z0-9_-]+)\"[^}]{0,200}operationName:\"' + op + '\"'); const match = text.match(re); if (match) { queryIds[op] = match[1]; break; } } catch {} } } return { queryIds }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const qids = intermediate.queryIds || {}; const username = ('{{ username }}' || '').replace(/^@/, ''); const listId = '{{ list_id }}'; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; const bearer = 'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'; const headers = { 'Authorization': 'Bearer ' + decodeURIComponent(bearer), 'X-Csrf-Token': ct0, 'X-Twitter-Auth-Type': 'OAuth2Session', 'X-Twitter-Active-User': 'yes' }; const userFeat = JSON.stringify({ hidden_profile_subscriptions_enabled: true, rweb_tipjar_consumption_enabled: true, responsive_web_graphql_exclude_directive_enabled: true, verified_phone_label_enabled: false, subscriptions_verification_info_is_identity_verified_enabled: true, subscriptions_verification_info_verified_since_enabled: true, highlights_tweets_tab_ui_enabled: true, responsive_web_twitter_article_notes_tab_enabled: true, subscriptions_feature_can_gift_premium: true, creator_subscriptions_tweet_preview_api_enabled: true, responsive_web_graphql_skip_user_profile_image_extensions_enabled: false, responsive_web_graphql_timeline_navigation_enabled: true }); const userResp = await fetch('/i/api/graphql/' + qids.UserByScreenName + '/UserByScreenName?variables=' + encodeURIComponent(JSON.stringify({ screen_name: username, withSafetyModeUserFields: true })) + '&features=' + encodeURIComponent(userFeat), { headers, credentials: 'include' }); if (!userResp.ok) return { error: 'HTTP ' + userResp.status + ' resolving user' }; const userData = await userResp.json(); const userId = userData?.data?.user?.result?.rest_id; if (!userId) return { error: 'User not found: @' + username }; const listsFeat = JSON.stringify({ rweb_video_screen_enabled: false, profile_label_improvements_pcf_label_in_post_enabled: true, rweb_tipjar_consumption_enabled: true, verified_phone_label_enabled: false, creator_subscriptions_tweet_preview_api_enabled: true, responsive_web_graphql_timeline_navigation_enabled: true, responsive_web_graphql_skip_user_profile_image_extensions_enabled: false, premium_content_api_read_enabled: false, communities_web_enable_tweet_community_results_fetch: true, c9s_tweet_anatomy_moderator_badge_enabled: true, responsive_web_grok_analyze_button_fetch_trends_enabled: false, responsive_web_grok_analyze_post_followups_enabled: true, responsive_web_jetfuel_frame: false, responsive_web_grok_share_attachment_enabled: true, articles_preview_enabled: true, responsive_web_edit_tweet_api_enabled: true, graphql_is_translatable_rweb_tweet_is_translatable_enabled: true, view_counts_everywhere_api_enabled: true, longform_notetweets_consumption_enabled: true, responsive_web_twitter_article_tweet_consumption_enabled: true, tweet_awards_web_tipping_enabled: false, responsive_web_grok_show_grok_translated_post: false, responsive_web_grok_analysis_button_from_backend: false, creator_subscriptions_quote_tweet_preview_enabled: false, freedom_of_speech_not_reach_fetch_enabled: true, standardized_nudges_misinfo: true, tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true, longform_notetweets_rich_text_read_enabled: true, longform_notetweets_inline_media_enabled: true, responsive_web_grok_image_annotation_enabled: true, responsive_web_enhance_cards_enabled: false }); const listsResp = await fetch('/i/api/graphql/' + qids.ListsManagementPageTimeline + '/ListsManagementPageTimeline?features=' + encodeURIComponent(listsFeat), { headers, credentials: 'include' }); if (!listsResp.ok) return { error: 'HTTP ' + listsResp.status + ' fetching lists' }; const listsData = await listsResp.json(); const instructions = listsData?.data?.viewer?.list_management_timeline?.timeline?.instructions || []; const lists = []; const seen = new Set(); for (const inst of instructions) { for (const entry of inst.entries || []) { if (entry?.content?.items) { for (const item of entry?.content?.items) { const list = item?.item?.itemContent?.list; if (!list) continue; const id = list?.id_str || list?.id; if (!id || seen.has(id)) continue; seen.add(id); lists.push({ id: String(id), name: list?.name || '', members: list?.member_count || 0 }); } } } } const targetList = lists.find(l => l.id === listId); if (!targetList) return { error: 'List ' + listId + ' not found. Available: ' + lists.map(l => l.id + ':' + l.name).join(', ') }; return { userId, listName: targetList.name, listId, username, membersBefore: targetList.members }; }"
+      }
+    },
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://x.com/${username}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "waitTarget",
+      "argument": {
+        "target": "primary column"
+      },
+      "selectors": [
+        {
+          "selector": "[data-testid=\"primaryColumn\"]"
+        }
+      ]
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "click",
+      "argument": {
+        "target": "user actions menu button"
+      },
+      "selectors": [
+        {
+          "selector": "[data-testid=\"userActions\"]"
+        }
+      ]
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { await new Promise(r => setTimeout(r, 800)); for (let retry = 0; retry < 10; retry++) { const menuItems = Array.from(document.querySelectorAll('[role=\"menuitem\"]')); if (menuItems.length > 0) { const addToListItem = menuItems.find(el => /add\\/remove|从列表|列表|add to list|add or remove/i.test(el.innerText || '')); if (addToListItem) { addToListItem.click(); return { ok: true }; } } await new Promise(r => setTimeout(r, 300)); } return { error: 'Could not find \"Add/remove from Lists\" menu item' }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return intermediate; const waitFor = async (fn, timeoutMs = 8000) => { const t0 = Date.now(); while (Date.now() - t0 < timeoutMs) { const v = fn(); if (v) return v; await new Promise(r => setTimeout(r, 200)); } return null; }; const dialog = await waitFor(() => document.querySelector('[role=\"dialog\"]')); if (!dialog) return { error: 'List selection dialog did not open' }; return { ok: true }; }"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 1200
+      }
+    },
+    {
+      "action": "waitTarget",
+      "argument": {
+        "target": "list selection items"
+      },
+      "selectors": [
+        {
+          "selector": "[data-testid=\"cellInnerDiv\"]"
+        }
+      ]
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return intermediate; const targetName = intermediate.listName; const listId = intermediate.listId; const username = intermediate.username; await new Promise(r => setTimeout(r, 3000)); const isDialogPage = window.location.pathname.includes('/lists/add_member'); let container = document.querySelector('[data-testid=\"listMembersDialog\"]') || document.querySelector('[role=\"dialog\"]') || document.querySelector('[data-testid=\"primaryColumn\"]') || document.body; for (let wait = 0; wait < 5; wait++) { const cells = container.querySelectorAll('[data-testid=\"cellInnerDiv\"]'); if (cells.length > 0) break; await new Promise(r => setTimeout(r, 1000)); } const scrollCandidates = [ container.querySelector('[data-viewportview=\"true\"]'), container.querySelector('[aria-label]')?.parentElement, ...Array.from(container.querySelectorAll('div')).filter(d => d.scrollHeight > d.clientHeight + 100) ].filter(Boolean); let scrollEl = scrollCandidates[0] || container; for (const se of scrollCandidates) { if (se.scrollHeight > se.clientHeight + 100) { scrollEl = se; break; } } let row = null; for (let i = 0; i < 15; i++) { const cells = Array.from(container.querySelectorAll('[data-testid=\"cellInnerDiv\"]')); row = cells.find(c => (c.innerText || '').split('\\n')[0].trim() === targetName); if (row) break; const prev = scrollEl.scrollTop; scrollEl.scrollTop += 300; if (scrollEl.scrollTop === prev) break; await new Promise(r => setTimeout(r, 400)); } if (!row) { const allCells = Array.from(container.querySelectorAll('[data-testid=\"cellInnerDiv\"]')); const names = allCells.map(c => (c.innerText || '').split('\\n')[0].trim()).filter(Boolean); const debugInfo = 'cells=' + allCells.length + ', scrollElHeight=' + scrollEl.scrollHeight + ', container=' + (container.tagName || 'unknown'); return { error: 'List \"' + targetName + '\" not found. Found: ' + names.join(' | ') + ' (page: ' + window.location.pathname + ', ' + debugInfo + ')' }; } const listCell = row.querySelector('[data-testid=\"listCell\"]') || row.querySelector('[role=\"checkbox\"]') || row; await new Promise(r => setTimeout(r, 500)); let ariaChecked = listCell.getAttribute('aria-checked'); for (let i = 0; i < 5; i++) { await new Promise(r => setTimeout(r, 300)); const next = listCell.getAttribute('aria-checked'); if (next && next === ariaChecked) break; ariaChecked = next || ariaChecked; } const isMember = ariaChecked === 'true'; if (isMember) { const closeBtn = document.querySelector('[data-testid=\"app-bar-close\"]'); if (closeBtn) closeBtn.click(); return { ok: true, noop: true, message: '@' + username + ' is already a member of list ' + listId }; } listCell.click(); await new Promise(r => setTimeout(r, 500)); const saveButton = Array.from(container.querySelectorAll('[role=\"button\"], button')).find(b => /^(Save|Done|保存|完成|儲存)$/i.test(b.innerText?.trim() || '')); if (saveButton) { saveButton.click(); await new Promise(r => setTimeout(r, 1500)); } else { const closeBtn = document.querySelector('[data-testid=\"app-bar-close\"]'); if (closeBtn) closeBtn.click(); } return { ok: true, clickedSave: Boolean(saveButton), message: 'Added @' + username + ' to list ' + listId + ' (' + targetName + ')' }; }"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 3000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ listId: '', username: '', userId: '', status: 'error', message: intermediate.error }]; if (intermediate.noop) return [{ listId: intermediate.listId, username: intermediate.username, userId: '', status: 'noop', message: intermediate.message }]; return [{ listId: intermediate.listId, username: intermediate.username, userId: intermediate.userId || '', status: intermediate.ok ? 'success' : 'failed', message: intermediate.message || '' }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "listId",
+      "type": "string",
+      "description": "列表ID"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "description": "用户名"
+    },
+    {
+      "name": "userId",
+      "type": "string",
+      "description": "用户ID"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态(success/noop/error)"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    }
+  ],
+  "variables": [
+    {
+      "name": "list_id",
+      "type": "string",
+      "required": true,
+      "help": "Numeric list ID (from your lists)",
+      "test": "2046117032786378819"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "help": "Twitter screen name to add",
+      "test": "elonmusk"
+    }
+  ],
+  "version": 2
+}

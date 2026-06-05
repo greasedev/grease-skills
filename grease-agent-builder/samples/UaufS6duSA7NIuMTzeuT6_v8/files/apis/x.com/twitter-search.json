@@ -1,0 +1,95 @@
+{
+  "name": "Search",
+  "website_domain": "x.com",
+  "category": "auth",
+  "method": "GET",
+  "api_endpoint": "twitter-search",
+  "description": "Search Twitter/X for tweets",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://x.com/search?q={{ query }}&f={{ filter }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const query = '{{ query }}'; const filter = '{{ filter }}' === 'live' ? 'live' : 'top'; const limit = {{ limit }} || 15; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; await new Promise(r => setTimeout(r, 3000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) { await new Promise(r => setTimeout(r, 3000)); } const articles = document.querySelectorAll('article[data-testid=\"tweet\"]'); const results = []; const seen = new Set(); for (const article of articles) { if (results.length >= limit) break; try { const link = article.querySelector('a[href*=\"/status/\"]'); if (!link) continue; const href = link.getAttribute('href') || ''; const idMatch = href.match(/\\/status\\/(\\d+)/); if (!idMatch) continue; const id = idMatch[1]; if (seen.has(id)) continue; seen.add(id); const textEl = article.querySelector('[data-testid=\"tweetText\"]'); const text = textEl?.textContent || ''; const authorEl = article.querySelector('[data-testid=\"User-Name\"] a'); const authorHref = authorEl?.getAttribute('href') || ''; const author = authorHref.replace(/^\\//, '').split('?')[0] || ''; const timeEl = article.querySelector('time'); const created = timeEl?.getAttribute('datetime') || ''; const likes = article.querySelector('[data-testid=\"like\"]')?.textContent || '0'; const viewsEl = article.querySelector('[role=\"group\"] + div, [aria-label*=\"View\"]'); const views = ''; results.push({ id, author, text, created_at: created, likes, views, url: 'https://x.com/i/status/' + id }); } catch {} } return { results }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ id: '', author: '', text: '', created_at: '', likes: 0, views: '0', url: '', error: intermediate.error }]; return intermediate.results || []; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "推文ID"
+    },
+    {
+      "name": "author",
+      "type": "string",
+      "description": "作者"
+    },
+    {
+      "name": "text",
+      "type": "string",
+      "description": "内容"
+    },
+    {
+      "name": "created_at",
+      "type": "string",
+      "description": "创建时间"
+    },
+    {
+      "name": "likes",
+      "type": "number",
+      "description": "点赞数"
+    },
+    {
+      "name": "views",
+      "type": "string",
+      "description": "浏览量"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "链接"
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "description": "错误信息(可选)"
+    }
+  ],
+  "variables": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "help": "Search query",
+      "test": "AI"
+    },
+    {
+      "name": "filter",
+      "type": "string",
+      "default": "top",
+      "help": "Filter: top or live"
+    },
+    {
+      "name": "limit",
+      "type": "int",
+      "default": 15,
+      "help": "Number of results",
+      "test": 5
+    }
+  ],
+  "version": 5
+}

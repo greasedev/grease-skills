@@ -1,0 +1,144 @@
+{
+  "name": "GroupCreate",
+  "website_domain": "weibo.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "weibo-group-create",
+  "description": "Create a new Weibo follow group",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://weibo.com",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const dryrun = {{ dryrun }} || false; const name = '{{ name }}'; return { dryrun, name }; }"
+      }
+    },
+    {
+      "action": "click",
+      "argument": {
+        "target": "自定义分组旁边的管理按钮"
+      },
+      "selectors": [
+        {
+          "selector": "button.woo-button-main.woo-button-primary",
+          "reason": "Uses stable semantic classes directly on the target button element."
+        },
+        {
+          "selector": "button.woo-button-main:has(span.woo-button-content)",
+          "reason": "Identifies the button by its stable class and the presence of its specific child span element."
+        },
+        {
+          "selector": "div.woo-panel-main button.woo-button-main",
+          "reason": "Scopes the button within its main panel container for better specificity."
+        }
+      ]
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 1500
+      }
+    },
+    {
+      "action": "click",
+      "argument": {
+        "target": "新建分组按钮"
+      },
+      "selectors": [
+        {
+          "selector": "button.woo-button-main.woo-button-primary",
+          "reason": "Uses semantic classes 'woo-button-main' and 'woo-button-primary' which are likely stable and specific to the primary action button.",
+          "nth": 6
+        },
+        {
+          "selector": "div.woo-modal-main button.woo-button-main",
+          "reason": "Anchors the button within the stable modal container 'woo-modal-main' to ensure uniqueness."
+        },
+        {
+          "selector": "button.woo-button-main.woo-button-line",
+          "reason": "Uses the style class 'woo-button-line' combined with the base class to identify the button.",
+          "nth": 5
+        }
+      ]
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 1000
+      }
+    },
+    {
+      "action": "input",
+      "argument": {
+        "target": "分组标题输入框",
+        "text": "{{ name }}",
+        "delay": 100
+      },
+      "selectors": [
+        {
+          "selector": "input[type=\"text\"]",
+          "reason": "标题输入"
+        }
+      ]
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 500
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const dryrun = intermediate.dryrun; const name = intermediate.name; if (dryrun) return [{ status: 'dryrun', message: 'Dryrun mode - title filled but not submitted', name }]; const buttons = document.querySelectorAll('button, [role=\"button\"]'); for (const btn of buttons) { const t = (btn.innerText || btn.textContent || '').trim(); if (t === '确定') { btn.click(); await new Promise(r => setTimeout(r, 1000)); return [{ status: 'success', message: 'Group created', name }]; } } return [{ status: 'error', message: 'Could not find confirm button', name }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态(success/dryrun/error)"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "分组名称"
+    }
+  ],
+  "variables": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "help": "Group name (1-8 characters)",
+      "test": "测试"
+    },
+    {
+      "name": "dryrun",
+      "type": "boolean",
+      "default": false,
+      "help": "Test mode without actually creating",
+      "test": true
+    }
+  ],
+  "version": 1
+}

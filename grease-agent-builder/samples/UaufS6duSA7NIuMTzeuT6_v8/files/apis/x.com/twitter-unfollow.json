@@ -1,0 +1,46 @@
+{
+  "name": "Unfollow",
+  "website_domain": "x.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "twitter-unfollow",
+  "description": "Unfollow a Twitter user",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://x.com/{{ username }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const username = ('{{ username }}' || '').replace(/^@/, ''); await new Promise(r => { const start = Date.now(); const poll = () => { const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (primary) return r(); if (Date.now() - start > 10000) return r(); setTimeout(poll, 500); }; poll(); }); await new Promise(r => setTimeout(r, 1000)); let attempts = 0; let unfollowBtn = null; while (attempts < 20) { const followBtn = document.querySelector('[data-testid$=\"-follow\"]'); if (followBtn && !followBtn.getAttribute('data-testid').endsWith('-unfollow')) { return [{ status: 'success', message: 'Not following @' + username + ' (already unfollowed).' }]; } unfollowBtn = document.querySelector('[data-testid$=\"-unfollow\"]'); if (unfollowBtn) break; await new Promise(r => setTimeout(r, 500)); attempts++; } if (!unfollowBtn) { return [{ status: 'failed', message: 'Could not find Unfollow button. Are you logged in?' }]; } unfollowBtn.click(); await new Promise(r => setTimeout(r, 1000)); const confirmBtn = document.querySelector('[data-testid=\"confirmationSheetConfirm\"]'); if (confirmBtn) { confirmBtn.click(); await new Promise(r => setTimeout(r, 1000)); } const verify = document.querySelector('[data-testid$=\"-follow\"]'); if (verify && !verify.getAttribute('data-testid').endsWith('-unfollow')) { return [{ status: 'success', message: 'Successfully unfollowed @' + username + '.' }]; } return [{ status: 'failed', message: 'Unfollow action initiated but UI did not update.' }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "消息"
+    }
+  ],
+  "variables": [
+    {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "help": "Twitter screen name (without @)",
+      "test": "elonmusk"
+    }
+  ],
+  "version": 7
+}

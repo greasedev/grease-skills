@@ -1,0 +1,350 @@
+import { Agent } from '@greaseclaw/workflow-sdk';
+import {
+  escapeAttr,
+  escapeHtml,
+  getSavedTweets,
+  syncListTweets,
+  syncListMembers,
+  unique,
+  type SavedTweet,
+  type TweetMedia,
+  type SyncProgress,
+  type ListMemberSyncProgress,
+} from '../shared';
+
+const app = document.querySelector('#app') as HTMLElement;
+const agent = new Agent(window.agentOptions || {});
+
+declare global {
+  interface Window {
+    agentOptions?: Record<string, unknown>;
+  }
+}
+
+let tweets: SavedTweet[] = [];
+let loading = true;
+let syncing = false;
+let syncProgress: SyncProgress | null = null;
+let syncingMembers = false;
+let memberSyncProgress: ListMemberSyncProgress | null = null;
+let error = '';
+let syncError = '';
+let memberSyncError = '';
+let query = '';
+let listFilter = '全部';
+let renderTimeout: number | null = null;
+
+loadTweets();
+
+async function loadTweets() {
+  loading = true;
+  error = '';
+  render();
+  try {
+    tweets = await getSavedTweets(agent, 500);
+  } catch (err) {
+    error = `读取已保存 Tweet 失败：${(err as Error).message || err}`;
+  } finally {
+    loading = false;
+    render();
+  }
+}
+
+async function startSync() {
+  syncing = true;
+  syncError = '';
+  syncProgress = { phase: 'prepare', message: '开始同步...', current: 0, total: 0 };
+  render();
+
+  try {
+    const result = await syncListTweets(agent, {
+      interest: listFilter === '全部' ? undefined : listFilter,
+      onProgress: (progress) => {
+        syncProgress = progress;
+        render();
+      },
+    });
+    syncProgress = { phase: 'done', message: result.message, current: result.syncedLists.length, total: result.syncedLists.length };
+    // Reload tweets after sync completes
+    await loadTweets();
+  } catch (err) {
+    syncError = `同步失败：${(err as Error).message || err}`;
+    syncProgress = { phase: 'error', message: syncError, current: 0, total: 0 };
+  } finally {
+    syncing = false;
+    render();
+  }
+}
+
+async function startMemberSync() {
+  syncingMembers = true;
+  memberSyncError = '';
+  memberSyncProgress = { phase: 'prepare', message: '开始同步列表成员...', current: 0, total: 0 };
+  render();
+
+  try {
+    const result = await syncListMembers(agent, {
+      interest: listFilter === '全部' ? undefined : listFilter,
+      onProgress: (progress) => {
+        memberSyncProgress = progress;
+        render();
+      },
+    });
+    memberSyncProgress = { phase: 'done', message: result.message, current: result.syncedLists.length, total: result.syncedLists.length };
+  } catch (err) {
+    memberSyncError = `同步列表成员失败：${(err as Error).message || err}`;
+    memberSyncProgress = { phase: 'error', message: memberSyncError, current: 0, total: 0 };
+  } finally {
+    syncingMembers = false;
+    render();
+  }
+}
+
+function render() {
+  // Check if query input is focused before re-rendering
+  const activeElement = document.activeElement as HTMLElement;
+  const wasQueryFocused = activeElement?.id === 'query';
+  const cursorPos = wasQueryFocused ? (activeElement as HTMLInputElement).selectionStart : 0;
+
+  const lists = ['全部', ...unique(tweets.flatMap(tweet => tweet.listNames || []))];
+  const visible = tweets.filter(tweet => {
+    const haystack = [
+      tweet.author,
+      tweet.authorName,
+      tweet.text,
+      tweet.url,
+      ...(tweet.listNames || []),
+    ].join(' ').toLowerCase();
+    return (!query || haystack.includes(query.toLowerCase()))
+      && (listFilter === '全部' || (tweet.listNames || []).includes(listFilter));
+  });
+
+  app.innerHTML = `
+    <div class="top">
+      <div class="steps">
+        <span class="on now"><b>1</b>保存的 List Tweets</span>
+        <span class="on"><b>${tweets.length}</b>已保存</span>
+        <span class="on"><b>${visible.length}</b>当前显示</span>
+      </div>
+    </div>
+    <main>
+      <section class="view">
+        <div class="nav" style="justify-content:flex-start">
+          <button class="primary" id="sync" ${syncing || syncingMembers ? 'disabled' : ''}>${syncing ? '同步 Tweets...' : '同步 Tweets'}</button>
+          <button class="primary" id="syncMembers" ${syncing || syncingMembers ? 'disabled' : ''}>${syncingMembers ? '同步列表...' : '同步列表'}</button>
+          <button class="ghost" id="refresh" ${syncing || syncingMembers ? 'disabled' : ''}>刷新</button>
+        </div>
+        <h2>保存的 X.com List Tweets</h2>
+        ${error ? `<p class="err" style="text-align:center">${escapeHtml(error)}</p>` : ''}
+        ${syncError ? `<p class="err" style="text-align:center">${escapeHtml(syncError)}</p>` : ''}
+        ${memberSyncError ? `<p class="err" style="text-align:center">${escapeHtml(memberSyncError)}</p>` : ''}
+        ${syncProgress ? syncProgressView() : ''}
+        ${memberSyncProgress ? memberSyncProgressView() : ''}
+        <div class="card" style="margin-top:24px">
+          <div class="row">
+            <input type="search" class="input" id="query" placeholder="搜索作者、正文或列表名" value="${escapeAttr(query)}" ${syncing || syncingMembers ? 'disabled' : ''}>
+            <select class="input" id="listFilter" ${syncing || syncingMembers ? 'disabled' : ''}>
+              ${lists.map(list => `<option value="${escapeAttr(list)}" ${list === listFilter ? 'selected' : ''}>${escapeHtml(list)}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        ${loading ? loadingView() : tweetListView(visible)}
+      </section>
+    </main>`;
+
+  // Restore focus and cursor position after render
+  if (wasQueryFocused) {
+    const newInput = document.querySelector('#query') as HTMLInputElement;
+    if (newInput) {
+      newInput.focus();
+      newInput.setSelectionRange(cursorPos, cursorPos);
+    }
+  }
+
+  document.querySelector('#sync')?.addEventListener('click', startSync);
+  document.querySelector('#syncMembers')?.addEventListener('click', startMemberSync);
+  document.querySelector('#refresh')?.addEventListener('click', loadTweets);
+  const queryInput = document.querySelector('#query') as HTMLInputElement;
+  if (queryInput) {
+    queryInput.addEventListener('input', event => {
+      query = (event.target as HTMLInputElement).value;
+      // Debounce render to avoid page refresh on every keystroke
+      if (renderTimeout) clearTimeout(renderTimeout);
+      renderTimeout = window.setTimeout(() => {
+        renderTimeout = null;
+        render();
+      }, 150);
+    });
+  }
+  document.querySelector('#listFilter')?.addEventListener('change', event => {
+    listFilter = (event.target as HTMLSelectElement).value;
+    render();
+  });
+}
+
+function syncProgressView(): string {
+  const progress = syncProgress!;
+  const pct = progress.total > 0 ? Math.round((progress.current / progress.total) * 100) : 0;
+  return `
+    <div class="sync-progress" style="margin-top:18px">
+      <div class="card">
+        <p style="margin-bottom:12px">${escapeHtml(progress.message)}</p>
+        <div class="progress">
+          <i style="width:${pct}%"></i>
+        </div>
+        <p class="tiny" style="margin-top:8px;text-align:right">${pct}%</p>
+      </div>
+    </div>`;
+}
+
+function memberSyncProgressView(): string {
+  const progress = memberSyncProgress!;
+  const pct = progress.total > 0 ? Math.round((progress.current / progress.total) * 100) : 0;
+  return `
+    <div class="sync-progress" style="margin-top:18px">
+      <div class="card">
+        <p style="margin-bottom:12px">${escapeHtml(progress.message)}</p>
+        <div class="progress">
+          <i style="width:${pct}%"></i>
+        </div>
+        <p class="tiny" style="margin-top:8px;text-align:right">${pct}%</p>
+      </div>
+    </div>`;
+}
+
+function loadingView(): string {
+  return `
+    <section class="view hero loading-panel">
+      <div class="loader" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p class="lead">正在读取本地数据库...</p>
+      <div class="loading-meter"><i style="width:68%"></i></div>
+    </section>`;
+}
+
+function tweetListView(items: SavedTweet[]): string {
+  if (!items.length) {
+    return `<div class="card" style="margin-top:18px;text-align:center"><p class="muted">暂无保存的 Tweet。点击"同步 Tweets"按钮从 X.com Lists 获取新内容。</p></div>`;
+  }
+  return `<div class="tweet-feed">${items.map(tweetCard).join('')}</div>`;
+}
+
+function tweetCard(tweet: SavedTweet): string {
+  const url = tweet.url || (tweet.id ? `https://x.com/i/status/${tweet.id}` : '');
+  const listTags = (tweet.listNames || []).slice(0, 2).map(name => `<span class="pill">${escapeHtml(name)}</span>`).join('');
+  const authorHandle = tweet.author?.replace(/^@/, '') || '';
+  const authorDisplay = tweet.authorName || authorHandle || 'Unknown';
+  const verifiedBadge = tweet.authorVerified ? '<span class="verified" title="Verified">✓</span>' : '';
+  const timeAgo = tweet.createdAt ? formatTimeAgo(tweet.createdAt) : '';
+  const engagement = formatEngagement(tweet);
+  const mediaHtml = formatMedia(tweet.media);
+  const isRetweetBadge = tweet.isRetweet ? '<span class="pill retweet">RT</span>' : '';
+
+  return `
+    <article class="tweet-card">
+      <div class="tweet-header">
+        ${tweet.authorAvatar
+          ? `<img class="tweet-avatar" src="${escapeAttr(tweet.authorAvatar)}" alt="${escapeAttr(authorDisplay)}" loading="lazy">`
+          : `<span class="tweet-avatar-placeholder">${escapeHtml(authorDisplay.slice(0, 2).toUpperCase())}</span>`
+        }
+        <div class="tweet-author">
+          <div class="tweet-author-name">
+            ${escapeHtml(authorDisplay)}
+            ${verifiedBadge}
+          </div>
+          <div class="tweet-author-handle">
+            @${escapeHtml(authorHandle)}${timeAgo ? ` · ${timeAgo}` : ''}
+          </div>
+        </div>
+        ${url ? `<a class="tweet-link" href="${escapeAttr(url)}" target="_blank" rel="noopener">→</a>` : ''}
+      </div>
+      <div class="tweet-content">
+        ${isRetweetBadge}
+        ${formatTweetText(tweet.text || '')}
+      </div>
+      ${mediaHtml}
+      <div class="tweet-footer">
+        <div class="tweet-engagement">${engagement}</div>
+        ${listTags ? `<div class="tweet-tags">${listTags}</div>` : ''}
+      </div>
+    </article>`;
+}
+
+function formatTimeAgo(dateStr: string): string {
+  try {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return '刚刚';
+    if (diffMins < 60) return `${diffMins}分钟前`;
+    if (diffHours < 24) return `${diffHours}小时前`;
+    if (diffDays < 7) return `${diffDays}天前`;
+    return date.toLocaleDateString('zh-CN');
+  } catch {
+    return '';
+  }
+}
+
+function formatEngagement(tweet: SavedTweet): string {
+  const parts: string[] = [];
+  if (tweet.likes) parts.push(`<span class="stat likes">${formatNumber(tweet.likes)}</span>`);
+  if (tweet.retweets) parts.push(`<span class="stat retweets">${formatNumber(tweet.retweets)}</span>`);
+  if (tweet.replies) parts.push(`<span class="stat replies">${formatNumber(tweet.replies)}</span>`);
+  return parts.join('');
+}
+
+function formatNumber(n: number): string {
+  if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
+  return String(n);
+}
+
+function formatTweetText(text: string): string {
+  // Escape HTML first
+  let html = escapeHtml(text);
+  // Linkify URLs
+  html = html.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  // Linkify mentions
+  html = html.replace(/@([a-zA-Z0-9_]+)/g, '<a href="https://x.com/$1" target="_blank" rel="noopener">@$1</a>');
+  // Bold hashtags
+  html = html.replace(/#([a-zA-Z0-9_一-龥]+)/g, '<b>#$1</b>');
+  return html;
+}
+
+function formatMedia(media?: TweetMedia[]): string {
+  if (!media?.length) return '';
+  // Deduplicate media by url
+  const seenUrls = new Set<string>();
+  const deduped = media.filter(m => {
+    const url = m.url || m.video_url || '';
+    if (!url || seenUrls.has(url)) return false;
+    seenUrls.add(url);
+    return true;
+  });
+
+  const images = deduped.filter(m => m.type === 'photo' || m.url?.includes('pbs.twimg.com'));
+  const videos = deduped.filter(m => m.type === 'video' || m.video_url);
+
+  if (videos.length) {
+    const video = videos[0];
+    const thumbUrl = video.url || '';
+    return `
+      <div class="tweet-media tweet-video">
+        ${thumbUrl ? `<img src="${escapeAttr(thumbUrl)}" alt="Video thumbnail" loading="lazy">` : ''}
+        <span class="video-indicator">▶</span>
+      </div>`;
+  }
+
+  if (images.length) {
+    const cols = images.length >= 4 ? 'cols-4' : images.length >= 2 ? 'cols-2' : 'cols-1';
+    return `
+      <div class="tweet-media ${cols}">
+        ${images.map(img => `<img src="${escapeAttr(img.url || '')}" alt="Tweet media" loading="lazy">`).join('')}
+      </div>`;
+  }
+
+  return '';
+}

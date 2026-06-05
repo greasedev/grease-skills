@@ -1,0 +1,52 @@
+{
+  "name": "Unbookmark",
+  "website_domain": "x.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "twitter-unbookmark",
+  "description": "Remove a tweet from bookmarks",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "{{ url }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const tweetId = '{{ url }}'.match(/\\/status\\/(\\d+)/)?.[1]; if (!tweetId) return { error: 'Invalid tweet URL' }; await new Promise(r => setTimeout(r, 2000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) await new Promise(r => setTimeout(r, 2000)); const article = Array.from(document.querySelectorAll('article')).find(a => a.querySelector('a[href*=\"/status/' + tweetId + '\"]')); if (!article) return { ok: false, message: 'Tweet article not found' }; const bookmarkBtn = article.querySelector('[data-testid=\"bookmark\"]'); if (bookmarkBtn) return { ok: true, message: 'Already not bookmarked' }; const removeBtn = article.querySelector('[data-testid=\"removeBookmark\"]'); if (!removeBtn) return { ok: false, message: 'Remove bookmark button not found' }; removeBtn.click(); await new Promise(r => setTimeout(r, 1000)); const verified = article.querySelector('[data-testid=\"bookmark\"]'); return { ok: !!verified, message: verified ? 'Unbookmarked' : 'Unbookmark not verified' }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error }]; return [intermediate]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "ok",
+      "type": "boolean",
+      "description": "成功"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    }
+  ],
+  "variables": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "help": "Tweet URL",
+      "test": "https://x.com/elonmusk/status/2044315118583066738"
+    }
+  ],
+  "version": 1
+}

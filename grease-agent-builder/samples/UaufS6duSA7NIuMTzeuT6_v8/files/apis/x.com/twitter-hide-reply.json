@@ -1,0 +1,52 @@
+{
+  "name": "HideReply",
+  "website_domain": "x.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "twitter-hide-reply",
+  "description": "Hide a reply to your tweet",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "{{ url }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const tweetId = '{{ url }}'.match(/\\/status\\/(\\d+)/)?.[1]; if (!tweetId) return { error: 'Invalid tweet URL' }; await new Promise(r => setTimeout(r, 2000)); const primary = document.querySelector('[data-testid=\"primaryColumn\"]'); if (!primary) await new Promise(r => setTimeout(r, 2000)); const article = Array.from(document.querySelectorAll('article')).find(a => a.querySelector('a[href*=\"/status/' + tweetId + '\"]')); if (!article) return { ok: false, message: 'Reply article not found' }; const moreBtn = article.querySelector('[aria-label=\"More\"]'); if (!moreBtn) return { ok: false, message: 'More button not found' }; moreBtn.click(); await new Promise(r => setTimeout(r, 500)); const hideItem = Array.from(document.querySelectorAll('[role=\"menuitem\"]')).find(m => /hide/i.test(m.textContent || '')); if (!hideItem) return { ok: false, message: 'Hide reply menu item not found' }; hideItem.click(); await new Promise(r => setTimeout(r, 1000)); return { ok: true, message: 'Hide reply initiated' }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ ok: false, message: intermediate.error }]; return [intermediate]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "ok",
+      "type": "boolean",
+      "description": "成功"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    }
+  ],
+  "variables": [
+    {
+      "name": "url",
+      "type": "string",
+      "required": true,
+      "help": "Reply tweet URL",
+      "test": "https://x.com/someone/status/1234567890"
+    }
+  ],
+  "version": 1
+}

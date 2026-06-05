@@ -1,0 +1,92 @@
+{
+  "name": "GroupDelete",
+  "website_domain": "weibo.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "weibo-group-delete",
+  "description": "Delete a Weibo follow group",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://weibo.com",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const dryrun = {{ dryrun }} || false; const name = '{{ name }}'; return { dryrun, name }; }"
+      }
+    },
+    {
+      "action": "click",
+      "argument": {
+        "target": "自定义分组旁边的管理按钮"
+      },
+      "selectors": [
+        {
+          "selector": "button.woo-button-main.woo-button-line.woo-button-primary.xs.woo-button-round",
+          "reason": "Selects the button using its stable class names which describe its style and type, avoiding dynamic IDs."
+        },
+        {
+          "selector": "div._inner_mmtyp_7 button.woo-button-main",
+          "reason": "Uses a parent container with a semi-stable class to scope the search for the button, reducing the chance of selecting other similar buttons if they exist elsewhere."
+        }
+      ]
+    },
+    {
+      "action": "wait",
+      "argument": {
+        "timeMs": 1500
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const name = intermediate.name; const dryrun = intermediate.dryrun; const allDivs = document.querySelectorAll('div'); let targetDiv = null; for (const div of allDivs) { const txt = (div.innerText || div.textContent || '').trim(); if (txt.includes(name) && txt.length < 50) { const closeBtn = div.querySelector('[class*=\"close\"]') || div.querySelector('svg'); if (closeBtn) { targetDiv = div; break; } } } if (!targetDiv) return { error: 'Group not found: ' + name, name }; const closeBtn = targetDiv.querySelector('[class*=\"close\"]') || targetDiv.querySelector('svg'); if (closeBtn) closeBtn.click(); await new Promise(r => setTimeout(r, 500)); if (dryrun) return [{ status: 'dryrun', message: 'Dryrun mode - delete clicked but not confirmed', name }]; const buttons = document.querySelectorAll('button, [role=\"button\"]'); for (const btn of buttons) { const t = (btn.innerText || btn.textContent || '').trim(); if (t === '确定') { btn.click(); await new Promise(r => setTimeout(r, 1000)); return [{ status: 'success', message: 'Group deleted', name }]; } } return [{ status: 'success', message: 'Delete initiated', name }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态(success/dryrun/error)"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "分组名称"
+    }
+  ],
+  "variables": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "help": "Group name to delete",
+      "test": "测试"
+    },
+    {
+      "name": "dryrun",
+      "type": "boolean",
+      "default": false,
+      "help": "Test mode without actually deleting",
+      "test": true
+    }
+  ],
+  "version": 1
+}

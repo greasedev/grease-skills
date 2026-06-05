@@ -1,0 +1,97 @@
+{
+  "name": "ListSearch",
+  "website_domain": "x.com",
+  "category": "auth",
+  "method": "GET",
+  "api_endpoint": "twitter-list-search",
+  "description": "Search for Twitter/X lists by name (direct GraphQL API call)",
+  "actions": [
+    {
+      "action": "track",
+      "argument": {
+        "urlPattern": "ListSearchTimeline",
+        "script": "async (globalVars) => { const response = globalVars.response; const prev = globalVars.extractData || []; const seenIds = prev.filter(l => !l._isTerminated).map(l => l.id); const seen = new Set(seenIds); const results = []; let isTerminated = false; try { const d = JSON.parse(response.body); const insts = d?.data?.search_by_raw_query?.list_search_timeline?.timeline?.instructions || []; for (const inst of insts) { if (inst.type === 'TimelineTerminateTimeline' && inst.direction === 'Bottom') { isTerminated = true; continue; } if (inst.moduleItems) { for (const item of inst.moduleItems) { const list = item?.item?.itemContent?.list; if (!list) continue; const id = list?.id_str || list?.id; if (!id || seen.has(id)) continue; seen.add(id); results.push({ id: String(id), name: list?.name || '', members: list?.member_count || 0, followers: list?.subscriber_count || 0, description: list?.description || '', isPrivate: list?.mode === 'Private', url: 'https://x.com/i/lists/' + id }); } } if (inst.entries) { for (const entry of inst.entries) { const content = entry?.content; if (content?.__typename === 'TimelineTimelineModule') { for (const item of content?.items || []) { const list = item?.item?.itemContent?.list; if (!list) continue; const id = list?.id_str || list?.id; if (!id || seen.has(id)) continue; seen.add(id); results.push({ id: String(id), name: list?.name || '', members: list?.member_count || 0, followers: list?.subscriber_count || 0, description: list?.description || '', isPrivate: list?.mode === 'Private', url: 'https://x.com/i/lists/' + id }); } } } } if (isTerminated) results.push({ _isTerminated: true }); return results; } catch (e) { return []; } }"
+      }
+    },
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://x.com/i/lists/search?q={{ query }}",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "loop",
+      "argument": {
+        "script": "async (globalVars) => { const limit = {{ limit }} || 20; const maxScrolls = 20; const data = globalVars.extractData || []; if (data.some(d => d._isTerminated)) return false; const results = data.filter(d => !d._isTerminated); if (results.length >= limit) return false; globalVars.loopCount = (globalVars.loopCount || 0) + 1; if (globalVars.loopCount > maxScrolls) return false; window.scrollBy(0, 2000); return {loopCount: globalVars.loopCount}; }",
+        "intervalMs": 2000
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "(globalVars) => { const limit = {{ limit }} || 20; globalVars.extractData = (globalVars.extractData || []).filter(d => !d._isTerminated).slice(0, limit); return globalVars; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "列表ID"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "列表名称"
+    },
+    {
+      "name": "members",
+      "type": "number",
+      "description": "成员数"
+    },
+    {
+      "name": "followers",
+      "type": "number",
+      "description": "关注者数"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "列表描述"
+    },
+    {
+      "name": "isPrivate",
+      "type": "boolean",
+      "description": "是否私有"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "列表链接"
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "description": "错误信息(可选)"
+    }
+  ],
+  "variables": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "help": "Search query",
+      "test": "AI"
+    },
+    {
+      "name": "limit",
+      "type": "int",
+      "default": 20,
+      "help": "Number of results",
+      "test": 200
+    }
+  ],
+  "version": 1
+}

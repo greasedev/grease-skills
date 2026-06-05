@@ -1,0 +1,63 @@
+{
+  "name": "ListDelete",
+  "website_domain": "x.com",
+  "category": "interact",
+  "method": "POST",
+  "api_endpoint": "twitter-list-delete",
+  "description": "Delete a Twitter/X list",
+  "actions": [
+    {
+      "action": "open",
+      "argument": {
+        "url": "https://x.com/home",
+        "waitUntil": "load"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const op = 'DeleteList'; const fallback = 'UnN9Th1BDbeLjpgjGSpL3Q'; let scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length < 5) { for (let i = 0; i < 10; i++) { await new Promise(r => setTimeout(r, 500)); scripts = performance.getEntriesByType('resource').filter(r => r.name.includes('client-web') && r.name.endsWith('.js')).map(r => r.name); if (scripts.length >= 5) break; } } let queryId = fallback; for (const scriptUrl of scripts.slice(0, 30)) { try { const text = await (await fetch(scriptUrl)).text(); const re = new RegExp('queryId:\"([A-Za-z0-9_-]+)\"[^}]{0,200}operationName:\"' + op + '\"'); const match = text.match(re); if (match) { queryId = match[1]; break; } } catch {} } return { queryId }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { const queryId = intermediate.queryId; const listId = '{{ list_id }}'; const ct0 = document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('ct0='))?.split('=')[1]; if (!ct0) return { error: 'Not logged into x.com (no ct0 cookie)' }; const bearer = 'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'; const headers = { 'Authorization': 'Bearer ' + decodeURIComponent(bearer), 'X-Csrf-Token': ct0, 'X-Twitter-Auth-Type': 'OAuth2Session', 'X-Twitter-Active-User': 'yes', 'Content-Type': 'application/json' }; const body = JSON.stringify({ variables: { listId }, queryId }); const resp = await fetch('/i/api/graphql/' + queryId + '/DeleteList', { method: 'POST', headers, body, credentials: 'include' }); const data = await resp.json(); if (data?.data?.list_delete === 'Done') return { listId, status: 'success', message: 'Deleted list ' + listId }; if (data.errors && data.errors.length > 0) return { error: 'API error: ' + data.errors.map(e => e.message || e.code).join(', ') }; return { error: 'DeleteList failed', status: resp.status, data }; }"
+      }
+    },
+    {
+      "action": "evaluate",
+      "argument": {
+        "script": "async (intermediate) => { if (intermediate.error) return [{ listId: '', status: 'error', message: intermediate.error }]; return [{ listId: intermediate.listId, status: 'success', message: intermediate.message }]; }"
+      }
+    }
+  ],
+  "is_public": true,
+  "output_schema": [
+    {
+      "name": "listId",
+      "type": "string",
+      "description": "删除的列表ID"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "状态(success/error)"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "结果消息"
+    }
+  ],
+  "variables": [
+    {
+      "name": "list_id",
+      "type": "string",
+      "required": true,
+      "help": "Numeric list ID to delete",
+      "test": "2054106359575269670"
+    }
+  ],
+  "version": 1
+}
